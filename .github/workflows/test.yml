@@ -27,9 +27,11 @@ jobs:
         with:
           path: artifacts
 
-      - name: Publish Unit Test Results
+      - name: Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
+        # the action is useless on pull_request events
+        # (it can not create check runs or pull request comments)
+        if: always()
         with:
-          check_name: Unit Test Results
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: test-results/**/*.xml
+          files: "test-results/*.xml"
