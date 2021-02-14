@@ -24,7 +24,4 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: ashley-taylor/junit-report-annotations-action@1.3
-        if: always()
-        with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
 
