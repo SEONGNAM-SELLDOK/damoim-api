@@ -12,6 +12,8 @@ spring:
     console:
       enabled: true
       path: /h2-db
+      settings:
+        web-allow-others: true
   jpa:
     generate-ddl: true
     show-sql: true
