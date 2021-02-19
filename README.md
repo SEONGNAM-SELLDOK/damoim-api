@@ -38,7 +38,7 @@ gradlew bootrun
 ### http Plugin 활용
 ```
 ### 회원 생성
-POST http://localhost:9090/members
+POST http://localhost:8080/members
 Content-Type: application/json
 
 {
@@ -57,7 +57,7 @@ client.test("Request executed successfully", function() {
 
 ```
 
-### 데이터베이스 콘솔 활용(localhost:9090/h2-db)
+### 데이터베이스 콘솔 활용(localhost:8080/h2-db)
 ![image](https://user-images.githubusercontent.com/2491418/99860795-7b358480-2bd7-11eb-916b-ffbd9b665ce8.png)
 
 ### 클라우드 환경 URL
