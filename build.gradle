@@ -4,6 +4,7 @@ plugins {
     id 'java'
     id "org.sonarqube" version "3.1.1"
     id 'net.ltgt.apt' version '0.15'
+    id 'jacoco'
 }
 
 group = 'com.damoim'
@@ -55,3 +56,11 @@ sonarqube {
         property "sonar.host.url", "https://sonarcloud.io"
     }
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+test.finalizedBy jacocoTestReport
