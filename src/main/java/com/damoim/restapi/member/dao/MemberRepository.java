@@ -1,8 +1,8 @@
-package com.damoim.restapi.employee.dao;
+package com.damoim.restapi.member.dao;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.damoim.restapi.employee.entity.Member;
+import com.damoim.restapi.member.entity.Member;
 
 /**  * MemberRepository
  *

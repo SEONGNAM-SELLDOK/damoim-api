@@ -1,4 +1,4 @@
-package com.damoim.restapi.employee.model;
+package com.damoim.restapi.member.model;
 
 import java.time.LocalDateTime;
 

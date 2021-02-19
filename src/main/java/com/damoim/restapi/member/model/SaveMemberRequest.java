@@ -1,7 +1,6 @@
-package com.damoim.restapi.employee.model;
+package com.damoim.restapi.member.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

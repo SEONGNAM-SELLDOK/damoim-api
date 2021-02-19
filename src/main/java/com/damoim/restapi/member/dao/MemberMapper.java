@@ -1,10 +1,10 @@
-package com.damoim.restapi.employee.dao;
+package com.damoim.restapi.member.dao;
 
 import org.mapstruct.Mapper;
 
 import com.damoim.restapi.config.jpa.EntityMapper;
-import com.damoim.restapi.employee.entity.Member;
-import com.damoim.restapi.employee.model.SaveMemberResponse;
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.model.SaveMemberResponse;
 
 /**  * MemberMapper
  *

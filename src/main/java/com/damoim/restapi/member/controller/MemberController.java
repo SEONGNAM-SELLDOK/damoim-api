@@ -1,4 +1,4 @@
-package com.damoim.restapi.employee.controller;
+package com.damoim.restapi.member.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.damoim.restapi.employee.dao.MemberMapper;
-import com.damoim.restapi.employee.entity.Member;
-import com.damoim.restapi.employee.model.SaveMemberRequest;
-import com.damoim.restapi.employee.model.SaveMemberResponse;
-import com.damoim.restapi.employee.service.MemberService;
+import com.damoim.restapi.member.dao.MemberMapper;
+import com.damoim.restapi.member.model.SaveMemberRequest;
+import com.damoim.restapi.member.model.SaveMemberResponse;
+import com.damoim.restapi.member.service.MemberService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 

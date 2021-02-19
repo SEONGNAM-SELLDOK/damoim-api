@@ -1,11 +1,11 @@
-package com.damoim.restapi.employee.service;
+package com.damoim.restapi.member.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.damoim.restapi.employee.dao.MemberRepository;
-import com.damoim.restapi.employee.entity.Member;
-import com.damoim.restapi.employee.model.SaveMemberRequest;
+import com.damoim.restapi.member.dao.MemberRepository;
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.model.SaveMemberRequest;
 import lombok.RequiredArgsConstructor;
 
 /**  * MemberService
