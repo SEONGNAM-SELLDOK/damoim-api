@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.damoim.restapi.employee.entity.Member;
 import com.damoim.restapi.employee.model.SaveMemberRequest;
 import com.damoim.restapi.employee.service.MemberService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 /**  * Controller
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
  * @author incheol.jung
  * @since 2021. 02. 19.
  */
+@Api(value = "member", description = "회원 관련 REST API")
 @RestController
 @RequestMapping("members")
 @RequiredArgsConstructor
