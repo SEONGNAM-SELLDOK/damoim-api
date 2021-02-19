@@ -24,11 +24,11 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("selldok wanted with Swagger")
-                .description("Swagger Test")
+                .title("DAMOIM API Swagger Documentation")
+                .description("DAMOIM API Swagger Documentation")
                 .version("1.0")
                 .license("License Version 1.0")
-                .licenseUrl("https://github.com/SEONGNAM-SELLDOK/CLONE-PROJECT")
+                .licenseUrl("https://github.com/SEONGNAM-SELLDOK/damoim-api")
                 .build();
     }
 
