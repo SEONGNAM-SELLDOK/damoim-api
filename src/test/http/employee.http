@@ -1,0 +1,17 @@
+### 구직자 생성
+POST http://localhost:9090/members
+Content-Type: application/json
+
+{
+  "id" : "incheol@naver.com",
+  "name" : "정인철",
+  "pwd" : "password",
+  "profilePicUrl" : "temp"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 201, "Response status is not 201, it is " + response.status);
+});
+%}
