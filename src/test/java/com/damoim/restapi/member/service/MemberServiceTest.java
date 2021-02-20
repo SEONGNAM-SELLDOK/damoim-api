@@ -26,5 +26,6 @@ class MemberServiceTest {
 		SaveMemberRequest request = SaveMemberRequest.builder().name("incheol").build();
 		Member member = memberService.save(request);
 		Assertions.assertEquals(member.getName(), request.getName());
+		System.out.println("test");
 	}
 }
