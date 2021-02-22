@@ -49,13 +49,13 @@ public class UsedItemController {
 
 
   @PostMapping
-  ResponseEntity<UsedItem> save(@Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest) {
+  public ResponseEntity<UsedItem> save(@Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest) {
     UsedItem usedItem = usedItemService.save(saveUsedItemRequest);
     return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
   }
 
   @GetMapping("/category")
-  ResponseEntity<Map<String, List<EnumValue>>> categoryList() {
+  public ResponseEntity<Map<String, List<EnumValue>>> categoryList() {
     //TODO (수정 필요함) ENUM 타입으로 관리된 KEY 사용 예정
     Map<String, List<EnumValue>> category = enumMapper.get("category");
     return ResponseEntity.ok(category);
@@ -63,7 +63,7 @@ public class UsedItemController {
 
 
   @GetMapping("/item")
-  ResponseEntity<UsedItem> selectItem(@RequestParam Long no) {
+  public ResponseEntity<UsedItem> selectItem(@RequestParam Long no) {
     UsedItem usedItem = usedItemService.selectItem(no);
     return ResponseEntity.ok(usedItem);
   }
