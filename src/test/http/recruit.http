@@ -1,0 +1,14 @@
+### 구직 작성
+POST http://localhost:8080/recruit
+Content-Type: application/json
+
+{
+  "title": "서비스를 함께 할 팀원을 모집합니다."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 201, "Response status is not 201, it is " + response.status);
+});
+%}
