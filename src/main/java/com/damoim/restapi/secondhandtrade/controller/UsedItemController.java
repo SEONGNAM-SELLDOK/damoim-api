@@ -54,7 +54,7 @@ public class UsedItemController {
     return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
   }
 
-  @GetMapping("/category")
+  @GetMapping("/categories")
   public ResponseEntity<Map<String, List<EnumValue>>> categoryList() {
     //TODO (수정 필요함) ENUM 타입으로 관리된 KEY 사용 예정
     Map<String, List<EnumValue>> category = enumMapper.get("category");
@@ -62,20 +62,20 @@ public class UsedItemController {
   }
 
 
-  @GetMapping("/item")
+  @GetMapping("/items")
   public ResponseEntity<UsedItem> selectItem(@RequestParam Long no) {
     UsedItem usedItem = usedItemService.selectItem(no);
     return ResponseEntity.ok(usedItem);
   }
 
-  @GetMapping("/page")
+  @GetMapping("/pages")
   public ResponseEntity<Page<UsedItem>> defaultPage(
       @PageableDefault(size = 6, sort = "postTime", direction = Direction.DESC) Pageable pageable) {
     Page<UsedItem> page = usedItemService.defaultPage(pageable);
     return ResponseEntity.ok(page);
   }
 
-  @GetMapping("/page/search")
+  @GetMapping("/pages/search")
   public ResponseEntity<Page<UsedItem>> searchPage(@RequestParam(defaultValue = "") String title,
       @RequestParam(defaultValue = "") String description,
       @PageableDefault(size = 6, sort = "postTime", direction = Direction.DESC) Pageable pageable) {
