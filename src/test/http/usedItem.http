@@ -22,17 +22,17 @@ client.test("Request executed successfully", function() {
 %}
 
 ### 카테고리 종류 가져오기
-GET http://localhost:8080/trading/category
+GET http://localhost:8080/trading/categories
 Accept: application/json
 
 
 ### defalutPage(아무런 검색조건이 없음) 중고거래 게시글 6개 보기 정렬기준 최근 작성된 글
-GET http://localhost:8080/trading/page
+GET http://localhost:8080/trading/pages
 Accept: application/json
 
 
 ### 특정 게시글 가져오기
-GET http://localhost:8080/trading/item?no=1
+GET http://localhost:8080/trading/items?no=2
 Accept: application/json
 
 

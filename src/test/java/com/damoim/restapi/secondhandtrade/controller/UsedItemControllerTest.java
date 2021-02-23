@@ -12,6 +12,7 @@ import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
@@ -62,14 +63,14 @@ class UsedItemControllerTest {
   @DisplayName("카테고리 종류 보기")
   void category() throws Exception {
 
-    mockMvc.perform(get("/trading/category"))
+    mockMvc.perform(get("/trading/categories"))
         .andDo(print())
         .andExpect(status().isOk());
   }
 
   @Test
-  @DisplayName("페이징")
-  void page() throws Exception {
+  @DisplayName("페이징(기본 페이지)")
+  void pages() throws Exception {
 
     //given
     for (int i = 0; i < 10; i++) {
@@ -77,7 +78,7 @@ class UsedItemControllerTest {
     }
 
     //when
-    mockMvc.perform(get("/trading/page")
+    mockMvc.perform(get("/trading/pages")
         .param("page", "0"))
         .andDo(print())
         .andExpect(status().isOk());
@@ -85,8 +86,25 @@ class UsedItemControllerTest {
   }
 
   @Test
-  @DisplayName("페이징")
-  void searchPage() throws Exception {
+  @DisplayName("특정 게시글 가져오기")
+  void getPage() throws Exception{
+    usedItemService.save(getItemRequest());
+    mockMvc.perform(get("/trading/pages/items")
+        .param("no","1"))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("특정 게시글 가져오기-실패(없는 페이지번호)")
+  void getPageFail() throws Exception{
+    mockMvc.perform(get("/trading/pages/items")
+        .param("no","999"))
+        .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  @DisplayName("페이징(제목,내용 검색)")
+  void searchPages() throws Exception {
 
     //given
     for (int i = 0; i < 5; i++) {
@@ -105,7 +123,7 @@ class UsedItemControllerTest {
     }
 
     //when
-    mockMvc.perform(get("/trading/page/search")
+    mockMvc.perform(get("/trading/pages/search")
         .param("page", "2")
         .param("title", "Air")
         .param("description", "buy"))
