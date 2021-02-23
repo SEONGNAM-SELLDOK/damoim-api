@@ -85,7 +85,7 @@ public class SeminarController {
         return new ResponseEntity(seminarsInfo, HttpStatus.OK);
     }
 
-    @PostMapping("fileUpload") // 파일 등록하기
+    @PostMapping("files") // 파일 등록하기
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
         String fileName = seminarService.saveUploadFile(file);
         redirectAttr.addFlashAttribute("pictures", file);
@@ -93,6 +93,6 @@ public class SeminarController {
         HashMap<String, String> map = new HashMap<>();
         map.put("fileName", fileName);
 
-        return new ResponseEntity(map, HttpStatus.OK);
+        return ResponseEntity.ok(map);
     }
 }

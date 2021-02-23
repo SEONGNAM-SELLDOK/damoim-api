@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author gjsung.Go
- * @since 2012.02.20
+ * @since 2021.02.20
  */
 @Entity
 @Getter
@@ -18,27 +18,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Seminar extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seminar_id")
-    private Long id; // 세미나 아이디
-
+    private Long id;
     @NotBlank
-    private String title; // 세미나 제목
-
+    private String title;
     @NotBlank
-    private String content; // 상세 내용
-
+    private String content;
     @NotBlank
-    private String image; // 대표 이미지
-
+    private String image;
     @Embedded
-    private Address address; // 장소
-    private String totalMember; // 총원
-    private String currentMember; //현재원
-    private String subject; // 주제
-
-    // 모임 태그 의도가 해시태그 인가요??
+    private Address address;
+    private String totalMember;
+    private String currentMember;
+    private String subject;
     @Enumerated(EnumType.STRING)
-    private DamoimTag damoimTag; // 태그
-
-    private LocalDateTime endDate; // 마감일
+    private DamoimTag damoimTag;
+    private LocalDateTime endDate;
 }

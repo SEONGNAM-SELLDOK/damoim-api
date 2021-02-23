@@ -5,5 +5,5 @@ package com.damoim.restapi.seminar.entity;
  * @since 2021-02-22
  * */
 public enum DamoimTag {
-    Java, Spring, JPA, Python, Nodejs, Javascript, React, ReactNative, Vuejs, Kotlin, Android
+    JAVA, SPRING, JPA, PYTHON, NODEJS, JAVASCRIPT, REACT, REACTNATIVE, VUEJS, KOTLIN, ANDROID
 }
