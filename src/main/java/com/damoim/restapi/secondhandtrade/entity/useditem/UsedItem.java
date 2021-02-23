@@ -3,6 +3,8 @@ package com.damoim.restapi.secondhandtrade.entity.useditem;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -40,8 +42,10 @@ public class UsedItem {
 
   private String address; //판매 지역
 
+  @CreationTimestamp
   private LocalDateTime postTime; //등록일시
 
+  @UpdateTimestamp
   private LocalDateTime editTime; //수정일시
 
   private String editWriter; //수정자 ID

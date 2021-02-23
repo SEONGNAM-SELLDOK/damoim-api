@@ -22,7 +22,6 @@ public class UsedItemService {
 
   public UsedItem save(SaveUsedItemRequest saveUsedItemRequest) {
     UsedItem item = modelMapper.map(saveUsedItemRequest, UsedItem.class);
-    item.setPostTime(LocalDateTime.now());
     return usedItemRepository.save(item);
   }
 
