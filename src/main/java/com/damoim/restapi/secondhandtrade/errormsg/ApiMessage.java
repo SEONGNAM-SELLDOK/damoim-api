@@ -11,6 +11,6 @@ public class ApiMessage {
 
   private final String message;
 
-  private final String InputValue;
+  private final String inputValue;
 
 }
