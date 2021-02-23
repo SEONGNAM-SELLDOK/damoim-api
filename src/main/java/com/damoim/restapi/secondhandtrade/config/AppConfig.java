@@ -23,7 +23,7 @@ public class AppConfig {
   @Bean
   public EnumMapper enumMapper(){
     EnumMapper enumMapper = new EnumMapper();
-    //TODO 추후 key 값 하드코딩이 아닌 Enum 타입으로 따로 관리
+    //추후 key 값 하드코딩이 아닌 Enum 타입으로 따로 관리
     enumMapper.put("category", Category.class);
     enumMapper.put("tradeType",TradeType.class);
     return enumMapper;

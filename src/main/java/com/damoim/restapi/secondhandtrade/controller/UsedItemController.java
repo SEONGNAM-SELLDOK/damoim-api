@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
  * @author kimjaeJoon
  * @since 2021.02.22
  */
-@Api(value = "UsedItem", description = "중고관련 관련 REST API")
+@Api(value = "UsedItem",tags = "중고거래 관련 REST API")
 @RestController
 @RequestMapping("trading")
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class UsedItemController {
 
   @GetMapping("/categories")
   public ResponseEntity<Map<String, List<EnumValue>>> categoryList() {
-    //TODO (수정 필요함) ENUM 타입으로 관리된 KEY 사용 예정
+    //(수정 필요함) ENUM 타입으로 관리된 KEY 사용 예정
     Map<String, List<EnumValue>> category = enumMapper.get("category");
     return ResponseEntity.ok(category);
   }

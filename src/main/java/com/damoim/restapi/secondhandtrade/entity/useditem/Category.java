@@ -4,7 +4,7 @@ import com.damoim.restapi.secondhandtrade.mapper.EnumMapperType;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum Category implements EnumMapperType {
-    //TODO 추후 카테고리 추가
+    //추후 카테고리 추가
     DEFAULT("기타"),
     ELECTRONICS("전자제품"),
     FOOD("음식"),
