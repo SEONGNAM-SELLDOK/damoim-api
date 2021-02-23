@@ -27,11 +27,8 @@ public class UsedItemService {
   }
 
   public UsedItem selectItem(Long no) {
-    if(!usedItemRepository.existsById(no)){
-      throw new NotFoundPage(HttpStatus.NOT_FOUND.toString(),no);
-    }
     Optional<UsedItem> item = usedItemRepository.findById(no);
-    return item.get();
+    return item.orElseThrow(()-> new NotFoundPage(HttpStatus.NOT_FOUND.toString(),no));
   }
 
   public Page<UsedItem> defaultPage(Pageable pageable) {
