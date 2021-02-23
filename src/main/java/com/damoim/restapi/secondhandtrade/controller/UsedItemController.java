@@ -41,7 +41,7 @@ public class UsedItemController {
   public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage){
     ApiMessage apiMessage = ApiMessage.builder()
         .message(notFoundPage.getMessage())
-        .InputValue(notFoundPage.getValue())
+        .inputValue(notFoundPage.getValue())
         .statusCode(HttpStatus.NOT_FOUND.value())
         .build();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiMessage);
