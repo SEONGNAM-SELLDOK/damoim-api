@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
@@ -89,7 +91,7 @@ class UsedItemControllerTest {
   @DisplayName("특정 게시글 가져오기")
   void getPage() throws Exception{
     usedItemService.save(getItemRequest());
-    mockMvc.perform(get("/trading/pages/items")
+    mockMvc.perform(get("/trading/items")
         .param("no","1"))
         .andExpect(status().isOk());
   }
@@ -97,9 +99,12 @@ class UsedItemControllerTest {
   @Test
   @DisplayName("특정 게시글 가져오기-실패(없는 페이지번호)")
   void getPageFail() throws Exception{
-    mockMvc.perform(get("/trading/pages/items")
+    mockMvc.perform(get("/trading/items")
         .param("no","999"))
-        .andExpect(status().is4xxClientError());
+        .andExpect(status().is4xxClientError())
+        .andExpect(jsonPath("statusCode").value("404"))
+        .andExpect(jsonPath("message").value("404 NOT_FOUND"))
+        .andExpect(jsonPath("inputValue").value("999"));
   }
 
   @Test
