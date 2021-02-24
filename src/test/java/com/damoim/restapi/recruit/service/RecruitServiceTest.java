@@ -110,5 +110,6 @@ class RecruitServiceTest {
 
         recruitService.delete(saveRecruit.getId());
         assertThrows(RuntimeException.class, () -> recruitService.getById(saveRecruit.getId()));
+
     }
 }
