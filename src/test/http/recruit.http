@@ -1,9 +1,13 @@
 ### 구직 작성
-POST http://localhost:8080/recruit
+POST http://localhost:8080/recruits
 Content-Type: application/json
 
 {
-  "title": "서비스를 함께 할 팀원을 모집합니다."
+  "register": "오성록",
+  "company": "Naver",
+  "title": "서비스를 함께 할 팀원을 모집합니다.",
+  "description": "웹/앱 서비스의 코어 개발을 담당하시며 빠르고 안정적인 서비스 구현의 핵심적인 역할을 수행하게 됩니다.",
+  "deadline": "2021-05-30"
 }
 
 > {%

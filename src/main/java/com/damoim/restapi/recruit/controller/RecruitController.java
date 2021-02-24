@@ -1,8 +1,8 @@
 package com.damoim.restapi.recruit.controller;
 
-import com.damoim.restapi.recruit.dao.RecruitSaveResponseDtoMapper;
-import com.damoim.restapi.recruit.model.RecruitSaveRequestDto;
-import com.damoim.restapi.recruit.model.RecruitSaveResponseDto;
+import com.damoim.restapi.recruit.dao.RecruitSaveResponseMapper;
+import com.damoim.restapi.recruit.model.RecruitSaveRequest;
+import com.damoim.restapi.recruit.model.RecruitSaveResponse;
 import com.damoim.restapi.recruit.service.RecruitService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -13,20 +13,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * @author SeongRok.Oh
  * @since 2021/02/21
  */
-@Api(value = "recruit", description = "구인 구직 관련 REST API")
+@Api(value = "recruits")
 @RequiredArgsConstructor
-@RequestMapping(value = "recruit")
+@RequestMapping(value = "recruits")
 @RestController
 public class RecruitController {
     private final RecruitService recruitService;
-    private final RecruitSaveResponseDtoMapper saveResponseDtoMapper;
+    private final RecruitSaveResponseMapper saveResponseDtoMapper;
 
     @PostMapping
-    public ResponseEntity<RecruitSaveResponseDto> saveRecruit(@RequestBody RecruitSaveRequestDto saveRequestDto) {
+    public ResponseEntity<RecruitSaveResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequestDto) {
         return new ResponseEntity<>(saveResponseDtoMapper.toDto(recruitService.save(saveRequestDto)), HttpStatus.CREATED);
     }
 }

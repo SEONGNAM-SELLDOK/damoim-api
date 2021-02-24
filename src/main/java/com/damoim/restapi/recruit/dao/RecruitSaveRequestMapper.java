@@ -2,7 +2,7 @@ package com.damoim.restapi.recruit.dao;
 
 import com.damoim.restapi.config.jpa.EntityMapper;
 import com.damoim.restapi.recruit.entity.Recruit;
-import com.damoim.restapi.recruit.model.RecruitSaveResponseDto;
+import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import org.mapstruct.Mapper;
 
 /**
@@ -10,5 +10,5 @@ import org.mapstruct.Mapper;
  * @since 2021/02/21
  */
 @Mapper(componentModel = "spring")
-public interface RecruitSaveResponseDtoMapper extends EntityMapper<RecruitSaveResponseDto, Recruit> {
+public interface RecruitSaveRequestMapper extends EntityMapper<RecruitSaveRequest, Recruit> {
 }
