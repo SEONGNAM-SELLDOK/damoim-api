@@ -16,7 +16,6 @@ import javax.validation.Valid;
  * @since 2021/02/21
  */
 @RequiredArgsConstructor
-@Transactional
 @Validated
 @Service
 public class RecruitService {
@@ -24,8 +23,14 @@ public class RecruitService {
     private final RecruitRepository repository;
     private final RecruitSaveRequestMapper saveRequestDtoMapper;
 
+    @Transactional
     public Recruit save(@Valid RecruitSaveRequest recruitSaveRequest) {
         return repository.save(saveRequestDtoMapper.toEntity(recruitSaveRequest));
+    }
+
+    @Transactional
+    public Recruit getRecruit(@Valid Long id) {
+        return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 
 }
