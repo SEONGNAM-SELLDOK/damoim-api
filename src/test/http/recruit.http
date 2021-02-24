@@ -47,3 +47,14 @@ client.test("Request executed successfully", function() {
     client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
 });
 %}
+
+### 구직 삭제
+DELETE http://localhost:8080/recruits/1
+Content-Type: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}

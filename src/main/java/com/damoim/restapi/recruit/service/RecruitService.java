@@ -32,13 +32,17 @@ public class RecruitService {
     }
 
     @Transactional
-    public Recruit getRecruit(@Valid Long id) {
+    public Recruit getById(@Valid Long id) {
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Transactional
-    public Recruit updateRecruit(@Valid RecruitUpdateRequest recruitUpdateRequest) {
+    public Recruit update(@Valid RecruitUpdateRequest recruitUpdateRequest) {
         return repository.save(updateRequestMapper.toEntity(recruitUpdateRequest));
     }
 
+    @Transactional
+    public void delete(@Valid Long id) {
+        repository.delete(getById(id));
+    }
 }

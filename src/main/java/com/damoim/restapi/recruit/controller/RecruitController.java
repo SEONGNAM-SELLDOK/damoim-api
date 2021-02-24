@@ -34,11 +34,17 @@ public class RecruitController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<RecruitGetResponse> getRecruit(@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(getResponseMapper.toDto(recruitService.getRecruit(id)), HttpStatus.OK);
+        return new ResponseEntity<>(getResponseMapper.toDto(recruitService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<RecruitUpdateResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest) {
-        return new ResponseEntity<>(updateResponseMapper.toDto(recruitService.updateRecruit(updateRequest)), HttpStatus.OK);
+        return new ResponseEntity<>(updateResponseMapper.toDto(recruitService.update(updateRequest)), HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteRecruit(@Valid @PathVariable Long id) {
+        recruitService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
