@@ -1,4 +1,4 @@
-package com.damoim.restapi.seminar.entity;
+package com.damoim.restapi.boards.entity;
 
 import lombok.*;
 
@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Seminar extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class Boards extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
     private String title;
@@ -30,7 +31,12 @@ public class Seminar extends BaseEntity {
     private String totalMember;
     private String currentMember;
     private String subject;
+
     @Enumerated(EnumType.STRING)
     private DamoimTag damoimTag;
+
     private LocalDateTime endDate;
+
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 }

@@ -1,10 +1,8 @@
-package com.damoim.restapi.seminar.model;
+package com.damoim.restapi.boards.model;
 
-import com.damoim.restapi.seminar.entity.Address;
-import com.damoim.restapi.seminar.entity.DamoimTag;
+import com.damoim.restapi.boards.entity.DamoimTag;
 import lombok.*;
 
-import javax.persistence.Embedded;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;

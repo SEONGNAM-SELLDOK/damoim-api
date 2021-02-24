@@ -1,12 +1,12 @@
-package com.damoim.restapi.seminar.service;
+package com.damoim.restapi.boards.service;
 
 import com.damoim.restapi.config.DamoimFileUtil;
-import com.damoim.restapi.seminar.dao.SeminarMapper;
-import com.damoim.restapi.seminar.dao.SeminarRepository;
-import com.damoim.restapi.seminar.entity.Address;
-import com.damoim.restapi.seminar.entity.Seminar;
-import com.damoim.restapi.seminar.model.ModifySeminarRequest;
-import com.damoim.restapi.seminar.model.ReadSeminarResponse;
+import com.damoim.restapi.boards.dao.BoardsMapper;
+import com.damoim.restapi.boards.dao.BoardsRepository;
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Boards;
+import com.damoim.restapi.boards.model.ModifySeminarRequest;
+import com.damoim.restapi.boards.model.ReadSeminarResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,23 +22,24 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class SeminarService {
-    private final SeminarRepository seminarRepository;
+public class BoardsService {
+    private final BoardsRepository boardsRepository;
     private final DamoimFileUtil damoimFileUtil;
-    private final SeminarMapper seminarMapper;
+    private final BoardsMapper boardsMapper;
 
-    public Long save(Seminar seminar) {
-        seminarRepository.save(seminar);
-        return seminar.getId();
+    public Long save(Boards boards) {
+        boardsRepository.save(boards);
+        return boards.getId();
     }
 
-    public Optional<Seminar> findById(Long id) {
-        return seminarRepository.findById(id);
+    @Transactional(readOnly = true)
+    public Optional<Boards> findById(Long id) {
+        return boardsRepository.findById(id);
     }
 
     public Long modify(Long id, ModifySeminarRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        Optional<Seminar> seminar = seminarRepository.findById(id);
+        Optional<Boards> seminar = boardsRepository.findById(id);
         seminar.ifPresent(existingSeminar -> {
             existingSeminar.setTitle(request.getTitle());
             existingSeminar.setContent(request.getContent());
@@ -47,19 +48,19 @@ public class SeminarService {
             existingSeminar.setSubject(request.getSubject());
             existingSeminar.setDamoimTag(request.getDamoimTag());
             existingSeminar.setEndDate(request.getEndDate());
-            seminarRepository.save(existingSeminar);
+            boardsRepository.save(existingSeminar);
         });
 
         return id;
     }
 
     public void delete(Long id) {
-        seminarRepository.deleteById(id);
+        boardsRepository.deleteById(id);
     }
 
-    public List<Seminar> getList(ReadSeminarResponse response) {
-        return seminarMapper.getSeminar(response);
-    }
+//    public List<Boards> getList(ReadSeminarResponse response) {
+//        return boardsMapper.getBoards(response);
+//    }
 
     public String saveUploadFile(MultipartFile upload_file) { return damoimFileUtil.upload(upload_file); }
 

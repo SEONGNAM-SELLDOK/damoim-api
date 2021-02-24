@@ -1,4 +1,4 @@
-package com.damoim.restapi.seminar.entity;
+package com.damoim.restapi.boards.entity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;

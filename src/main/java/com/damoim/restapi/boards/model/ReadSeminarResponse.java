@@ -1,4 +1,4 @@
-package com.damoim.restapi.seminar.model;
+package com.damoim.restapi.boards.model;
 
 import lombok.Getter;
 import lombok.Setter;
