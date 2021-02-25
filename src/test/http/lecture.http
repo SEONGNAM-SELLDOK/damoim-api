@@ -1,0 +1,22 @@
+### 강의 추천 작성
+POST http://localhost:8080/lecture
+Content-Type: application/json
+
+{
+  "lectureId": 1,
+  "image": "",
+  "speaker": "토비",
+  "register": "이경희",
+  "title": "토비의 스프링 5",
+  "description": "토비 저자의 스프링 프레임워크 5 신간 강의 입니다.",
+  "dueDate": "2021-02-25"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 201, "Response status is not 201, it is " + response.status);
+});
+%}
+
+###
