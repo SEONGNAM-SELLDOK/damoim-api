@@ -22,3 +22,7 @@ spring:
     properties:
       hibernate:
         format-sql: true
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
