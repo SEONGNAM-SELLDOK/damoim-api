@@ -23,6 +23,7 @@ public class LectureService {
                 .lectureId(request.getLectureId())
                 .title(request.getTitle())
                 .description(request.getDescription())
+                .image(request.getImage())
                 .register(request.getRegister())
                 .build();
 

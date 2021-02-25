@@ -35,7 +35,7 @@ public class Lecture {
     private String speaker; // 발표자
     private String subject; // 주제
     private String route;   // 수업 경로
-    private Date dueDate;   // 마감 기한
+    private LocalDateTime dueDate;   // 마감 기한
 
     @Column(updatable = false)
     private String register;
