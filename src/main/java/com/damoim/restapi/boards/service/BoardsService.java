@@ -1,5 +1,6 @@
 package com.damoim.restapi.boards.service;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.config.DamoimFileUtil;
 import com.damoim.restapi.boards.dao.BoardsRepository;
@@ -58,8 +59,8 @@ public class BoardsService {
         boardsRepository.deleteById(id);
     }
 
-    public List<ReadBoardsResponse> findBoardInfo(Long id) {
-        return boardsRepository.findByBoardInfo(id);
+    public List<ReadBoardsResponse> findBoardInfo(Long id, BoardType type) {
+        return boardsRepository.findByBoardInfo(id, type);
     }
 
 

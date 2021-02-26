@@ -1,5 +1,6 @@
 package com.damoim.restapi.boards.dao;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.entity.QBoards;
 import com.damoim.restapi.boards.model.ListBoardsResponse;
 import com.damoim.restapi.boards.model.QListBoardsResponse;
@@ -28,7 +29,7 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
     public BoardsRepositoryImpl(JPAQueryFactory queryFactory) { this.queryFactory = queryFactory; }
 
     @Override
-    public List<ReadBoardsResponse> findByBoardInfo(Long id) {
+    public List<ReadBoardsResponse> findByBoardInfo(Long id, BoardType type) {
         return queryFactory.select(new QReadBoardsResponse(
                 boards.title,
                 boards.content,
@@ -41,7 +42,10 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
                 boards.subject,
                 boards.endDate))
             .from(boards)
-            .where(boards.id.eq(id))
+            .where(
+                boards.id.eq(id),
+                boards.boardType.eq(type)
+            )
             .fetch();
     }
 

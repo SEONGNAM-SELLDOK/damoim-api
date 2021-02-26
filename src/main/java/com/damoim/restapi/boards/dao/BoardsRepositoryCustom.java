@@ -1,5 +1,6 @@
 package com.damoim.restapi.boards.dao;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ListBoardsResponse;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ import java.util.List;
  * */
 
 public interface BoardsRepositoryCustom {
-    List<ReadBoardsResponse> findByBoardInfo(Long id);
+    List<ReadBoardsResponse> findByBoardInfo(Long id, BoardType type);
     Page<ListBoardsResponse> searchBoard(BoardsSearchCondition condition, Pageable pageable);
 
 

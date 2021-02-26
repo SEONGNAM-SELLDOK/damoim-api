@@ -68,8 +68,8 @@ public class BoardsController {
 
     @GetMapping("{id}")
     @ResponseBody
-    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
-        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id);
+    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id, @RequestParam(value = "type") BoardType type) {
+        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id, type);
         return ResponseEntity.ok(boardInfo);
     }
 
