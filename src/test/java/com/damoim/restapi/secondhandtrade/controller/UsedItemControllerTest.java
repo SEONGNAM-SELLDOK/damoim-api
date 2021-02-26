@@ -124,7 +124,7 @@ class UsedItemControllerTest {
 
     UsedItem usedItem = usedItemRepository.findById(item.getNo()).get();
 
-    assertThat(usedItem.isClose()).isEqualTo(true);
+    assertThat(usedItem.isClose()).isTrue();
   }
 
   @Test

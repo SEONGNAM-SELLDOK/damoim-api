@@ -49,7 +49,7 @@ public class UsedItemService {
     UsedItem item = getItemFromId(no);
     // 추후 SpringSecurity 의존성 추가 시  AccessDeniedException 으로 변경
     if (!item.isWriter(writer)) {
-      throw new RuntimeException();
+      throw new RuntimeException("작성자 외 수정 불가능");
     }
 
     ResponseModifyUsedItemClosed closed = item.closed(writer);
