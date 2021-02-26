@@ -27,6 +27,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.4.2'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.5'
+
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.2'
     compileOnly 'org.projectlombok:lombok'
@@ -59,6 +62,7 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
 }
 
 sonarqube {
