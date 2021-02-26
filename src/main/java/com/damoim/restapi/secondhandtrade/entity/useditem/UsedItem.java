@@ -1,5 +1,7 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
+import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -53,4 +55,28 @@ public class UsedItem {
   private boolean close = false; //판매완료 여부 (default = false)
 
   private boolean negotiation = false; //흥정여부(default = false)
+
+  public boolean isWriter(String writer){
+    return this.writer.equals(writer);
+  }
+
+  public ResponseModifyUsedItemClosed closed(String writer){
+    this.editWriter = writer;
+    this.close=true;
+    return new ResponseModifyUsedItemClosed(this.no, true);
+  }
+
+  public UsedItem update(EditUsedItemRequest editRq) {
+    this.editWriter = editRq.getEditWriter();
+    this.title =editRq.getTitle();
+    this.price = editRq.getPrice();
+    this.description = editRq.getDescription();
+    this.tradeType = editRq.getTradeType();
+    this.titleImg = editRq.getTitleImg();
+    this.category = editRq.getCategory();
+    this.negotiation = editRq.isNegotiation();
+    this.address = editRq.getAddress();
+    return this;
+  }
+
 }

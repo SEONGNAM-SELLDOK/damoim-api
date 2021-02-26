@@ -5,6 +5,8 @@ import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
+import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 
@@ -28,9 +30,9 @@ import lombok.RequiredArgsConstructor;
  * @author kimjaeJoon
  * @since 2021.02.22
  */
-@Api(value = "UsedItem",tags = "중고거래 관련 REST API")
+@Api(value = "UsedItem", tags = "중고거래 관련 REST API")
 @RestController
-@RequestMapping("trading")
+@RequestMapping("useditems")
 @RequiredArgsConstructor
 public class UsedItemController {
 
@@ -38,7 +40,7 @@ public class UsedItemController {
   private final EnumMapper enumMapper;
 
   @ExceptionHandler(NotFoundPage.class)
-  public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage){
+  public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage) {
     ApiMessage apiMessage = ApiMessage.builder()
         .message(notFoundPage.getMessage())
         .inputValue(notFoundPage.getValue())
@@ -49,7 +51,8 @@ public class UsedItemController {
 
 
   @PostMapping
-  public ResponseEntity<UsedItem> save(@Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest) {
+  public ResponseEntity<UsedItem> save(
+      @Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest) {
     UsedItem usedItem = usedItemService.save(saveUsedItemRequest);
     return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
   }
@@ -62,8 +65,8 @@ public class UsedItemController {
   }
 
 
-  @GetMapping("/items")
-  public ResponseEntity<UsedItem> selectItem(@RequestParam Long no) {
+  @GetMapping("/item/{no}")
+  public ResponseEntity<UsedItem> selectItem(@PathVariable Long no) {
     UsedItem usedItem = usedItemService.selectItem(no);
     return ResponseEntity.ok(usedItem);
   }
@@ -82,5 +85,24 @@ public class UsedItemController {
 
     Page<UsedItem> page = usedItemService.searchTitleOrDescription(title, description, pageable);
     return ResponseEntity.ok(page);
+  }
+
+  @PutMapping("/item/{no}/edit")
+  public ResponseEntity<UsedItem> editItem(@PathVariable Long no,
+      @Valid @RequestBody EditUsedItemRequest editRq){
+    UsedItem item = usedItemService.editItem(no,editRq);
+    return ResponseEntity.ok(item);
+  }
+
+  @PatchMapping("/item/{no}/closed")
+  public ResponseEntity<ResponseModifyUsedItemClosed> closed(@PathVariable Long no,
+      @RequestParam String writer) {
+    return ResponseEntity.ok(usedItemService.ItemUpdateToClosed(no, writer));
+  }
+
+  @DeleteMapping("/item/{no}")
+  public ResponseEntity<Object> delete(@PathVariable Long no){
+    usedItemService.delete(no);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }
