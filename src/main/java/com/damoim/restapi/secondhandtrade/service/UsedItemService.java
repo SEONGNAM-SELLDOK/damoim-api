@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,9 +48,8 @@ public class UsedItemService {
 
   public ResponseModifyUsedItemClosed itemUpdateToClosed(Long no, String writer) {
     UsedItem item = getItemFromId(no);
-    // 추후 SpringSecurity 의존성 추가 시  AccessDeniedException 으로 변경
     if (!item.isWriter(writer)) {
-      throw new RuntimeException("작성자 외 수정 불가능");
+      throw new AccessDeniedException("작성자 외 수정 불가능");
     }
 
     ResponseModifyUsedItemClosed closed = item.closed(writer);
