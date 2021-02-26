@@ -1,3 +1,7 @@
+GET http://localhost:8080/useditems/pages/search?title=Book&description=Air&negotiation=true
+Accept: application/json
+
+###
 ### 중고거래 게시글 생성
 POST http://localhost:8080/useditems
 Content-Type: application/json
@@ -7,7 +11,7 @@ Content-Type: application/json
   "titleImg" : "IMG URL",
   "address" : "서울특별시",
   "category" : "default",
-  "description" : "content",
+  "description" : "Air",
   "negotiation" : "true",
   "tradeType": "ALL",
   "title" : "MackBook 판매합니다.",
@@ -26,7 +30,7 @@ DELETE http://localhost:8080/useditems/item/1
 
 
 ### 게시글 수정
-PUT http://localhost:8080/useditems/item/1/edit
+PUT http://localhost:8080/useditems/item/1
 Content-Type: application/json
 
 {

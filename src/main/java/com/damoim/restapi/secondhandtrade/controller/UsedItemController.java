@@ -8,6 +8,7 @@ import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
 import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 
 import io.swagger.annotations.Api;
@@ -71,23 +72,14 @@ public class UsedItemController {
     return ResponseEntity.ok(usedItem);
   }
 
-  @GetMapping("/pages")
-  public ResponseEntity<Page<UsedItem>> defaultPage(
-      @PageableDefault(size = 6, sort = "postTime", direction = Direction.DESC) Pageable pageable) {
-    Page<UsedItem> page = usedItemService.defaultPage(pageable);
-    return ResponseEntity.ok(page);
-  }
-
   @GetMapping("/pages/search")
-  public ResponseEntity<Page<UsedItem>> searchPage(@RequestParam(defaultValue = "") String title,
-      @RequestParam(defaultValue = "") String description,
+  public ResponseEntity<Page<UsedItem>> searchPage(SearchUsedItemRequest request,
       @PageableDefault(size = 6, sort = "postTime", direction = Direction.DESC) Pageable pageable) {
-
-    Page<UsedItem> page = usedItemService.searchTitleOrDescription(title, description, pageable);
-    return ResponseEntity.ok(page);
+    Page<UsedItem> search = usedItemService.search(request, pageable);
+    return ResponseEntity.ok(search);
   }
 
-  @PutMapping("/item/{no}/edit")
+  @PutMapping("/item/{no}")
   public ResponseEntity<UsedItem> editItem(@PathVariable Long no,
       @Valid @RequestBody EditUsedItemRequest editRq){
     UsedItem item = usedItemService.editItem(no,editRq);
@@ -97,7 +89,7 @@ public class UsedItemController {
   @PatchMapping("/item/{no}/closed")
   public ResponseEntity<ResponseModifyUsedItemClosed> closed(@PathVariable Long no,
       @RequestParam String writer) {
-    return ResponseEntity.ok(usedItemService.ItemUpdateToClosed(no, writer));
+    return ResponseEntity.ok(usedItemService.itemUpdateToClosed(no, writer));
   }
 
   @DeleteMapping("/item/{no}")

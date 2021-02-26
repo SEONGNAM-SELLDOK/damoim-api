@@ -16,24 +16,24 @@ public class EditUsedItemRequest {
   private String editWriter;
 
   @NotNull
-  @ApiModelProperty(value = "글 제목",required = true,example = "맥북 팝니다.")
+  @ApiModelProperty(value = "글 제목",required = true,example = "(수정)아이패드 팝니다.")
   private String title;
 
   @NotNull
   @Min(0)
-  @ApiModelProperty(value = "물건 가격",required = true,example = "10000")
+  @ApiModelProperty(value = "물건 가격",required = true,example = "12000")
   private int price;
 
   @NotNull
-  @ApiModelProperty(value = "글 내용",required = true,example = "2021년 신형입니다.")
+  @ApiModelProperty(value = "글 내용",required = true,example = "2020년 구형 입니다.")
   private String description;
 
   @NotNull
-  @ApiModelProperty(value ="거래방식",required = true,example = "ALL")
+  @ApiModelProperty(value ="거래방식",required = true,example = "DELIVERY")
   private TradeType tradeType;
 
   @NotNull
-  @ApiModelProperty(value = "썸네일(대표이미지)",example ="img/usedItem/MackBook.png" )
+  @ApiModelProperty(value = "썸네일(대표이미지)",example ="img/usedItem/IPad.png" )
   private String titleImg;
 
   @NotNull

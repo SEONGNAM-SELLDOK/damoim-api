@@ -1,11 +1,13 @@
 package com.damoim.restapi.secondhandtrade.service;
 
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
+import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,7 @@ public class UsedItemService {
 
   private final UsedItemRepository usedItemRepository;
   private final ModelMapper modelMapper;
+  private final UsedItemSearchRepository usedItemSearchRepository;
 
   public UsedItem save(SaveUsedItemRequest saveUsedItemRequest) {
     UsedItem item = modelMapper.map(saveUsedItemRequest, UsedItem.class);
@@ -36,18 +39,13 @@ public class UsedItemService {
     return usedItemRepository.findAll(pageable);
   }
 
-  public Page<UsedItem> searchTitleOrDescription(String title, String description,
-      Pageable pageable) {
-    return usedItemRepository.findAllSearch(title, description, pageable);
-  }
-
   public UsedItem editItem(Long no, EditUsedItemRequest editRq) {
     UsedItem originItem = getItemFromId(no);
     UsedItem editItem = originItem.update(editRq);
     return usedItemRepository.save(editItem);
   }
 
-  public ResponseModifyUsedItemClosed ItemUpdateToClosed(Long no, String writer) {
+  public ResponseModifyUsedItemClosed itemUpdateToClosed(Long no, String writer) {
     UsedItem item = getItemFromId(no);
     // 추후 SpringSecurity 의존성 추가 시  AccessDeniedException 으로 변경
     if (!item.isWriter(writer)) {
@@ -68,5 +66,9 @@ public class UsedItemService {
     Optional<UsedItem> item = usedItemRepository.findById(no);
     return item
         .orElseThrow(() -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(no)));
+  }
+
+  public Page<UsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
+    return usedItemSearchRepository.search(request,pageable);
   }
 }

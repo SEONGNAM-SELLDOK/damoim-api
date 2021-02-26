@@ -88,24 +88,6 @@ class UsedItemControllerTest {
 
   @Test
   @Transactional
-  @DisplayName("페이징(기본 페이지)")
-  void pages() throws Exception {
-
-    //given
-    for (int i = 0; i < 10; i++) {
-      usedItemService.save(getItemRequest());
-    }
-
-    //when
-    mockMvc.perform(get("/useditems/pages")
-        .param("page", "0"))
-        .andDo(print())
-        .andExpect(status().isOk());
-
-  }
-
-  @Test
-  @Transactional
   @DisplayName("특정 게시글 가져오기")
   void getPage() throws Exception{
     UsedItem item = usedItemService.save(getItemRequest());
@@ -125,36 +107,6 @@ class UsedItemControllerTest {
         .andExpect(jsonPath("inputValue").value("999"));
   }
 
-  @Test
-  @Transactional
-  @DisplayName("페이징(제목,내용 검색)")
-  void searchPages() throws Exception {
-
-    //given
-    for (int i = 0; i < 5; i++) {
-      usedItemService.save(getItemRequest());
-    }
-    for (int i = 0; i < 10; i++) {
-      SaveUsedItemRequest itemRequest = getItemRequest();
-      itemRequest.setTitle("Air");
-      usedItemService.save(itemRequest);
-    }
-
-    for (int i = 0; i < 3; i++) {
-      SaveUsedItemRequest itemRequest = getItemRequest();
-      itemRequest.setDescription("buy");
-      usedItemService.save(itemRequest);
-    }
-
-    //when
-    mockMvc.perform(get("/useditems/pages/search")
-        .param("page", "2")
-        .param("title", "Air")
-        .param("description", "buy"))
-        .andDo(print())
-        .andExpect(status().isOk());
-
-  }
 
   @Test
   @Transactional
