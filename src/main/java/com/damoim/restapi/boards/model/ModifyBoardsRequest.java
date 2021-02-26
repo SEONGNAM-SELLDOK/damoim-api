@@ -7,12 +7,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
+/**
+ * @author gisung go
+ * @since 2021-02-22
+ * */
+
 @NoArgsConstructor
 @Getter
 @ToString
 @AllArgsConstructor
 @Builder
-public class ModifySeminarRequest {
+public class ModifyBoardsRequest {
     @NotBlank
     private String title; // 세미나 제목
     @NotBlank

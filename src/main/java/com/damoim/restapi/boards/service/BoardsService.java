@@ -1,13 +1,14 @@
 package com.damoim.restapi.boards.service;
 
+import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.config.DamoimFileUtil;
-import com.damoim.restapi.boards.dao.BoardsMapper;
 import com.damoim.restapi.boards.dao.BoardsRepository;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
-import com.damoim.restapi.boards.model.ModifySeminarRequest;
-import com.damoim.restapi.boards.model.ReadSeminarResponse;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,6 @@ import java.util.Optional;
 public class BoardsService {
     private final BoardsRepository boardsRepository;
     private final DamoimFileUtil damoimFileUtil;
-    private final BoardsMapper boardsMapper;
 
     public Long save(Boards boards) {
         boardsRepository.save(boards);
@@ -37,7 +37,7 @@ public class BoardsService {
         return boardsRepository.findById(id);
     }
 
-    public Long modify(Long id, ModifySeminarRequest request) {
+    public Long modify(Long id, ModifyBoardsRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         Optional<Boards> seminar = boardsRepository.findById(id);
         seminar.ifPresent(existingSeminar -> {
@@ -58,10 +58,12 @@ public class BoardsService {
         boardsRepository.deleteById(id);
     }
 
-//    public List<Boards> getList(ReadSeminarResponse response) {
-//        return boardsMapper.getBoards(response);
-//    }
+    public List<ReadBoardsResponse> findBoardInfo(Long id) {
+        return boardsRepository.findByBoardInfo(id);
+    }
+
 
     public String saveUploadFile(MultipartFile upload_file) { return damoimFileUtil.upload(upload_file); }
+
 
 }

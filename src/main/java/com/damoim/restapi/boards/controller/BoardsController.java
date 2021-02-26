@@ -1,15 +1,20 @@
-package com.damoim.restapi.boards.comtroller;
+package com.damoim.restapi.boards.controller;
 
+import com.damoim.restapi.boards.dao.BoardsRepository;
+import com.damoim.restapi.boards.dao.BoardsSearchCondition;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.model.ModifySeminarRequest;
-import com.damoim.restapi.boards.model.ReadSeminarResponse;
+import com.damoim.restapi.boards.model.ListBoardsResponse;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,10 +37,10 @@ import java.util.List;
 public class BoardsController {
 
     private final BoardsService boardsService;
+    private final BoardsRepository boardsRepository;
 
-    @PostMapping
-    public ResponseEntity<String> save(final @Valid @RequestBody SaveBoardRequest request,
-                                       @RequestParam(value = "type") BoardType type) {
+    @PostMapping // type: SEMINAR, STUDY
+    public ResponseEntity<String> save(final @Valid @RequestBody SaveBoardRequest request, @RequestParam(value = "type") BoardType type) {
         log.info(request.toString());
 
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
@@ -63,32 +68,33 @@ public class BoardsController {
 
     @GetMapping("{id}")
     @ResponseBody
-    public ResponseEntity<ReadSeminarResponse> findById(@PathVariable("id") Long id) {
-        return new ResponseEntity(boardsService.findById(id), HttpStatus.OK);
+    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
+        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id);
+        return ResponseEntity.ok(boardInfo);
     }
 
     @PutMapping("{id}")
-    @ResponseBody // 세미나 수정하기
-    public ResponseEntity<String> modify(@PathVariable("id") Long id, final @Valid @RequestBody ModifySeminarRequest request) {
+    @ResponseBody
+    public ResponseEntity<String> modify(@PathVariable("id") Long id, final @Valid @RequestBody ModifyBoardsRequest request) {
         Long seminarId = boardsService.modify(id, request);
         HashMap<String, Long> map = new HashMap<>();
-        map.put("seminar_id", seminarId);
+        map.put("board_id", seminarId);
 
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    @ResponseBody // 세미나 삭제하기
+    @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long id) {
         boardsService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-//    @GetMapping("search")
-//    public ResponseEntity<List<ReadSeminarResponse>> searchPage(ReadSeminarResponse response) {
-//        List<Boards> seminarsInfo = boardsService.getList(response);
-//        return new ResponseEntity(seminarsInfo, HttpStatus.OK);
-//    }
+    @GetMapping("pages")
+    public ResponseEntity list(BoardsSearchCondition condition, Pageable pageable) {
+        Page<ListBoardsResponse> listBoardsResponses = boardsRepository.searchBoard(condition, pageable);
+        return ResponseEntity.ok(listBoardsResponses);
+    }
 
     @PostMapping("files") // 파일 등록하기
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {

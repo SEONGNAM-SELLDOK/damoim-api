@@ -1,11 +1,10 @@
 package com.damoim.restapi.member.service;
 
-import com.damoim.restapi.boards.comtroller.BoardsController;
+import com.damoim.restapi.boards.controller.BoardsController;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.entity.Tag;
-import com.damoim.restapi.boards.model.ModifySeminarRequest;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardsService;
 import org.junit.jupiter.api.Assertions;
@@ -77,7 +76,7 @@ public class BoardsServiceTest {
 
     @Test
     void modifyTest() {
-        ModifySeminarRequest request = ModifySeminarRequest.builder()
+        ModifyBoardsRequest request = ModifyBoardsRequest.builder()
                 .title("스프링 세미나 수정")
                 .build();
 
