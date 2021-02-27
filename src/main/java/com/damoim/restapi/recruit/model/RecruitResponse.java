@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
  * @author SeongRok.Oh
  * @since 2021/02/24
  */
-@Setter
 @Getter
-public class RecruitUpdateResponse {
+@Setter
+public class RecruitResponse {
     @ApiModelProperty(example = "1")
     private Long id;
 

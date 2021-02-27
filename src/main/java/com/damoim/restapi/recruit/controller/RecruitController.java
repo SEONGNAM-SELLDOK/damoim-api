@@ -1,8 +1,6 @@
 package com.damoim.restapi.recruit.controller;
 
-import com.damoim.restapi.recruit.dao.RecruitGetResponseMapper;
-import com.damoim.restapi.recruit.dao.RecruitSaveResponseMapper;
-import com.damoim.restapi.recruit.dao.RecruitUpdateResponseMapper;
+import com.damoim.restapi.recruit.dao.RecruitResponseMapper;
 import com.damoim.restapi.recruit.model.*;
 import com.damoim.restapi.recruit.service.RecruitService;
 import io.swagger.annotations.Api;
@@ -23,28 +21,26 @@ import javax.validation.Valid;
 @RestController
 public class RecruitController {
     private final RecruitService recruitService;
-    private final RecruitSaveResponseMapper saveResponseMapper;
-    private final RecruitGetResponseMapper getResponseMapper;
-    private final RecruitUpdateResponseMapper updateResponseMapper;
+    private final RecruitResponseMapper responseMapper;
 
     @PostMapping
-    public ResponseEntity<RecruitSaveResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest) {
-        return new ResponseEntity<>(saveResponseMapper.toDto(recruitService.save(saveRequest)), HttpStatus.CREATED);
+    public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest) {
+        return new ResponseEntity<>(responseMapper.toDto(recruitService.save(saveRequest)), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecruitGetResponse> getRecruit(@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(getResponseMapper.toDto(recruitService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<RecruitResponse> getRecruit(@Valid @PathVariable Long id) {
+        return new ResponseEntity<>(responseMapper.toDto(recruitService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<RecruitUpdateResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest) {
-        return new ResponseEntity<>(updateResponseMapper.toDto(recruitService.update(updateRequest)), HttpStatus.OK);
+    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest) {
+        return new ResponseEntity<>(responseMapper.toDto(recruitService.update(updateRequest)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteRecruit(@Valid @PathVariable Long id) {
         recruitService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }
