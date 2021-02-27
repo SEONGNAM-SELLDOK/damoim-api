@@ -19,6 +19,7 @@ import javax.validation.Valid;
  */
 @RequiredArgsConstructor
 @Validated
+@Transactional
 @Service
 public class RecruitService {
 
@@ -26,22 +27,19 @@ public class RecruitService {
     private final RecruitSaveRequestMapper saveRequestMapper;
     private final RecruitUpdateRequestMapper updateRequestMapper;
 
-    @Transactional
     public Recruit save(@Valid RecruitSaveRequest recruitSaveRequest) {
         return repository.save(saveRequestMapper.toEntity(recruitSaveRequest));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Recruit getById(@Valid Long id) {
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    @Transactional
     public Recruit update(@Valid RecruitUpdateRequest recruitUpdateRequest) {
         return repository.save(updateRequestMapper.toEntity(recruitUpdateRequest));
     }
 
-    @Transactional
     public void delete(@Valid Long id) {
         repository.delete(getById(id));
     }
