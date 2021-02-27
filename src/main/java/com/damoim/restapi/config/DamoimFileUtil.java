@@ -16,7 +16,6 @@ import java.nio.file.Paths;
  * */
 @Component
 public class DamoimFileUtil {
-
     @Autowired
     FileProperties fileProperties;
 
