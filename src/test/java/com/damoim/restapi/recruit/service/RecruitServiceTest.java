@@ -117,7 +117,8 @@ class RecruitServiceTest {
         assertEquals(saveRecruit.getId(), getRecruit.getId());
 
         recruitService.delete(saveRecruit.getId());
-        assertThrows(RuntimeException.class, () -> recruitService.getById(saveRecruit.getId()));
+        final Long id = saveRecruit.getId();
+        assertThrows(RuntimeException.class, () -> recruitService.getById(id));
     }
 
     @DisplayName("구인 조건별 가져오기")

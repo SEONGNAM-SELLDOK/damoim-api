@@ -53,21 +53,21 @@ public class RecruitGetRequest implements Predicate<Recruit> {
             return true;
         }
 
-        String title = recruit.getTitle();
-        String description = recruit.getDescription();
-        String company = recruit.getCompany();
-        String location = recruit.getLocation();
-        Integer reward = recruit.getReward();
-        String[] tags = recruit.getTags();
-        String register = recruit.getRegister();
+        String compareTitle = recruit.getTitle();
+        String compareDescription = recruit.getDescription();
+        String compareCompany = recruit.getCompany();
+        String compareLocation = recruit.getLocation();
+        Integer compareReward = recruit.getReward();
+        String[] compareTags = recruit.getTags();
+        String compareRegister = recruit.getRegister();
 
-        return (Objects.nonNull(title) && Objects.nonNull(this.title) && title.equals(this.title))
-                || (Objects.nonNull(description) && Objects.nonNull(this.description) && description.contains(this.description))
-                || (Objects.nonNull(company) && Objects.nonNull(this.company) && company.contains(this.company))
-                || (Objects.nonNull(location) && Objects.nonNull(this.location) && location.equals(this.location))
-                || (Objects.nonNull(reward) && Objects.nonNull(this.reward) && reward <= this.reward)
-                || (Objects.nonNull(tags) && Objects.nonNull(this.tags) && containTag(tags, this.tags))
-                || (Objects.nonNull(register) && Objects.nonNull(this.register) && register.contains(this.register))
+        return (Objects.nonNull(compareTitle) && Objects.nonNull(this.title) && compareTitle.equals(this.title))
+                || (Objects.nonNull(compareDescription) && Objects.nonNull(this.description) && compareDescription.contains(this.description))
+                || (Objects.nonNull(compareCompany) && Objects.nonNull(this.company) && compareCompany.contains(this.company))
+                || (Objects.nonNull(compareLocation) && Objects.nonNull(this.location) && compareLocation.equals(this.location))
+                || (Objects.nonNull(compareReward) && Objects.nonNull(this.reward) && compareReward <= this.reward)
+                || (Objects.nonNull(compareTags) && Objects.nonNull(this.tags) && containTag(compareTags, this.tags))
+                || (Objects.nonNull(compareRegister) && Objects.nonNull(this.register) && compareRegister.contains(this.register))
                 ;
     }
 
