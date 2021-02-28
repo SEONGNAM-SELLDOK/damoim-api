@@ -21,7 +21,7 @@ import java.util.Optional;
  * @author gisung go
  * @since 2021-02-22
  * */
-@SpringBootTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class BoardsServiceTest {
 

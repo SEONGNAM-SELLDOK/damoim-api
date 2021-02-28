@@ -15,7 +15,7 @@ import com.damoim.restapi.member.model.SaveMemberRequest;
  * @author incheol.jung
  * @since 2021. 02. 20.
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class MemberServiceTest {
 	@Autowired
