@@ -50,6 +50,7 @@ public class UsedItem {
   private TradeType tradeType; //거래 방식
 
   @Enumerated(EnumType.STRING)
+  @Builder.Default
   private Category category = Category.DEFAULT; //물품별 카테고리 (default = 기타)
 
   private String titleImg; //대표 이미지
@@ -63,9 +64,9 @@ public class UsedItem {
   private LocalDateTime updateDate; //수정일시
 
   private String editWriter; //수정자 ID
-
+  @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)
-
+  @Builder.Default
   private boolean negotiation = false; //흥정여부(default = false)
 
   public boolean isWriter(String writer) {
