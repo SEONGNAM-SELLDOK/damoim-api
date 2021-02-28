@@ -1,6 +1,7 @@
 package com.damoim.restapi.secondhandtrade.service;
 
-import com.damoim.restapi.fileUtil.DamoimFileUtil;
+
+import com.damoim.restapi.config.DamoimFileUtil;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
