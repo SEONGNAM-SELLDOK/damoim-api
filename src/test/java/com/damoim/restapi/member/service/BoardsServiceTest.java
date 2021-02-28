@@ -26,8 +26,6 @@ import java.util.Optional;
 @Transactional
 public class BoardsServiceTest {
 
-    //    @Autowired
-    //    BoardsController boardsController;
     @Autowired
     BoardsService boardsService;
 
