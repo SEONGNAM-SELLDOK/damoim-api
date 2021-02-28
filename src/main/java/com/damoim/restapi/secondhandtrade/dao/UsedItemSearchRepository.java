@@ -9,8 +9,7 @@ import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
-
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.ap.internal.util.Strings;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,7 @@ public class UsedItemSearchRepository {
 
   private final JPAQueryFactory queryFactory;
 
-  public Page<UsedItem> search(SearchUsedItemRequest request , Pageable pageable){
+  public Page<UsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
     QueryResults<UsedItem> results = queryFactory.selectFrom(usedItem)
         .where(
             likeTitle(request.getTitle()),
@@ -36,79 +35,88 @@ public class UsedItemSearchRepository {
             eqCategory(request.getCategory()),
             eqEditWriter(request.getEditWriter()),
             eqClose(request.getClose()),
-            eqNegotiation(request.getClose())
-            )
+            eqNegotiation(request.getClose()),
+            fromTo(request.getFrom(),request.getTo())
+        )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
         .fetchResults();
 
-    return new PageImpl<>(results.getResults(),pageable,results.getTotal());
+    return new PageImpl<>(results.getResults(), pageable, results.getTotal());
   }
 
-  private BooleanExpression likeTitle(String title){
-    if(Strings.isEmpty(title)){
+  private BooleanExpression fromTo(LocalDate from , LocalDate to){
+    if(from==null || to==null){
+      return null;
+    }
+    return usedItem.createDate.between(from.atStartOfDay(),to.atStartOfDay().plusDays(1L));
+  }
+
+  private BooleanExpression likeTitle(String title) {
+    if (Strings.isEmpty(title)) {
       return null;
     }
     return usedItem.title.contains(title);
   }
 
-  private BooleanExpression likeDescription(String description){
-    if(Strings.isEmpty(description)){
+  private BooleanExpression likeDescription(String description) {
+    if (Strings.isEmpty(description)) {
       return null;
     }
     return usedItem.description.contains(description);
   }
 
-  private BooleanExpression eqWriter(String writer){
-    if(Strings.isEmpty(writer)){
+  private BooleanExpression eqWriter(String writer) {
+    if (Strings.isEmpty(writer)) {
       return null;
     }
     return usedItem.writer.eq(writer);
   }
 
-  private BooleanExpression eqPrice(Integer price){
-    if(price ==null){
+  private BooleanExpression eqPrice(Integer price) {
+    if (price == null) {
       return null;
     }
     return usedItem.price.eq(price);
   }
 
-  private BooleanExpression likeAddress(String address){
-    if(Strings.isEmpty(address)){
+  private BooleanExpression likeAddress(String address) {
+    if (Strings.isEmpty(address)) {
       return null;
     }
     return usedItem.address.contains(address);
   }
 
-  private BooleanExpression eqTradeType(TradeType tradeType){
-    if(tradeType== null){
+  private BooleanExpression eqTradeType(TradeType tradeType) {
+    if (tradeType == null) {
       return null;
     }
     return usedItem.tradeType.eq(tradeType);
   }
 
-  private BooleanExpression eqCategory(Category category){
-    if(category == null){
+  private BooleanExpression eqCategory(Category category) {
+    if (category == null) {
       return null;
     }
     return usedItem.category.eq(category);
   }
 
-  private BooleanExpression eqEditWriter(String editWriter){
-    if(Strings.isEmpty(editWriter)){
+  private BooleanExpression eqEditWriter(String editWriter) {
+    if (Strings.isEmpty(editWriter)) {
       return null;
     }
     return usedItem.editWriter.eq(editWriter);
   }
-  private BooleanExpression eqClose(Boolean result){
-    if(result==null){
+
+  private BooleanExpression eqClose(Boolean result) {
+    if (result == null) {
       return null;
     }
     return usedItem.close.eq(result);
   }
 
-  private BooleanExpression eqNegotiation(Boolean result){
-    if(result ==null){
+  private BooleanExpression eqNegotiation(Boolean result) {
+    if (result == null) {
       return null;
     }
     return usedItem.negotiation.eq(result);

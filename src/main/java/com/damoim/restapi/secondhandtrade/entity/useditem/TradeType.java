@@ -4,7 +4,7 @@ import com.damoim.restapi.secondhandtrade.mapper.EnumMapperType;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum TradeType implements EnumMapperType {
-  ALL("택배,직거래"),DELIVERY("택배"),DIRECT("직거래");
+  ALL("택배,직거래"), DELIVERY("택배"), DIRECT("직거래");
 
   private final String value;
 

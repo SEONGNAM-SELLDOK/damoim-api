@@ -22,3 +22,9 @@ spring:
     properties:
       hibernate:
         format-sql: true
+
+
+damoim:
+  file:
+    pathPrefix: src/main/resources/static
+    pathLast: /img/

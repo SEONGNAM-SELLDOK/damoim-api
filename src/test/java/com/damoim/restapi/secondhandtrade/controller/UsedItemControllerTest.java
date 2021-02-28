@@ -51,7 +51,6 @@ class UsedItemControllerTest {
   ModelMapper modelMapper;
 
 
-
   @Test
   @Transactional
   @DisplayName("중고거래 게시글 작성")
@@ -67,14 +66,13 @@ class UsedItemControllerTest {
         .content(json))
         .andExpect(status().is2xxSuccessful());
 
-    UsedItem returnItem = valueToObject(resultActions,UsedItem.class);
+    UsedItem returnItem = valueToObject(resultActions, UsedItem.class);
 
     //then
     UsedItem item = usedItemRepository.findById(returnItem.getNo()).get();
     assertThat(item.getTitle()).isEqualTo(returnItem.getTitle());
-    assertThat(item.getPostTime()).isEqualTo(returnItem.getPostTime());
+    assertThat(item.getCreateDate()).isEqualTo(returnItem.getCreateDate());
   }
-
 
 
   @Test
@@ -89,17 +87,17 @@ class UsedItemControllerTest {
   @Test
   @Transactional
   @DisplayName("특정 게시글 가져오기")
-  void getPage() throws Exception{
+  void getPage() throws Exception {
     UsedItem item = usedItemService.save(getItemRequest());
     String id = String.valueOf(item.getNo());
-    mockMvc.perform(get("/useditems/item/"+id))
+    mockMvc.perform(get("/useditems/item/" + id))
         .andExpect(status().isOk());
   }
 
   @Test
   @Transactional
   @DisplayName("특정 게시글 가져오기-실패(없는 페이지번호)")
-  void getPageFail() throws Exception{
+  void getPageFail() throws Exception {
     mockMvc.perform(get("/useditems/item/999"))
         .andExpect(status().is4xxClientError())
         .andExpect(jsonPath("statusCode").value("404"))
@@ -111,13 +109,13 @@ class UsedItemControllerTest {
   @Test
   @Transactional
   @DisplayName("게시글 판매상태 변경 - closed")
-  void itemClosed() throws Exception{
+  void itemClosed() throws Exception {
 
     UsedItem item = usedItemService.save(getItemRequest());
     String id = String.valueOf(item.getNo());
 
-    mockMvc.perform(patch("/useditems/item/"+id+"/closed")
-        .param("writer","KJJ"))
+    mockMvc.perform(patch("/useditems/item/" + id + "/closed")
+        .param("writer", "KJJ"))
         .andExpect(jsonPath("no").value(id))
         .andExpect(jsonPath("close").value(true))
         .andExpect(status().isOk());
@@ -130,7 +128,7 @@ class UsedItemControllerTest {
   @Test
   @Transactional
   @DisplayName("게시글 수정")
-  void editItem(){
+  void editItem() {
     //given
     UsedItem save = usedItemService.save(getItemRequest());
     //when
@@ -149,7 +147,7 @@ class UsedItemControllerTest {
   @Test
   @Transactional
   @DisplayName("게시글 삭제")
-  void itemDelete(){
+  void itemDelete() {
     //given
     UsedItem save = usedItemService.save(getItemRequest());
     //when
@@ -160,17 +158,16 @@ class UsedItemControllerTest {
   }
 
 
-  private <T> T valueToObject(ResultActions resultActions, Class<T> target) throws Exception{
+  private <T> T valueToObject(ResultActions resultActions, Class<T> target) throws Exception {
     MvcResult mvcResult = resultActions.andReturn();
     MockHttpServletResponse response = mvcResult.getResponse();
     String resultJson = response.getContentAsString();
-    return objectMapper.readValue(resultJson,target);
+    return objectMapper.readValue(resultJson, target);
   }
 
   private SaveUsedItemRequest getItemRequest() {
     return SaveUsedItemRequest.builder()
         .writer("KJJ")
-        .titleImg("temp")
         .address("tempAddress")
         .category(Category.DEFAULT)
         .description("content")

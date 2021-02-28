@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ApiMessage {
+
   private final int statusCode;
 
   private final String message;

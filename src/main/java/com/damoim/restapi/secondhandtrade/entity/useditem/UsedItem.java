@@ -1,16 +1,28 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
-import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
-import lombok.*;
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @EqualsAndHashCode(of = "no")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,10 +57,10 @@ public class UsedItem {
   private String address; //판매 지역
 
   @CreationTimestamp
-  private LocalDateTime postTime; //등록일시
+  private LocalDateTime createDate; //등록일시
 
   @UpdateTimestamp
-  private LocalDateTime editTime; //수정일시
+  private LocalDateTime updateDate; //수정일시
 
   private String editWriter; //수정자 ID
 
@@ -56,27 +68,13 @@ public class UsedItem {
 
   private boolean negotiation = false; //흥정여부(default = false)
 
-  public boolean isWriter(String writer){
+  public boolean isWriter(String writer) {
     return this.writer.equals(writer);
   }
 
-  public ResponseModifyUsedItemClosed closed(String writer){
+  public ResponseModifyUsedItemClosed closed(String writer) {
     this.editWriter = writer;
-    this.close=true;
+    this.close = true;
     return new ResponseModifyUsedItemClosed(this.no, true);
   }
-
-  public UsedItem update(EditUsedItemRequest editRq) {
-    this.editWriter = editRq.getEditWriter();
-    this.title =editRq.getTitle();
-    this.price = editRq.getPrice();
-    this.description = editRq.getDescription();
-    this.tradeType = editRq.getTradeType();
-    this.titleImg = editRq.getTitleImg();
-    this.category = editRq.getCategory();
-    this.negotiation = editRq.isNegotiation();
-    this.address = editRq.getAddress();
-    return this;
-  }
-
 }

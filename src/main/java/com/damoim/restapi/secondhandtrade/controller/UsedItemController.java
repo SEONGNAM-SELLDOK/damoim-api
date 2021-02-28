@@ -24,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller
@@ -53,8 +54,9 @@ public class UsedItemController {
 
   @PostMapping
   public ResponseEntity<UsedItem> save(
-      @Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest) {
-    UsedItem usedItem = usedItemService.save(saveUsedItemRequest);
+      @Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest,
+      @RequestParam(required = false) MultipartFile file) {
+    UsedItem usedItem = usedItemService.save(saveUsedItemRequest, file);
     return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
   }
 
@@ -81,8 +83,8 @@ public class UsedItemController {
 
   @PutMapping("/item/{no}")
   public ResponseEntity<UsedItem> editItem(@PathVariable Long no,
-      @Valid @RequestBody EditUsedItemRequest editRq){
-    UsedItem item = usedItemService.editItem(no,editRq);
+      @Valid @RequestBody EditUsedItemRequest editRq) {
+    UsedItem item = usedItemService.editItem(no, editRq);
     return ResponseEntity.ok(item);
   }
 
@@ -93,7 +95,7 @@ public class UsedItemController {
   }
 
   @DeleteMapping("/item/{no}")
-  public ResponseEntity<Object> delete(@PathVariable Long no){
+  public ResponseEntity<Object> delete(@PathVariable Long no) {
     usedItemService.delete(no);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }

@@ -1,5 +1,3 @@
-GET http://localhost:8080/useditems/pages/search?title=Book&description=Air&negotiation=true
-Accept: application/json
 
 ###
 ### 중고거래 게시글 생성
@@ -8,7 +6,6 @@ Content-Type: application/json
 
 {
   "writer": "KJJ",
-  "titleImg" : "IMG URL",
   "address" : "서울특별시",
   "category" : "default",
   "description" : "Air",
@@ -17,6 +14,8 @@ Content-Type: application/json
   "title" : "MackBook 판매합니다.",
   "price": "10000"
 }
+
+
 
 > {%
 client.test("Request executed successfully", function() {
@@ -51,22 +50,14 @@ Content-Type: application/x-www-form-urlencoded
 
 writer=KJJ
 
-###
-GET http://localhost:8080/useditems/pages/search?description=content
+### 검색
+GET http://localhost:8080/useditems/pages/search?from=2021-03-01&to=2021-03-01&price=10000
 Accept: application/json
-
-
 
 
 ### 카테고리 종류 가져오기
 GET http://localhost:8080/useditems/categories
 Accept: application/json
-
-
-### defalutPage(아무런 검색조건이 없음) 중고거래 게시글 6개 보기 정렬기준 최근 작성된 글
-GET http://localhost:8080/useditems/pages
-Accept: application/json
-
 
 ### 특정 게시글 가져오기
 GET http://localhost:8080/useditems/item/1

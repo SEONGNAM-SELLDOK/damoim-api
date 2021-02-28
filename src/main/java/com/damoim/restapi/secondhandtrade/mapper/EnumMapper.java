@@ -19,14 +19,14 @@ public class EnumMapper {
   }
 
   public void put(String key, Class<? extends EnumMapperType> e) {
-    factory.put(key,toEnumValues(e));
+    factory.put(key, toEnumValues(e));
   }
 
-  public Map<String,List<EnumValue>> getAll(){
+  public Map<String, List<EnumValue>> getAll() {
     return factory;
   }
 
-  public Map<String, List<EnumValue>> get(String keys){
+  public Map<String, List<EnumValue>> get(String keys) {
     return Arrays
         .stream(keys.split(","))
         .collect(Collectors.toMap(Function.identity(), factory::get));

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class MapperConfig {
 
   @Bean
-  public ModelMapper modelMapper(){
+  public ModelMapper modelMapper() {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper.getConfiguration()
         .setSourceNameTokenizer(NameTokenizers.UNDERSCORE)
@@ -21,11 +21,11 @@ public class MapperConfig {
   }
 
   @Bean
-  public EnumMapper enumMapper(){
+  public EnumMapper enumMapper() {
     EnumMapper enumMapper = new EnumMapper();
     //추후 key 값 하드코딩이 아닌 Enum 타입으로 따로 관리
     enumMapper.put("category", Category.class);
-    enumMapper.put("tradeType",TradeType.class);
+    enumMapper.put("tradeType", TradeType.class);
     return enumMapper;
   }
 }
