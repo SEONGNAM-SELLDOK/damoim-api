@@ -36,4 +36,18 @@ public class Recruit {
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Recruit)) {
+            return false;
+        }
+        Recruit other = (Recruit) obj;
+        return this.id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
 }
