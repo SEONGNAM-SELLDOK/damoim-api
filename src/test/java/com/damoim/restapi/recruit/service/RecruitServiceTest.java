@@ -82,7 +82,7 @@ class RecruitServiceTest {
 
         String updateCompany = "Never";
         String updateTitle = "회사 이름 바뀜";
-        RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
         Recruit updateRecruit = recruitService.update(recruitUpdateRequest);
         assertEquals(updateCompany, updateRecruit.getCompany());
         assertEquals(updateTitle, updateRecruit.getTitle());
@@ -94,17 +94,17 @@ class RecruitServiceTest {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("작성자").company("회사").title("구인 타이틀").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Recruit saveRecruit = recruitService.save(recruitSaveRequest);
         String updateCompany = "업데이트회사";
-        RecruitUpdateRequest noIdRecruit = RecruitUpdateRequest.builder().register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest noIdRecruit = RecruitUpdateRequest.updateRequestBuilder().register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit));
-        RecruitUpdateRequest noRegisterRecruit = RecruitUpdateRequest.builder().id(saveRecruit.getId()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest noRegisterRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noRegisterRecruit));
-        RecruitUpdateRequest noCompanyRecruit = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest noCompanyRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noCompanyRecruit));
-        RecruitUpdateRequest noTitleRecruit = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).reward(0).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest noTitleRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).reward(0).deadline(saveRecruit.getDeadline()).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noTitleRecruit));
-        RecruitUpdateRequest noDeadLineRecruit = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).build();
+        RecruitUpdateRequest noDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noDeadLineRecruit));
-        RecruitUpdateRequest afterDeadLineRecruit = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(LocalDate.of(2020, 1, 1)).build();
+        RecruitUpdateRequest afterDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(LocalDate.of(2020, 1, 1)).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(afterDeadLineRecruit));
     }
 

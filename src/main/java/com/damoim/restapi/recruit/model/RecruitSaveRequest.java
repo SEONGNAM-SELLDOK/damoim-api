@@ -2,6 +2,7 @@ package com.damoim.restapi.recruit.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
@@ -32,11 +33,11 @@ public class RecruitSaveRequest {
     @NotBlank
     private String title;
 
-    @ApiModelProperty(value = "근무지", example = "판교역")
+    @ApiModelProperty(value = "근무지", required = true, example = "판교역")
     @NotBlank
     private String location;
 
-    @ApiModelProperty(value = "채용보상금", example = "500000")
+    @ApiModelProperty(value = "채용보상금", required = true, example = "500000")
     @NotNull
     @Min(0)
     private Integer reward;
@@ -51,5 +52,8 @@ public class RecruitSaveRequest {
     @Future
     @NotNull
     private LocalDate deadline;
+
+    @ApiModelProperty(value = "대표이미지", required = true)
+    private MultipartFile file;
 
 }
