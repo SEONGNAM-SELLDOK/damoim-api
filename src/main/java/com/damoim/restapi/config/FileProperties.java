@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class FileProperties {
+    
     private String pathPrefix;
     private String pathLast;
 
