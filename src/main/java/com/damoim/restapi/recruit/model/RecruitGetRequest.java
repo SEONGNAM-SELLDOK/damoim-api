@@ -15,7 +15,7 @@ import java.util.function.Predicate;
  */
 @Builder
 @AllArgsConstructor
-public clasRecruitGetRequest implements Predicate<Recruit> {
+public class RecruitGetRequest implements Predicate<Recruit> {
 
     @ApiModelProperty(value = "제목", example = "새로운 서비스를 함께 할 팀원을 모집합니다.")
     private String title;
