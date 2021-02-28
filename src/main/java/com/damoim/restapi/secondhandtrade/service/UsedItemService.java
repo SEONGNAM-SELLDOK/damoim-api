@@ -6,9 +6,8 @@ import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
-import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class UsedItemService {
   private final DamoimFileUtil damoimFileUtil;
 
 
-  public UsedItem save(SaveUsedItemRequest request, MultipartFile file) {
+  public UsedItem save(UsedItemRequest request, MultipartFile file) {
     UsedItem item = request.toEntity();
     if (file != null) {
       String upload = damoimFileUtil.upload(file);
@@ -39,7 +38,7 @@ public class UsedItemService {
     return usedItemRepository.save(item);
   }
 
-  public UsedItem save(SaveUsedItemRequest request) {
+  public UsedItem save(UsedItemRequest request) {
     return usedItemRepository.save(request.toEntity());
   }
 
@@ -47,7 +46,7 @@ public class UsedItemService {
     return getItemFromId(no);
   }
 
-  public UsedItem editItem(Long no, EditUsedItemRequest editRq) {
+  public UsedItem editItem(Long no, UsedItemRequest editRq) {
     UsedItem originItem = getItemFromId(no);
     UsedItem editItem = editRq.updateTo(originItem);
     return usedItemRepository.save(editItem);

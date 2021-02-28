@@ -12,8 +12,7 @@ import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
-import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,7 +56,7 @@ class UsedItemControllerTest {
   void save() throws Exception {
 
     //given
-    SaveUsedItemRequest request = getItemRequest();
+    UsedItemRequest request = getItemRequest();
     String json = objectMapper.writeValueAsString(request);
 
     //when
@@ -132,15 +131,15 @@ class UsedItemControllerTest {
     //given
     UsedItem save = usedItemService.save(getItemRequest());
     //when
-    EditUsedItemRequest request = modelMapper.map(getItemRequest(), EditUsedItemRequest.class);
-    request.setEditWriter("수정자 이름");
-    usedItemService.editItem(save.getNo(), request);
+    UsedItemRequest itemRequest = getItemRequest();
+    itemRequest.setWriter("수정자 이름");
+    usedItemService.editItem(save.getNo(), itemRequest);
 
     //then
     UsedItem usedItem = usedItemRepository.findById(save.getNo()).get();
 
     assertThat(usedItem.getNo()).isEqualTo(save.getNo());
-    assertThat(usedItem.getEditWriter()).isEqualTo(request.getEditWriter());
+    assertThat(usedItem.getEditWriter()).isEqualTo(itemRequest.getWriter());
 
   }
 
@@ -165,8 +164,8 @@ class UsedItemControllerTest {
     return objectMapper.readValue(resultJson, target);
   }
 
-  private SaveUsedItemRequest getItemRequest() {
-    return SaveUsedItemRequest.builder()
+  private UsedItemRequest getItemRequest() {
+    return UsedItemRequest.builder()
         .writer("KJJ")
         .address("tempAddress")
         .category(Category.DEFAULT)

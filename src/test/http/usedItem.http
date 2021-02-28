@@ -33,7 +33,7 @@ PUT http://localhost:8080/useditems/item/1
 Content-Type: application/json
 
 {
-  "editWriter": "(수정자)JJ",
+  "writer": "(수정자)JJ",
   "titleImg" : "IMG URL",
   "address" : "(수정)판교",
   "category" : "default",

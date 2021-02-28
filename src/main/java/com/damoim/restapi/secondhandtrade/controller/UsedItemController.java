@@ -5,9 +5,8 @@ import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
-import com.damoim.restapi.secondhandtrade.model.EditUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.SaveUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 
@@ -54,9 +53,9 @@ public class UsedItemController {
 
   @PostMapping
   public ResponseEntity<UsedItem> save(
-      @Valid @RequestBody SaveUsedItemRequest saveUsedItemRequest,
+      @Valid @RequestBody UsedItemRequest usedItemRequest,
       @RequestParam(required = false) MultipartFile file) {
-    UsedItem usedItem = usedItemService.save(saveUsedItemRequest, file);
+    UsedItem usedItem = usedItemService.save(usedItemRequest, file);
     return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
   }
 
@@ -83,7 +82,7 @@ public class UsedItemController {
 
   @PutMapping("/item/{no}")
   public ResponseEntity<UsedItem> editItem(@PathVariable Long no,
-      @Valid @RequestBody EditUsedItemRequest editRq) {
+      @Valid @RequestBody UsedItemRequest editRq) {
     UsedItem item = usedItemService.editItem(no, editRq);
     return ResponseEntity.ok(item);
   }
