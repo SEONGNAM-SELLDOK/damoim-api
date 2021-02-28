@@ -1,6 +1,8 @@
 package com.damoim.restapi.recruit.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -28,6 +30,9 @@ public class Recruit {
     private String company;
     private String title;
     private String description;
+    private String location;
+    private String[] tags;
+    private Integer reward;
 
     private LocalDate deadline;
 

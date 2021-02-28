@@ -32,6 +32,15 @@ public class RecruitResponse {
     @ApiModelProperty(value = "마감일", required = true, example = "2021-02-28")
     private LocalDate deadline;
 
+    @ApiModelProperty(value = "근무지", example = "판교역")
+    private String location;
+
+    @ApiModelProperty(value = "채용보상금", example = "500000")
+    private Integer reward;
+
+    @ApiModelProperty(value = "태그", example = "[\"복지좋은회사\",\"인센티브\",\"포털회사\",\"트래픽많은\"]")
+    private String[] tags;
+
     @ApiModelProperty(value = "등록일", example = "2021-02-21T20:17:22.137Z")
     private LocalDateTime createdDate;
 

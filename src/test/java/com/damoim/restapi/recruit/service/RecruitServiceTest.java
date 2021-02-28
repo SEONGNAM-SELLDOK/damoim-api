@@ -32,7 +32,7 @@ class RecruitServiceTest {
     @DisplayName("구인 저장")
     @Test
     void saveRecruit() {
-        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Recruit recruit = recruitService.save(recruitSaveRequest);
         assertEquals(recruitSaveRequest.getTitle(), recruit.getTitle());
     }
@@ -40,22 +40,26 @@ class RecruitServiceTest {
     @DisplayName("구인 저장 Dto 검증")
     @Test
     void saveRecruitRequestValidation() {
-        RecruitSaveRequest noRegisterDto = RecruitSaveRequest.builder().company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest noRegisterDto = RecruitSaveRequest.builder().company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
         assertThrows(RuntimeException.class, () -> recruitService.save(noRegisterDto));
-        RecruitSaveRequest noCompanyDto = RecruitSaveRequest.builder().register("오성록").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest noCompanyDto = RecruitSaveRequest.builder().register("오성록").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
         assertThrows(RuntimeException.class, () -> recruitService.save(noCompanyDto));
-        RecruitSaveRequest noTitleDto = RecruitSaveRequest.builder().register("오성록").company("Naver").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest noTitleDto = RecruitSaveRequest.builder().register("오성록").company("Naver").reward(0).location("판교").deadline(LocalDate.of(2022, 2, 1)).build();
         assertThrows(RuntimeException.class, () -> recruitService.save(noTitleDto));
-        RecruitSaveRequest noDeadLineDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").build();
+        RecruitSaveRequest noDeadLineDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").reward(0).location("판교").build();
         assertThrows(RuntimeException.class, () -> recruitService.save(noDeadLineDto));
-        RecruitSaveRequest beforeDeadLineDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2019, 2, 1)).build();
+        RecruitSaveRequest beforeDeadLineDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").reward(0).location("판교").deadline(LocalDate.of(2019, 2, 1)).build();
         assertThrows(RuntimeException.class, () -> recruitService.save(beforeDeadLineDto));
+        RecruitSaveRequest noRewardDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").deadline(LocalDate.of(2019, 2, 1)).build();
+        assertThrows(RuntimeException.class, () -> recruitService.save(noRewardDto));
+        RecruitSaveRequest noLocationDto = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").reward(0).deadline(LocalDate.of(2019, 2, 1)).build();
+        assertThrows(RuntimeException.class, () -> recruitService.save(noLocationDto));
     }
 
     @DisplayName("구인 가져오기")
     @Test
     void getRecruit() {
-        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("구인3").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("구인3").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Long id = recruitService.save(recruitSaveRequest).getId();
         Recruit recruit = recruitService.getById(id);
         assertEquals("구인3", recruit.getRegister());
@@ -64,7 +68,7 @@ class RecruitServiceTest {
     @DisplayName("구인 가져오기 해당 아이디 없음")
     @Test
     void getRecruitNoContentException() {
-        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         recruitService.save(recruitSaveRequest);
         Long id = 500L;
         assertThrows(RuntimeException.class, () -> recruitService.getById(id));
@@ -73,12 +77,12 @@ class RecruitServiceTest {
     @DisplayName("구인 업데이트")
     @Test
     void updateRecruit() {
-        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Recruit saveRecruit = recruitService.save(recruitSaveRequest);
 
         String updateCompany = "Never";
         String updateTitle = "회사 이름 바뀜";
-        RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).deadline(saveRecruit.getDeadline()).build();
+        RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.builder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
         Recruit updateRecruit = recruitService.update(recruitUpdateRequest);
         assertEquals(updateCompany, updateRecruit.getCompany());
         assertEquals(updateTitle, updateRecruit.getTitle());
