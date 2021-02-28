@@ -17,16 +17,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+
 /**
  * @author gisung go
  * @since 2021-02-22
  * */
-@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @Transactional
 public class BoardsServiceTest {
 
-//    @Autowired
-//    BoardsController boardsController;
+    //    @Autowired
+    //    BoardsController boardsController;
     @Autowired
     BoardsService boardsService;
 
@@ -36,36 +37,36 @@ public class BoardsServiceTest {
     public void setup(){
         Address address = new Address("KR", "seoul", "대왕판교로 1122 8층");
         Boards boards = Boards.builder()
-                .title("스프링 JPA 세미나")
-                .content("스프링 JPA 세미나 내용 입니다.")
-                .image("/img/0000.jpg")
-                .address(address)
-                .totalMember("20")
-                .currentMember("5")
-                .subject("JPA")
-                .damoimTag(new DamoimTag("JPA"))
-                .endDate(LocalDateTime.now())
-                .build();
+            .title("스프링 JPA 세미나")
+            .content("스프링 JPA 세미나 내용 입니다.")
+            .image("/img/0000.jpg")
+            .address(address)
+            .totalMember("20")
+            .currentMember("5")
+            .subject("JPA")
+            .damoimTag(new DamoimTag("JPA"))
+            .endDate(LocalDateTime.now())
+            .build();
         id = boardsService.save(boards);
     }
 
     @Test
     void save(){
         SaveBoardRequest request = SaveBoardRequest.builder()
-                .title("스프링 JPA 세미나")
-                .content("스프링 JPA 세미나 내용 입니다.")
-                .image("/img/0000.jpg")
-                .country("KR")
-                .city("seoul")
-                .street("대왕판교로 1122 8층")
-                .totalMember("20")
-                .currentMember("5")
-                .subject("JPA")
-                .damoimTag("JPA")
-                .endDate(LocalDateTime.now())
-                .build();
+            .title("스프링 JPA 세미나")
+            .content("스프링 JPA 세미나 내용 입니다.")
+            .image("/img/0000.jpg")
+            .country("KR")
+            .city("seoul")
+            .street("대왕판교로 1122 8층")
+            .totalMember("20")
+            .currentMember("5")
+            .subject("JPA")
+            .damoimTag("JPA")
+            .endDate(LocalDateTime.now())
+            .build();
 
-//        ResponseEntity<String> id = boardsController.save(request, (BoardType) seminar);
+        //        ResponseEntity<String> id = boardsController.save(request, (BoardType) seminar);
     }
 
     @Test
@@ -77,8 +78,8 @@ public class BoardsServiceTest {
     @Test
     void modifyTest() {
         ModifyBoardsRequest request = ModifyBoardsRequest.builder()
-                .title("스프링 세미나 수정")
-                .build();
+            .title("스프링 세미나 수정")
+            .build();
 
         boardsService.modify(id, request);
         Optional<Boards> seminar = boardsService.findById(id);
