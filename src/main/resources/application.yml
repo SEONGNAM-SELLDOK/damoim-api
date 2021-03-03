@@ -5,7 +5,7 @@ spring:
     name: selldok-toy
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:h2:mem:testdb
+    url: jdbc:log4jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
     username: sa
     password:
   h2:
@@ -22,3 +22,9 @@ spring:
     properties:
       hibernate:
         format-sql: true
+
+
+damoim:
+  file:
+    pathPrefix: src/main/resources/static
+    pathLast: /img/
