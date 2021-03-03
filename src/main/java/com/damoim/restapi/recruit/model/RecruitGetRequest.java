@@ -1,21 +1,22 @@
 package com.damoim.restapi.recruit.model;
 
-import com.damoim.restapi.recruit.entity.Recruit;
+import com.damoim.restapi.recruit.entity.QRecruit;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 /**
  * @author SeongRok.Oh
  * @since 2021/02/27
  */
+@Getter
 @Builder
 @AllArgsConstructor
-public class RecruitGetRequest implements Predicate<Recruit> {
+public class RecruitGetRequest {
 
     @ApiModelProperty(value = "제목", example = "새로운 서비스를 함께 할 팀원을 모집합니다.")
     private String title;
@@ -38,40 +39,4 @@ public class RecruitGetRequest implements Predicate<Recruit> {
     @ApiModelProperty(value = "등록자", example = "오성록")
     private String register;
 
-    /*
-     * 제목 - eq
-     * 상세내용 - like
-     * 회사 - like
-     * 근무지 - eq
-     * 채용 보상금 - 조회금액보다 작거나 같음
-     * 태그 - eq
-     * 등록자 - like
-     */
-    @Override
-    public boolean test(Recruit recruit) {
-        if (Objects.isNull(recruit)) {
-            return true;
-        }
-
-        String compareTitle = recruit.getTitle();
-        String compareDescription = recruit.getDescription();
-        String compareCompany = recruit.getCompany();
-        String compareLocation = recruit.getLocation();
-        Integer compareReward = recruit.getReward();
-        String[] compareTags = recruit.getTags();
-        String compareRegister = recruit.getRegister();
-
-        return (Objects.nonNull(compareTitle) && Objects.nonNull(this.title) && compareTitle.equals(this.title))
-                || (Objects.nonNull(compareDescription) && Objects.nonNull(this.description) && compareDescription.contains(this.description))
-                || (Objects.nonNull(compareCompany) && Objects.nonNull(this.company) && compareCompany.contains(this.company))
-                || (Objects.nonNull(compareLocation) && Objects.nonNull(this.location) && compareLocation.equals(this.location))
-                || (Objects.nonNull(compareReward) && Objects.nonNull(this.reward) && compareReward <= this.reward)
-                || (Objects.nonNull(compareTags) && Objects.nonNull(this.tags) && containTag(compareTags, this.tags))
-                || (Objects.nonNull(compareRegister) && Objects.nonNull(this.register) && compareRegister.contains(this.register))
-                ;
-    }
-
-    private boolean containTag(String[] tags, String[] lookUpTags) {
-        return lookUpTags.length == Arrays.stream(lookUpTags).filter(lookUpTag -> Arrays.asList(tags).contains(lookUpTag)).count();
-    }
 }
