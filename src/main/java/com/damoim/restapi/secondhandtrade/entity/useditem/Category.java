@@ -8,6 +8,7 @@ public enum Category implements EnumMapperType {
   DEFAULT("기타"),
   ELECTRONICS("전자제품"),
   FOOD("음식"),
+  CLOTHES("옷"),
   BOOK("책");
 
   private final String value;
