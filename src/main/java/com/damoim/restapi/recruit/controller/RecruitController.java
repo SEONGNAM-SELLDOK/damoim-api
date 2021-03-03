@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Set;
@@ -33,8 +34,8 @@ public class RecruitController {
     private final RecruitResponseMapper responseMapper;
 
     @PostMapping
-    public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest) {
-        return new ResponseEntity<>(responseMapper.toDto(recruitService.save(saveRequest)), HttpStatus.CREATED);
+    public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
+        return new ResponseEntity<>(responseMapper.toDto(recruitService.save(saveRequest, file)), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -43,8 +44,8 @@ public class RecruitController {
     }
 
     @PutMapping
-    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest) {
-        return new ResponseEntity<>(responseMapper.toDto(recruitService.update(updateRequest)), HttpStatus.OK);
+    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file) {
+        return new ResponseEntity<>(responseMapper.toDto(recruitService.update(updateRequest, file)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

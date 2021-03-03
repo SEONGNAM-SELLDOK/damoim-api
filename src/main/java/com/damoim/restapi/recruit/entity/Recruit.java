@@ -3,7 +3,9 @@ package com.damoim.restapi.recruit.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -26,6 +28,7 @@ public class Recruit {
     @Id
     private Long id;
 
+    @CreatedBy
     private String register;
     private String company;
     private String title;
@@ -34,6 +37,8 @@ public class Recruit {
     private String[] tags;
     private Integer reward;
 
+    private String image;
+
     private LocalDate deadline;
 
     @CreatedDate
@@ -41,6 +46,9 @@ public class Recruit {
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @LastModifiedBy
+    private String modifier;
 
     @Override
     public boolean equals(Object obj) {

@@ -41,9 +41,15 @@ public class RecruitResponse {
     @ApiModelProperty(value = "태그", example = "[\"복지좋은회사\",\"인센티브\",\"포털회사\",\"트래픽많은\"]")
     private String[] tags;
 
+    @ApiModelProperty(value = "이미지주소", example = "/images/naver_recruit")
+    private String image;
+
     @ApiModelProperty(value = "등록일", example = "2021-02-21T20:17:22.137Z")
     private LocalDateTime createdDate;
 
     @ApiModelProperty(value = "마지막 수정일", example = "2021-02-21T20:17:22.137Z")
     private LocalDateTime modifiedDate;
+
+    @ApiModelProperty(value = "수정자", example = "운영자")
+    private String modifier;
 }

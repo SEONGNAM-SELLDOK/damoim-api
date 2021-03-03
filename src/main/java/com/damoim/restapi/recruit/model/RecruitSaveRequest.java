@@ -53,7 +53,7 @@ public class RecruitSaveRequest {
     @NotNull
     private LocalDate deadline;
 
-    @ApiModelProperty(value = "대표이미지", required = true)
-    private MultipartFile file;
+    @ApiModelProperty(value = "이미지주소", required = true)
+    private String image;
 
 }
