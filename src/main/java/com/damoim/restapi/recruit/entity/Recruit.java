@@ -1,5 +1,6 @@
 package com.damoim.restapi.recruit.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
  * @author SeongRok.Oh
  * @since 2021/02/21
  */
+@EqualsAndHashCode(of = "id")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,17 +52,4 @@ public class Recruit {
     @LastModifiedBy
     private String modifier;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Recruit)) {
-            return false;
-        }
-        Recruit other = (Recruit) obj;
-        return this.id.equals(other.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id.intValue();
-    }
 }
