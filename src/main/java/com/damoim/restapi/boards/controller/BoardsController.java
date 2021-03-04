@@ -39,10 +39,8 @@ public class BoardsController {
     private final BoardsService boardsService;
     private final BoardsRepository boardsRepository;
 
-    @PostMapping // type: SEMINAR, STUDY
-    public ResponseEntity<String> save(final @Valid @RequestBody SaveBoardRequest request, @RequestParam(value = "type") BoardType type) {
-        log.info(request.toString());
-
+    @PostMapping("/seminar")
+    public ResponseEntity<String> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
         Boards boards = Boards.builder()
@@ -55,7 +53,7 @@ public class BoardsController {
                 .subject(request.getSubject())
                 .damoimTag(damoimTag)
                 .endDate(request.getEndDate())
-                .boardType(type)
+                .boardType(BoardType.SEMINAR)
                 .build();
 
         Long seminarId = boardsService.save(boards);
@@ -65,6 +63,32 @@ public class BoardsController {
 
         return new ResponseEntity(map, HttpStatus.OK);
     }
+
+    @PostMapping("/study")
+    public ResponseEntity<String> saveStudy(final @Valid @RequestBody SaveBoardRequest request) {
+        Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
+        DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
+        Boards boards = Boards.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .image(request.getImage())
+                .address(address)
+                .totalMember(request.getTotalMember())
+                .currentMember(request.getCurrentMember())
+                .subject(request.getSubject())
+                .damoimTag(damoimTag)
+                .endDate(request.getEndDate())
+                .boardType(BoardType.STUDY)
+                .build();
+
+        Long seminarId = boardsService.save(boards);
+
+        HashMap<String, Long> map = new HashMap<>();
+        map.put("seminar_id", seminarId);
+
+        return new ResponseEntity(map, HttpStatus.OK);
+    }
+
 
     @GetMapping("{id}")
     @ResponseBody
