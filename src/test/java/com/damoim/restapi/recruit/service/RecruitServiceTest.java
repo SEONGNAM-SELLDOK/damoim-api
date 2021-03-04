@@ -147,6 +147,5 @@ class RecruitServiceTest {
         assertEquals(2, javaRecruit.size());
         Set<Recruit> notConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, null);
         assertEquals(6, notConditionRecruitSet.size());
-
     }
 }

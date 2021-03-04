@@ -1,13 +1,11 @@
 package com.damoim.restapi.recruit.model;
 
-import com.damoim.restapi.recruit.entity.QRecruit;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.time.LocalDate;
 
 /**
  * @author SeongRok.Oh
@@ -38,5 +36,11 @@ public class RecruitGetRequest {
 
     @ApiModelProperty(value = "등록자", example = "오성록")
     private String register;
+
+    @ApiModelProperty(value = "생성날짜시작", example = "2021-02-21")
+    private LocalDate from;
+
+    @ApiModelProperty(value = "생성날짜끝", example = "2021-02-28")
+    private LocalDate to;
 
 }

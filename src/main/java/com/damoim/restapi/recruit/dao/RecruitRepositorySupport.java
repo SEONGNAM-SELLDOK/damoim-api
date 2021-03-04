@@ -2,15 +2,15 @@ package com.damoim.restapi.recruit.dao;
 
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
-import com.querydsl.core.types.dsl.ArrayPath;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -41,7 +41,7 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
      * 등록자 - like
      */
     public Set<Recruit> search(RecruitGetRequest request, Pageable pageable) {
-        if(Objects.isNull(request)){
+        if (Objects.isNull(request)) {
             return new HashSet<>(queryFactory.selectFrom(recruit)
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -55,7 +55,9 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
                         eqSth(recruit.location, request.getLocation()),
                         gtSth(recruit.reward, request.getReward()),
                         eqSthArray(recruit.tags, request.getTags()),
-                        likeSth(recruit.register, request.getRegister())
+                        likeSth(recruit.register, request.getRegister()),
+                        afterSth(recruit.createdDate, request.getFrom()),
+                        beforeSth(recruit.createdDate, request.getTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -90,4 +92,26 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
         }
         return compare1.contains(compare2);
     }
+
+    private BooleanExpression beforeSth(DateTimePath<LocalDateTime> time, LocalDate compare) {
+        if (Objects.isNull(time) || Objects.isNull(compare)) {
+            return null;
+        }
+        return time.before(LocalDateTime.of(compare, LocalTime.MIDNIGHT));
+    }
+
+    private BooleanExpression afterSth(DateTimePath<LocalDateTime> time, LocalDate compare) {
+        if (Objects.isNull(time) || Objects.isNull(compare)) {
+            return null;
+        }
+        return time.after(LocalDateTime.of(compare, LocalTime.MIDNIGHT));
+    }
+
+    private BooleanExpression betweenSth(DateTimePath<LocalDateTime> time, LocalDate from, LocalDate to) {
+        if (Objects.isNull(time)) {
+            return null;
+        }
+        return time.between(LocalDateTime.of(from, LocalTime.MIDNIGHT), LocalDateTime.of(to, LocalTime.MIDNIGHT));
+    }
+
 }
