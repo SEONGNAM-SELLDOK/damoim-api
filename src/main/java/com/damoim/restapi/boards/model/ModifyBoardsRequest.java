@@ -1,16 +1,19 @@
 package com.damoim.restapi.boards.model;
 
 import com.damoim.restapi.boards.entity.DamoimTag;
-import lombok.*;
-
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author gisung go
  * @since 2021-02-22
- * */
+ */
 
 @NoArgsConstructor
 @Getter
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ModifyBoardsRequest {
+
     @NotBlank
     private String title; // 세미나 제목
     @NotBlank

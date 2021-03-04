@@ -1,5 +1,5 @@
 server:
-#  포트 확인
+  #  포트 확인
   port: 8080
 spring:
   application:
@@ -27,4 +27,4 @@ spring:
 damoim:
   file:
     pathPrefix: src/main/resources/static
-    pathLast: /img/
+    pathLast: /img

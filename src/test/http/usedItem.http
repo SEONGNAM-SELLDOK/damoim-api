@@ -51,7 +51,7 @@ Content-Type: application/x-www-form-urlencoded
 writer=KJJ
 
 ### 검색
-GET http://localhost:8080/useditems/pages/search
+GET http://localhost:8080/useditems/pages/search?close=false
 Accept: application/json
 
 

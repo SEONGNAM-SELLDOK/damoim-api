@@ -1,17 +1,18 @@
 package com.damoim.restapi.boards.entity;
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
 
 /**
  * @author gisung go
  * @since 2021-02-22
- * */
+ */
 @MappedSuperclass
 public class BaseEntity {
+
     @Column(updatable = false)
     private LocalDateTime createDate; // 등록일시
     private LocalDateTime updateDate; // 수정일시
@@ -24,5 +25,7 @@ public class BaseEntity {
     }
 
     @PreUpdate
-    public void preUpdate() { updateDate = LocalDateTime.now(); }
+    public void preUpdate() {
+        updateDate = LocalDateTime.now();
+    }
 }

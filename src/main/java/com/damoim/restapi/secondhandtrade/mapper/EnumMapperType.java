@@ -2,7 +2,7 @@ package com.damoim.restapi.secondhandtrade.mapper;
 
 public interface EnumMapperType {
 
-  String getCode();
+    String getCode();
 
-  String getTitle();
+    String getTitle();
 }
