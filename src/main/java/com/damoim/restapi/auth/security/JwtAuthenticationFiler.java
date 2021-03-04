@@ -49,7 +49,6 @@ public class JwtAuthenticationFiler implements Filter {
             cookie.setMaxAge(0);
             httpServletResponse.addCookie(cookie);
         } catch (IOException | ServletException e) {
-            e.printStackTrace();
             throw new BadCredentialsException("JwtAuthenticationFiler error");
         }
     }

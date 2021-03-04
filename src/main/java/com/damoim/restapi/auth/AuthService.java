@@ -57,7 +57,13 @@ public class AuthService {
     }
 
     private GetTokenResponse fetchAccessToken(String code) {
-        return restTemplate.exchange(getAccessToken(code), HttpMethod.GET, null, GetTokenResponse.class).getBody();
+        GetTokenResponse response = restTemplate.exchange(getAccessToken(code), HttpMethod.GET, null, GetTokenResponse.class).getBody();
+
+        if (response == null) {
+            throw new RuntimeException("error naver callback");
+        }
+
+        return response;
     }
 
     private GetUserInfoResponse.UserInfo fetchUserInfoFromNaver(String accessToken) {

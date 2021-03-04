@@ -21,7 +21,7 @@ import java.util.UUID;
 @Service
 public class JwtService {
 
-    // TODO 환경변수로 받도록 빼야 함.
+    // FIXME 환경변수로 받도록 빼야 함.
     private static final String SIGN_SECRET = "gEAAiEAu3X3OoILbAg0vdzjvc0MxIG0xP";
     private static final Algorithm SIGN_ALGORITHM = Algorithm.HMAC256(SIGN_SECRET);
 
