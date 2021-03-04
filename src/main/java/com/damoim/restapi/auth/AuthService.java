@@ -25,6 +25,9 @@ public class AuthService {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
 
+    // FIXME secret 환경변수로 옮겨야 함
+    private static final String clientId = "qFAw79F6W2qVUb7lPG3F";
+    private static final String secret = "xvMLD0uRNK";
 
     @Transactional
     public String naverCallback(String code) {
@@ -61,8 +64,7 @@ public class AuthService {
     }
 
     private String getAccessToken(String code) {
-        // FIXME secret 환경변수로 옮겨야 함
-        return "https://nid.naver.com/oauth2.0/token?client_id=" + "qFAw79F6W2qVUb7lPG3F" + "&client_secret=" + "xvMLD0uRNK" + "&grant_type=authorization_code&state=" + 123 + "&code=" + code;
+        return "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret + "&grant_type=authorization_code&state=123&code=" + code;
     }
 
     @Setter
