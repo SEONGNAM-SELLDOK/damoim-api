@@ -1,23 +1,23 @@
 package com.damoim.restapi.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author gisung go
  * @since 2021-02-22
  * */
 @Component
+@RequiredArgsConstructor
 public class DamoimFileUtil {
-    @Autowired
-    FileProperties fileProperties;
+
+    private  final FileProperties fileProperties;
 
     public String upload(MultipartFile file) {
         Path rootLocation = Paths.get(fileProperties.getFinalPath())
