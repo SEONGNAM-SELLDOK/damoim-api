@@ -4,6 +4,7 @@ import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardsService;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +45,8 @@ public class BoardsServiceTest {
             .damoimTag(new DamoimTag("JPA"))
             .endDate(LocalDateTime.now())
             .build();
-        id = boardsService.save(boards);
+        ReadBoardsResponse response = boardsService.save(boards);
+        id = response.getId();
     }
 
     @Test

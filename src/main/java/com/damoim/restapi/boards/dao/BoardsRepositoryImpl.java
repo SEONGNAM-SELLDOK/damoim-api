@@ -31,12 +31,11 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
     @Override
     public List<ReadBoardsResponse> findByBoardInfo(Long id, BoardType type) {
         return queryFactory.select(new QReadBoardsResponse(
+                boards.id,
                 boards.title,
                 boards.content,
                 boards.image,
-                boards.address.country.as("boardsCountry"),
-                boards.address.city.as("boardsCity"),
-                boards.address.street.as("boardsStreet"),
+                boards.address,
                 boards.totalMember,
                 boards.currentMember,
                 boards.subject,
@@ -73,7 +72,8 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
                         totalMemberEq(condition.getTotalMember()),
                         currentMemberEq(condition.getCurrentMember()),
                         subjectEq(condition.getSubject()),
-                        damoimTagEq(condition.getDamoimTag())
+                        damoimTagEq(condition.getDamoimTag()),
+                        boardTypeEq(condition.getBoardType())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -119,5 +119,9 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
 
     private BooleanExpression damoimTagEq(String damoimTag) {
         return StringUtils.hasText(damoimTag) ? boards.damoimTag.tag.eq(damoimTag) : null;
+    }
+
+    private BooleanExpression boardTypeEq(String boardType) {
+        return StringUtils.hasText(boardType) ? boards.boardType.eq(BoardType.valueOf(boardType)) : null;
     }
 }

@@ -1,5 +1,6 @@
 package com.damoim.restapi.boards.dao;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,5 @@ public class BoardsSearchCondition {
     private String currentMember;
     private String subject;
     private String damoimTag;
+    private String boardType;
 }

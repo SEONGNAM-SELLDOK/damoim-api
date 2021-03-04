@@ -25,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * @author gisung go
  * @since 2021-03-03
@@ -39,7 +41,7 @@ public class StudyController {
     private final BoardsRepository boardsRepository;
 
     @PostMapping
-    public ResponseEntity<String> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
+    public ResponseEntity<ReadBoardsResponse> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
         Boards boards = Boards.builder()
@@ -55,12 +57,8 @@ public class StudyController {
                 .boardType(BoardType.STUDY)
                 .build();
 
-        Long seminarId = boardsService.save(boards);
-
-        HashMap<String, Long> map = new HashMap<>();
-        map.put("seminar_id", seminarId);
-
-        return new ResponseEntity(map, HttpStatus.OK);
+        ReadBoardsResponse response = boardsService.save(boards);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
@@ -72,12 +70,11 @@ public class StudyController {
 
     @PutMapping("{id}")
     @ResponseBody
-    public ResponseEntity<String> modify(@PathVariable("id") Long id, final @Valid @RequestBody ModifyBoardsRequest request) {
-        Long seminarId = boardsService.modify(id, request);
-        HashMap<String, Long> map = new HashMap<>();
-        map.put("board_id", seminarId);
-
-        return new ResponseEntity(map, HttpStatus.OK);
+    public ResponseEntity<Optional<Boards>> modify(
+            @PathVariable("id") Long id,
+            final @Valid @RequestBody ModifyBoardsRequest request) {
+        Optional<Boards> boards = boardsService.modify(id, request);
+        return ResponseEntity.ok(boards);
     }
 
     @DeleteMapping("{id}")
