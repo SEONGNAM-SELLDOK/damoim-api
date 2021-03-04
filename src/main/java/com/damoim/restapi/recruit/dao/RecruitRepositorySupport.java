@@ -107,11 +107,4 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
         return time.after(LocalDateTime.of(compare, LocalTime.MIDNIGHT));
     }
 
-    private BooleanExpression betweenSth(DateTimePath<LocalDateTime> time, LocalDate from, LocalDate to) {
-        if (Objects.isNull(time)) {
-            return null;
-        }
-        return time.between(LocalDateTime.of(from, LocalTime.MIDNIGHT), LocalDateTime.of(to, LocalTime.MIDNIGHT));
-    }
-
 }

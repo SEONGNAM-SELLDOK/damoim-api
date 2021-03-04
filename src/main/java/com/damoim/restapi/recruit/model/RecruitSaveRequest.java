@@ -2,7 +2,6 @@ package com.damoim.restapi.recruit.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
