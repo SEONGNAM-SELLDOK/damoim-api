@@ -25,47 +25,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
-
 /**
  * @author gisung go
- * @since 2021-02-22
+ * @since 2021-03-03
  * */
+
 @Slf4j
 @Controller
-@RequestMapping("board")
+@RequestMapping("study")
 @RequiredArgsConstructor
-public class BoardsController {
-
+public class StudyController {
     private final BoardsService boardsService;
     private final BoardsRepository boardsRepository;
 
-    @PostMapping("/seminar")
+    @PostMapping
     public ResponseEntity<String> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
-        Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
-        Boards boards = Boards.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .image(request.getImage())
-                .address(address)
-                .totalMember(request.getTotalMember())
-                .currentMember(request.getCurrentMember())
-                .subject(request.getSubject())
-                .damoimTag(damoimTag)
-                .endDate(request.getEndDate())
-                .boardType(BoardType.SEMINAR)
-                .build();
-
-        Long seminarId = boardsService.save(boards);
-
-        HashMap<String, Long> map = new HashMap<>();
-        map.put("seminar_id", seminarId);
-
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
-
-    @PostMapping("/study")
-    public ResponseEntity<String> saveStudy(final @Valid @RequestBody SaveBoardRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
         Boards boards = Boards.builder()
@@ -89,11 +63,10 @@ public class BoardsController {
         return new ResponseEntity(map, HttpStatus.OK);
     }
 
-
     @GetMapping("{id}")
     @ResponseBody
-    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id, @RequestParam(value = "type") BoardType type) {
-        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id, type);
+    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
+        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id, BoardType.STUDY);
         return ResponseEntity.ok(boardInfo);
     }
 

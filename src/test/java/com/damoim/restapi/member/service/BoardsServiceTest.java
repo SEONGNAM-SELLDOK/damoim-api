@@ -1,6 +1,5 @@
 package com.damoim.restapi.member.service;
 
-import com.damoim.restapi.boards.controller.BoardsController;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
