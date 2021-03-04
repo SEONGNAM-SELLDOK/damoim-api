@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("damoim.file")
 public class FileProperties {
-
+    
     private String pathPrefix;
     private String pathLast;
 
