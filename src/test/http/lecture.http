@@ -1,16 +1,19 @@
-### 강의 추천 작성
-POST http://localhost:8080/lecture
+### 강의 추천 저장 작성
+POST http://localhost:8080/lectures
 Content-Type: application/json
 
 {
-  "lectureId": 1,
-  "image": "",
-  "speaker": "토비",
+  "id": 2,
+  "lectureId": 2,
+  "title": "Java Persistence API",
+  "description": "김영한님의 JPA 실습 강의 입니다.",
+  "image": "/images/lectures-01.png",
+  "subject": "",
+  "speaker": "김영한",
   "register": "이경희",
-  "title": "토비의 스프링 5",
-  "description": "토비 저자의 스프링 프레임워크 5 신간 강의 입니다.",
-  "dueDate": "2021-02-25"
+  "deadline": "2021-03-05"
 }
+
 
 > {%
 client.test("Request executed successfully", function() {
@@ -19,4 +22,15 @@ client.test("Request executed successfully", function() {
 });
 %}
 
+### 강의 추천 전체 조회
+GET http://localhost:8080/lectures
+Accept: application/json
+
+### 강의 추천 상세 조회
+GET http://localhost:8080/lectures/2
+Accept: application/json
+
+### 강의 추천 개별 삭제
+DELETE http://localhost:8080/lectures/1
+Accept: application/json
 ###

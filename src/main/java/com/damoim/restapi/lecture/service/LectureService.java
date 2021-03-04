@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author leekyunghee
  * @since 2021. 02. 25
@@ -28,5 +30,19 @@ public class LectureService {
                 .build();
 
                 return lectureRepository.save(lecture);
+    }
+
+    public List<Lecture> list() {
+        return lectureRepository.findAll();
+    }
+
+    public Lecture findById(Long id) {
+        return lectureRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = {})", id)));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        lectureRepository.deleteById(id);
     }
 }

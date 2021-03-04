@@ -2,20 +2,15 @@ package com.damoim.restapi.lecture.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-
-/**
- * SaveLectureResponse Class
- * @author leekyunghee
- * @since 2021. 02.25
- */
 @Getter
 @Setter
-public class SaveLectureResponse {
-
+@NoArgsConstructor
+public class GetLectureResponse {
     @ApiModelProperty(example = "1")
     private long no;
     @ApiModelProperty(value = "강의 아이디", example = "100001")
@@ -28,7 +23,7 @@ public class SaveLectureResponse {
     private String description;
     @ApiModelProperty(value = "썸네일 이미지", example = "/images/lectures-01.png")
     private String image;
-    @ApiModelProperty(value = "주제", example = "스프링 프레임 워크 및 스프링 부트")
+    @ApiModelProperty(value = "주제", example = "")
     private String subject;
     @ApiModelProperty(value = "등록자", example = "이경희")
     private String register;
@@ -40,4 +35,5 @@ public class SaveLectureResponse {
     private LocalDateTime modifiedDate;
     @ApiModelProperty(value = "마감 기한", required = true, example = "2021-02-25T18:30:33.1215")
     private LocalDateTime deadline;
+
 }

@@ -22,7 +22,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-
 public class Lecture {
 
     @Id
@@ -30,12 +29,12 @@ public class Lecture {
     private long no;
     private long lectureId;
     private String title;
-    private String description; // 상세 내용
-    private String image;   // 썸네일 이미지
-    private String speaker; // 발표자
-    private String subject; // 주제
-    private String route;   // 수업 경로
-    private LocalDateTime dueDate;   // 마감 기한
+    private String description;       // 상세 내용
+    private String image;             // 썸네일 이미지
+    private String speaker;           // 발표자
+    private String subject;           // 주제
+    private String route;             // 수업 경로
+    private LocalDateTime deadline;   // 마감 기한
 
     @Column(updatable = false)
     private String register;
