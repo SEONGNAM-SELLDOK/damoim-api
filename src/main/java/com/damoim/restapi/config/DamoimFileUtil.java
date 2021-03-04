@@ -12,22 +12,22 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author gisung go
  * @since 2021-02-22
- * */
+ */
 @Component
 @RequiredArgsConstructor
 public class DamoimFileUtil {
 
-    private  final FileProperties fileProperties;
+    private final FileProperties fileProperties;
 
     public String upload(MultipartFile file) {
         Path rootLocation = Paths.get(fileProperties.getFinalPath())
-                .toAbsolutePath().normalize();
+            .toAbsolutePath().normalize();
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         File convFile;
 
         try {
             Files.createDirectories(rootLocation);
-            Path targetPath =  rootLocation.resolve(filename).normalize();
+            Path targetPath = rootLocation.resolve(filename).normalize();
             convFile = new File(String.valueOf(targetPath));
             file.transferTo(convFile);
         } catch (Exception e) {

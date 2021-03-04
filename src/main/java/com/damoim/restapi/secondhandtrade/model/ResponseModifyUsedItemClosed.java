@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ResponseModifyUsedItemClosed {
 
-  private final Long no;
-  private final boolean close;
+    private final Long no;
+    private final boolean close;
 
 }

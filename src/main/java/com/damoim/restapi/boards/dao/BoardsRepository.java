@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 /**
  * @author gisung go
  * @since 2021-02-22
- * */
+ */
 
 @Repository
 public interface BoardsRepository extends JpaRepository<Boards, Long>, BoardsRepositoryCustom {

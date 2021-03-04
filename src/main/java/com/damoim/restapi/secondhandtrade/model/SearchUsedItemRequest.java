@@ -13,19 +13,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 @AllArgsConstructor
 public class SearchUsedItemRequest {
 
-  private String title;
-  private Integer price;
-  private String writer;
-  private String description;
-  private TradeType tradeType;
-  private Category category;
-  private String address;
-  private String editWriter;
-  private Boolean close;
-  private Boolean negotiation;
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate from;
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate to;
+    private String title;
+    private Integer price;
+    private String writer;
+    private String description;
+    private TradeType tradeType;
+    private Category category;
+    private String address;
+    private String editWriter;
+    private Boolean close;
+    private Boolean negotiation;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate from;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate to;
 
 }

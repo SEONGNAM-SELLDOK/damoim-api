@@ -1,21 +1,21 @@
 package com.damoim.restapi.boards.model;
 
 import com.querydsl.core.annotations.QueryProjection;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
  * @author gisung go
  * @since 2021-02-22
- * */
+ */
 
 @Data
 @Builder
 @NoArgsConstructor
 public class ListBoardsResponse {
+
     private String title;
     private LocalDateTime endDate;
     private String boardsCountry;
@@ -28,7 +28,9 @@ public class ListBoardsResponse {
     private String image;
 
     @QueryProjection
-    public ListBoardsResponse(String title, LocalDateTime endDate, String boardsCountry, String boardsCity, String boardStreet, String totalMember, String currentMember, String subject, String damoimTag, String image) {
+    public ListBoardsResponse(String title, LocalDateTime endDate, String boardsCountry,
+        String boardsCity, String boardStreet, String totalMember, String currentMember,
+        String subject, String damoimTag, String image) {
         this.title = title;
         this.endDate = endDate;
         this.boardsCountry = boardsCountry;

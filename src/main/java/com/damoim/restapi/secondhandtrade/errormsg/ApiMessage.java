@@ -8,10 +8,10 @@ import lombok.Getter;
 @Builder
 public class ApiMessage {
 
-  private final int statusCode;
+    private final int statusCode;
 
-  private final String message;
+    private final String message;
 
-  private final String inputValue;
+    private final String inputValue;
 
 }
