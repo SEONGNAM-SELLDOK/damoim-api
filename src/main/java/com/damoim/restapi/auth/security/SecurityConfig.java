@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
 
 @EnableWebSecurity(debug = true)
 @Configuration

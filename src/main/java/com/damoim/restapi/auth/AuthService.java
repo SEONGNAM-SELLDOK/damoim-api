@@ -17,6 +17,11 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {

@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
+
 @RequiredArgsConstructor
 public class JwtAuthenticationFiler implements Filter {
 
