@@ -51,7 +51,7 @@ Content-Type: application/x-www-form-urlencoded
 writer=KJJ
 
 ### 검색
-GET http://localhost:8080/useditems/pages/search?from=2021-03-01&to=2021-03-01&price=10000
+GET http://localhost:8080/useditems/pages/search
 Accept: application/json
 
 

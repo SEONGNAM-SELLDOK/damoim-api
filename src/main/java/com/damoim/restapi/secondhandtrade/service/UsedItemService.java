@@ -7,10 +7,12 @@ import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -27,29 +29,31 @@ public class UsedItemService {
   private final UsedItemRepository usedItemRepository;
   private final UsedItemSearchRepository usedItemSearchRepository;
   private final DamoimFileUtil damoimFileUtil;
+  private final ModelMapper modelMapper;
 
-
-  public UsedItem save(UsedItemRequest request, MultipartFile file) {
+  public ResponseUsedItem save(UsedItemRequest request, MultipartFile file) {
     UsedItem item = request.toEntity();
     if (file != null) {
       String upload = damoimFileUtil.upload(file);
       item.setTitleImg(upload);
     }
-    return usedItemRepository.save(item);
+    usedItemRepository.save(item);
+    return modelMapper.map(item, ResponseUsedItem.class);
   }
 
   public UsedItem save(UsedItemRequest request) {
     return usedItemRepository.save(request.toEntity());
   }
 
-  public UsedItem selectItem(Long no) {
-    return getItemFromId(no);
+  public ResponseUsedItem selectItem(Long no) {
+    UsedItem item = getItemFromId(no);
+    return modelMapper.map(item,ResponseUsedItem.class);
   }
 
-  public UsedItem editItem(Long no, UsedItemRequest editRq) {
+  public ResponseUsedItem editItem(Long no, UsedItemRequest editRq) {
     UsedItem originItem = getItemFromId(no);
-    UsedItem editItem = editRq.updateTo(originItem);
-    return usedItemRepository.save(editItem);
+    UsedItem updateItem = usedItemRepository.save(editRq.updateTo(originItem));
+    return modelMapper.map(updateItem, ResponseUsedItem.class);
   }
 
   public ResponseModifyUsedItemClosed itemUpdateToClosed(Long no, String writer) {
@@ -74,7 +78,7 @@ public class UsedItemService {
         .orElseThrow(() -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(no)));
   }
 
-  public Page<UsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
+  public Page<ResponseUsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
     return usedItemSearchRepository.search(request, pageable);
   }
 }

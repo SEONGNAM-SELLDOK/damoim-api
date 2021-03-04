@@ -1,28 +1,36 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
-import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
-
 import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -52,11 +60,11 @@ public class UsedItemController {
 
 
   @PostMapping
-  public ResponseEntity<UsedItem> save(
+  public ResponseEntity<ResponseUsedItem> save(
       @Valid @RequestBody UsedItemRequest usedItemRequest,
       @RequestParam(required = false) MultipartFile file) {
-    UsedItem usedItem = usedItemService.save(usedItemRequest, file);
-    return new ResponseEntity<>(usedItem, HttpStatus.CREATED);
+    ResponseUsedItem item = usedItemService.save(usedItemRequest, file);
+    return new ResponseEntity<>(item, HttpStatus.CREATED);
   }
 
   @GetMapping("/categories")
@@ -68,22 +76,22 @@ public class UsedItemController {
 
 
   @GetMapping("/item/{no}")
-  public ResponseEntity<UsedItem> selectItem(@PathVariable Long no) {
-    UsedItem usedItem = usedItemService.selectItem(no);
-    return ResponseEntity.ok(usedItem);
+  public ResponseEntity<ResponseUsedItem> selectItem(@PathVariable Long no) {
+    ResponseUsedItem item = usedItemService.selectItem(no);
+    return ResponseEntity.ok(item);
   }
 
   @GetMapping("/pages/search")
-  public ResponseEntity<Page<UsedItem>> searchPage(SearchUsedItemRequest request,
+  public ResponseEntity<Page<ResponseUsedItem>> searchPage(SearchUsedItemRequest request,
       @PageableDefault(size = 6, sort = "postTime", direction = Direction.DESC) Pageable pageable) {
-    Page<UsedItem> search = usedItemService.search(request, pageable);
+    Page<ResponseUsedItem> search = usedItemService.search(request, pageable);
     return ResponseEntity.ok(search);
   }
 
   @PutMapping("/item/{no}")
-  public ResponseEntity<UsedItem> editItem(@PathVariable Long no,
+  public ResponseEntity<ResponseUsedItem> editItem(@PathVariable Long no,
       @Valid @RequestBody UsedItemRequest editRq) {
-    UsedItem item = usedItemService.editItem(no, editRq);
+    ResponseUsedItem item = usedItemService.editItem(no, editRq);
     return ResponseEntity.ok(item);
   }
 

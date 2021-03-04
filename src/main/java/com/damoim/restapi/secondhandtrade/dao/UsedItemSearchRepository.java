@@ -4,7 +4,8 @@ import static com.damoim.restapi.secondhandtrade.entity.useditem.QUsedItem.usedI
 
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
-import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
+import com.damoim.restapi.secondhandtrade.model.QResponseUsedItem;
+import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -23,8 +24,25 @@ public class UsedItemSearchRepository {
 
   private final JPAQueryFactory queryFactory;
 
-  public Page<UsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
-    QueryResults<UsedItem> results = queryFactory.selectFrom(usedItem)
+  public Page<ResponseUsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
+    QueryResults<ResponseUsedItem> results = queryFactory
+        .select(new QResponseUsedItem(
+              usedItem.no,
+              usedItem.title,
+              usedItem.price,
+              usedItem.writer,
+              usedItem.description,
+              usedItem.tradeType,
+              usedItem.category,
+              usedItem.titleImg,
+              usedItem.address,
+              usedItem.createDate,
+              usedItem.updateDate,
+              usedItem.editWriter,
+              usedItem.close,
+              usedItem.negotiation
+          ))
+        .from(usedItem)
         .where(
             likeTitle(request.getTitle()),
             likeDescription(request.getDescription()),
@@ -36,7 +54,7 @@ public class UsedItemSearchRepository {
             eqEditWriter(request.getEditWriter()),
             eqClose(request.getClose()),
             eqNegotiation(request.getClose()),
-            fromTo(request.getFrom(),request.getTo())
+            fromTo(request.getFrom(), request.getTo())
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -45,11 +63,11 @@ public class UsedItemSearchRepository {
     return new PageImpl<>(results.getResults(), pageable, results.getTotal());
   }
 
-  private BooleanExpression fromTo(LocalDate from , LocalDate to){
-    if(from==null || to==null){
+  private BooleanExpression fromTo(LocalDate from, LocalDate to) {
+    if (from == null || to == null) {
       return null;
     }
-    return usedItem.createDate.between(from.atStartOfDay(),to.atStartOfDay().plusDays(1L));
+    return usedItem.createDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
   }
 
   private BooleanExpression likeTitle(String title) {
