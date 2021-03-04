@@ -15,7 +15,4 @@ public class RestApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(RestApiApplication.class, args);
 	}
-
-	@Bean
-	JPAQueryFactory jpaQueryFactory(EntityManager em) { return new JPAQueryFactory(em); }
 }
