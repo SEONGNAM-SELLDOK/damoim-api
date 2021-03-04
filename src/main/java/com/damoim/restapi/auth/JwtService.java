@@ -6,11 +6,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
+
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
 
 @Service
 public class JwtService {
@@ -27,7 +33,7 @@ public class JwtService {
         verifier.verify(s);
 
         if (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) > s.getClaim("expiryTime").asLong()) {
-            throw new RuntimeException("expired token");
+            throw new BadCredentialsException("expired token");
         }
 
         return JwtUser.of(s.getClaim("id").asLong(),

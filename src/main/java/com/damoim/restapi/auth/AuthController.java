@@ -9,6 +9,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +35,7 @@ public class AuthController {
         String authToken = authService.naverCallback(code);
         setAuthToken(httpServletResponse, authToken);
 
-        return "redirect:/";
+        return "redirect:/me";
     }
 
     private void setAuthToken(HttpServletResponse httpServletResponse, String authToken) {

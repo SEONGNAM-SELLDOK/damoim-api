@@ -3,6 +3,11 @@ package com.damoim.restapi.auth.security;
 import com.damoim.restapi.member.entity.Member;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
+
 public class JwtAuthToken extends AbstractAuthenticationToken {
 
     private final Member member;

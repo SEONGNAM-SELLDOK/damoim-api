@@ -11,6 +11,11 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
+
 @Configuration
 public class RestTemplateConfig {
 

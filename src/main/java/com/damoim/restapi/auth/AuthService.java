@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -25,18 +26,24 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
 
+    @Transactional
     public String naverCallback(String code) {
         GetTokenResponse response = fetchAccessToken(code);
         GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
 
-        Member member = Member.builder()
-                .id(userInfo.nickname)
-                .name(userInfo.name)
-                .email(userInfo.email)
-                .register("OAUTH")
-                .build();
-
-        member = memberRepository.save(member);
+        Member member = memberRepository.findByEmail(userInfo.email);
+        if (member != null) {
+            member.setId(userInfo.nickname);
+            member.setName(userInfo.name);
+        } else {
+            Member newMember = Member.builder()
+                    .id(userInfo.nickname)
+                    .name(userInfo.name)
+                    .email(userInfo.email)
+                    .register("OAUTH")
+                    .build();
+            member = memberRepository.save(newMember);
+        }
 
         return jwtService.encode(JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
     }
@@ -49,8 +56,8 @@ public class AuthService {
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", "Bearer " + accessToken);
         HttpEntity<?> entity = new HttpEntity<>(header);
-        ResponseEntity<GetUserInfoResponse> rr = restTemplate.exchange("https://openapi.naver.com/v1/nid/me", HttpMethod.GET, entity, GetUserInfoResponse.class);
-        return Objects.requireNonNull(rr.getBody()).response;
+        ResponseEntity<GetUserInfoResponse> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me", HttpMethod.GET, entity, GetUserInfoResponse.class);
+        return Objects.requireNonNull(response.getBody()).response;
     }
 
     private String getAccessToken(String code) {

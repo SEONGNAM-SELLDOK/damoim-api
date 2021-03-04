@@ -1,13 +1,18 @@
 package com.damoim.restapi.auth.security;
 
 import com.damoim.restapi.auth.JwtService;
-import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+
+/**
+ * @author dodo45133@gmail.com
+ * @since 2021. 03. 04.
+ */
 
 @Component
 @RequiredArgsConstructor
@@ -23,9 +28,10 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
         JwtService.JwtUser jwtUser = jwtService.decode(((NotYetJwtAuthToken) authentication).getPrincipal());
 
-        Member member = memberService.get(jwtUser.getUserId()).orElseThrow(() -> new RuntimeException("auth error"));
-
-        return new JwtAuthToken(member);
+        return new JwtAuthToken(memberService
+                .get(jwtUser.getUserId())
+                .orElseThrow(() -> new BadCredentialsException("Invalid jwt token."))
+        );
     }
 
     @Override
