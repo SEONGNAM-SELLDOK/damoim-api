@@ -1,5 +1,6 @@
 package com.damoim.restapi.member.service;
 
+import com.damoim.restapi.boards.controller.SeminarController;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
@@ -12,11 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-
 
 /**
  * @author gisung go
@@ -28,6 +28,8 @@ public class BoardsServiceTest {
 
     @Autowired
     BoardsService boardsService;
+    @Autowired
+    SeminarController seminarController;
 
     private long id;
 
@@ -65,13 +67,13 @@ public class BoardsServiceTest {
             .endDate(LocalDateTime.now())
             .build();
 
-        //        ResponseEntity<String> id = boardsController.save(request, (BoardType) seminar);
+        ResponseEntity<ReadBoardsResponse> response = seminarController.saveSeminar(request);
     }
 
     @Test
     void findByIdTest() {
-        Optional<Boards> seminar = boardsService.findById(id);
-        Assertions.assertTrue(seminar.isPresent());
+        Boards boardId = boardsService.findById(id);
+        Assertions.assertTrue(boardId.getId() == id);
     }
 
     @Test
@@ -81,17 +83,14 @@ public class BoardsServiceTest {
             .build();
 
         boardsService.modify(id, request);
-        Optional<Boards> seminar = boardsService.findById(id);
-        Assertions.assertTrue(seminar.isPresent());
-        Assertions.assertEquals(seminar.get().getTitle(), "스프링 세미나 수정");
+        Boards boardId = boardsService.findById(id);
+        Assertions.assertTrue(boardId.getId() == id);
+        Assertions.assertEquals(boardId.getTitle(), "스프링 세미나 수정");
     }
 
     @Test
     void deleteTest() {
         boardsService.delete(id);
-
-        Optional<Boards> seminar = boardsService.findById(id);
-        Assertions.assertTrue(seminar.isEmpty());
     }
 
 }

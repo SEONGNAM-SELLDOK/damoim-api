@@ -1,5 +1,7 @@
 package com.damoim.restapi.boards.model;
 
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
 import lombok.*;
 
@@ -36,4 +38,15 @@ public class ModifyBoardsRequest {
     private DamoimTag damoimTag; // 태그
     @NotNull
     private LocalDateTime endDate; // 마감일
+
+    public Boards updateTo(Boards boards) {
+        boards.setTitle(title);
+        boards.setContent(content);
+        boards.setImage(image);
+        boards.setAddress(new Address(country, city, street));
+        boards.setSubject(subject);
+        boards.setDamoimTag(damoimTag);
+        boards.setEndDate(endDate);
+        return boards;
+    }
 }

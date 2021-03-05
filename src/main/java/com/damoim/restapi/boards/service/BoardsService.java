@@ -8,10 +8,12 @@ import com.damoim.restapi.boards.dao.BoardsRepository;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,25 +39,18 @@ public class BoardsService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Boards> findById(Long id) {
-        return boardsRepository.findById(id);
+    public Boards findById(Long id) {
+        Optional<Boards> Id = boardsRepository.findById(id);
+        return Id .orElseThrow(() -> new NotFoundPage(
+                HttpStatus.NOT_FOUND.toString(),
+                String.valueOf(Id))
+        );
     }
 
-    public Optional<Boards> modify(Long id, ModifyBoardsRequest request) {
-        Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        Optional<Boards> boardId = boardsRepository.findById(id);
-        boardId.ifPresent(existingSeminar -> {
-            existingSeminar.setTitle(request.getTitle());
-            existingSeminar.setContent(request.getContent());
-            existingSeminar.setImage(request.getImage());
-            existingSeminar.setAddress(address);
-            existingSeminar.setSubject(request.getSubject());
-            existingSeminar.setDamoimTag(request.getDamoimTag());
-            existingSeminar.setEndDate(request.getEndDate());
-            boardsRepository.save(existingSeminar);
-        });
-
-        return boardId;
+    public Boards modify(Long id, ModifyBoardsRequest request) {
+        Boards boardId = findById(id);
+        Boards board = boardsRepository.save(request.updateTo(boardId));
+        return modelMapper.map(board, Boards.class);
     }
 
     public void delete(Long id) {

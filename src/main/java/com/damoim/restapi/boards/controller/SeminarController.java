@@ -70,10 +70,10 @@ public class SeminarController {
 
     @PutMapping("{id}")
     @ResponseBody
-    public ResponseEntity<Optional<Boards>> modify(
+    public ResponseEntity<Boards> modify(
             @PathVariable("id") Long id,
             final @Valid @RequestBody ModifyBoardsRequest request) {
-        Optional<Boards> boards = boardsService.modify(id, request);
+        Boards boards = boardsService.modify(id, request);
         return ResponseEntity.ok(boards);
     }
 
