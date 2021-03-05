@@ -1,15 +1,15 @@
 package com.damoim.restapi.secondhandtrade.service;
 
 
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
