@@ -40,5 +40,4 @@ public class SaveBoardRequest {
     private String damoimTag;
     @NotNull
     private LocalDateTime endDate;
-
 }

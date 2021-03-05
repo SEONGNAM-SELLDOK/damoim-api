@@ -121,7 +121,7 @@ public class BoardsRepositoryImpl implements BoardsRepositoryCustom {
         return StringUtils.hasText(damoimTag) ? boards.damoimTag.tag.eq(damoimTag) : null;
     }
 
-    private BooleanExpression boardTypeEq(String boardType) {
-        return StringUtils.hasText(boardType) ? boards.boardType.eq(BoardType.valueOf(boardType)) : null;
+    private BooleanExpression boardTypeEq(BoardType type) {
+        return type != null ? boards.boardType.eq(type) : null;
     }
 }

@@ -88,8 +88,6 @@ public class SeminarController {
     public ResponseEntity list(BoardsSearchCondition condition, Pageable pageable) {
         Page<ListBoardsResponse> listBoardsResponses = boardsRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
-
-
     }
 
     @PostMapping("files") // 파일 등록하기
