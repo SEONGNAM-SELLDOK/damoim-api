@@ -1,5 +1,4 @@
 server:
-  #  포트 확인
   port: 8080
 spring:
   application:
