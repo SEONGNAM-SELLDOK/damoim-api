@@ -2,7 +2,7 @@ server:
   port: 8080
 spring:
   application:
-    name: selldok-toy
+    name: damoim-rest-api
   profiles:
     active: local
   datasource:
