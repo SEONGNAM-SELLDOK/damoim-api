@@ -80,14 +80,14 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
     }
 
     private BooleanExpression eqSth(StringPath compare1, String compare2) {
-        if (Objects.isNull(compare1) || Objects.isNull(compare2)) {
+        if (Objects.isNull(compare1) || Objects.isNull(compare2) || compare2.isEmpty()) {
             return null;
         }
         return compare1.eq(compare2);
     }
 
     private BooleanExpression likeSth(StringPath compare1, String compare2) {
-        if (Objects.isNull(compare1) || Objects.isNull(compare2)) {
+        if (Objects.isNull(compare1) || Objects.isNull(compare2) || compare2.isEmpty()) {
             return null;
         }
         return compare1.contains(compare2);
