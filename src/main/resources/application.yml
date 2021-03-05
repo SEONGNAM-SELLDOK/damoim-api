@@ -34,8 +34,9 @@ damoim:
 ---
 
 spring:
-  profiles:
-    active: dev
+  config:
+    activate:
+      on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://118.67.130.14:3306/damoim?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
