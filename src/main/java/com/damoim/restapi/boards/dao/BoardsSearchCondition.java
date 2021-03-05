@@ -21,5 +21,5 @@ public class BoardsSearchCondition {
     private String currentMember;
     private String subject;
     private String damoimTag;
-    private String boardType;
+    private BoardType boardType;
 }
