@@ -24,6 +24,9 @@ public class JwtService {
     // FIXME 환경변수로 받도록 빼야 함.
     private static final String SIGN_SECRET = "gEAAiEAu3X3OoILbAg0vdzjvc0MxIG0xP";
     private static final Algorithm SIGN_ALGORITHM = Algorithm.HMAC256(SIGN_SECRET);
+    private static final String EXPIRY_TIME = "expiryTime";
+    private static final String ISSUED_AT = "issuedAt";
+    private static final String ID = "id";
 
 
     public JwtUser decode(String jwtToken) {
@@ -32,20 +35,20 @@ public class JwtService {
 
         verifier.verify(s);
 
-        if (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) > s.getClaim("expiryTime").asLong()) {
+        if (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) > s.getClaim(EXPIRY_TIME).asLong()) {
             throw new BadCredentialsException("expired token");
         }
 
-        return JwtUser.of(s.getClaim("id").asLong(),
-                LocalDateTime.ofEpochSecond(s.getClaim("issuedAt").asLong(), 0, ZoneOffset.UTC),
-                LocalDateTime.ofEpochSecond(s.getClaim("expiryTime").asLong(), 0, ZoneOffset.UTC));
+        return JwtUser.of(s.getClaim(ID).asLong(),
+                LocalDateTime.ofEpochSecond(s.getClaim(ISSUED_AT).asLong(), 0, ZoneOffset.UTC),
+                LocalDateTime.ofEpochSecond(s.getClaim(EXPIRY_TIME).asLong(), 0, ZoneOffset.UTC));
     }
 
     public String encode(JwtUser user) {
         return JWT.create().withJWTId(user.jti)
-                .withClaim("id", user.userId)
-                .withClaim("issuedAt", user.issuedAt.toEpochSecond(ZoneOffset.UTC))
-                .withClaim("expiryTime", user.expiryTime.toEpochSecond(ZoneOffset.UTC))
+                .withClaim(ID, user.userId)
+                .withClaim(ISSUED_AT, user.issuedAt.toEpochSecond(ZoneOffset.UTC))
+                .withClaim(EXPIRY_TIME, user.expiryTime.toEpochSecond(ZoneOffset.UTC))
                 .sign(SIGN_ALGORITHM);
     }
 

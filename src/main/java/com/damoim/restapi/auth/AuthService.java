@@ -39,6 +39,12 @@ public class AuthService {
         GetTokenResponse response = fetchAccessToken(code);
         GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
 
+        Member member = createOrUpdateMember(userInfo);
+
+        return jwtService.encode(JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
+    }
+
+    private Member createOrUpdateMember(GetUserInfoResponse.UserInfo userInfo) {
         Member member = memberRepository.findByEmail(userInfo.email);
         if (member != null) {
             member.setId(userInfo.nickname);
@@ -52,8 +58,7 @@ public class AuthService {
                     .build();
             member = memberRepository.save(newMember);
         }
-
-        return jwtService.encode(JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
+        return member;
     }
 
     private GetTokenResponse fetchAccessToken(String code) {
