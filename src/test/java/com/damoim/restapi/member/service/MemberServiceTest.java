@@ -10,11 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.SaveMemberRequest;
 
-/**  * MemberServiceTest
- *
- * @author incheol.jung
- * @since 2021. 02. 20.
- */
 @SpringBootTest
 @Transactional
 class MemberServiceTest {
