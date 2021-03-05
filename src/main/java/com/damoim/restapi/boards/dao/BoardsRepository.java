@@ -1,8 +1,9 @@
 package com.damoim.restapi.boards.dao;
 
-import com.damoim.restapi.boards.entity.Boards;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.damoim.restapi.boards.entity.Board;
 
 /**
  * @author gisung go
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * */
 
 @Repository
-public interface BoardsRepository extends JpaRepository<Boards, Long>, BoardsRepositoryCustom {
+public interface BoardsRepository extends JpaRepository<Board, Long>, BoardsRepositoryCustom {
 
 }

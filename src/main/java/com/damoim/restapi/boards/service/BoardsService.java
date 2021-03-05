@@ -1,21 +1,20 @@
 package com.damoim.restapi.boards.service;
 
-import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import com.damoim.restapi.config.DamoimFileUtil;
-import com.damoim.restapi.boards.dao.BoardsRepository;
-import com.damoim.restapi.boards.entity.Address;
-import com.damoim.restapi.boards.entity.Boards;
-import com.damoim.restapi.boards.model.ModifyBoardsRequest;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import com.damoim.restapi.boards.dao.BoardsRepository;
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.boards.model.ReadBoardsResponse;
+import com.damoim.restapi.config.DamoimFileUtil;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author gisung go
@@ -28,19 +27,19 @@ public class BoardsService {
     private final BoardsRepository boardsRepository;
     private final DamoimFileUtil damoimFileUtil;
 
-    public Long save(Boards boards) {
-        boardsRepository.save(boards);
-        return boards.getId();
+    public Long save(Board board) {
+        boardsRepository.save(board);
+        return board.getId();
     }
 
     @Transactional(readOnly = true)
-    public Optional<Boards> findById(Long id) {
+    public Optional<Board> findById(Long id) {
         return boardsRepository.findById(id);
     }
 
     public Long modify(Long id, ModifyBoardsRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        Optional<Boards> seminar = boardsRepository.findById(id);
+        Optional<Board> seminar = boardsRepository.findById(id);
         seminar.ifPresent(existingSeminar -> {
             existingSeminar.setTitle(request.getTitle());
             existingSeminar.setContent(request.getContent());
