@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.damoim.restapi.boards.dao.BoardsRepository;
-import com.damoim.restapi.boards.dao.BoardsSearchCondition;
+import com.damoim.restapi.boards.dao.BoardRepository;
+import com.damoim.restapi.boards.dao.BoardSearchCondition;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
@@ -33,6 +33,7 @@ import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardsService;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,16 +42,18 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2021-02-22
  * */
 @Slf4j
+@Api(value = "boards", tags = "보드 관련 REST API")
 @Controller
-@RequestMapping("board")
+@RequestMapping("boards")
 @RequiredArgsConstructor
-public class BoardsController {
+public class BoardController {
 
     private final BoardsService boardsService;
-    private final BoardsRepository boardsRepository;
+    private final BoardRepository boardRepository;
 
     @PostMapping // type: SEMINAR, STUDY
-    public ResponseEntity<String> save(final @Valid @RequestBody SaveBoardRequest request, @RequestParam(value = "type") BoardType type) {
+    public ResponseEntity<String> save(final @Valid @RequestBody SaveBoardRequest request,
+        @RequestParam(value = "type") BoardType type) {
         log.info(request.toString());
 
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
@@ -101,8 +104,8 @@ public class BoardsController {
     }
 
     @GetMapping("pages")
-    public ResponseEntity list(BoardsSearchCondition condition, Pageable pageable) {
-        Page<ListBoardsResponse> listBoardsResponses = boardsRepository.searchBoard(condition, pageable);
+    public ResponseEntity list(BoardSearchCondition condition, Pageable pageable) {
+        Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
     }
 

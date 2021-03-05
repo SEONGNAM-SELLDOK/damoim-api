@@ -11,6 +11,6 @@ import com.damoim.restapi.boards.entity.Board;
  * */
 
 @Repository
-public interface BoardsRepository extends JpaRepository<Board, Long>, BoardsRepositoryCustom {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
 }

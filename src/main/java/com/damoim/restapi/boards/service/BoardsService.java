@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.damoim.restapi.boards.dao.BoardsRepository;
+import com.damoim.restapi.boards.dao.BoardRepository;
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
@@ -24,22 +24,22 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 @RequiredArgsConstructor
 public class BoardsService {
-    private final BoardsRepository boardsRepository;
+    private final BoardRepository boardRepository;
     private final DamoimFileUtil damoimFileUtil;
 
     public Long save(Board board) {
-        boardsRepository.save(board);
+        boardRepository.save(board);
         return board.getId();
     }
 
     @Transactional(readOnly = true)
     public Optional<Board> findById(Long id) {
-        return boardsRepository.findById(id);
+        return boardRepository.findById(id);
     }
 
     public Long modify(Long id, ModifyBoardsRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        Optional<Board> seminar = boardsRepository.findById(id);
+        Optional<Board> seminar = boardRepository.findById(id);
         seminar.ifPresent(existingSeminar -> {
             existingSeminar.setTitle(request.getTitle());
             existingSeminar.setContent(request.getContent());
@@ -48,18 +48,18 @@ public class BoardsService {
             existingSeminar.setSubject(request.getSubject());
             existingSeminar.setDamoimTag(request.getDamoimTag());
             existingSeminar.setEndDate(request.getEndDate());
-            boardsRepository.save(existingSeminar);
+            boardRepository.save(existingSeminar);
         });
 
         return id;
     }
 
     public void delete(Long id) {
-        boardsRepository.deleteById(id);
+        boardRepository.deleteById(id);
     }
 
     public List<ReadBoardsResponse> findBoardInfo(Long id, BoardType type) {
-        return boardsRepository.findByBoardInfo(id, type);
+        return boardRepository.findByBoardInfo(id, type);
     }
 
 
