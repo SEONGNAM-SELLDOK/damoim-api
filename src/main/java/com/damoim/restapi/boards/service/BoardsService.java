@@ -1,18 +1,16 @@
 package com.damoim.restapi.boards.service;
 
 
-import com.damoim.restapi.boards.dao.BoardsRepository;
+import com.damoim.restapi.boards.dao.BoardRepository;
 import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
