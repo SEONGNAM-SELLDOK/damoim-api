@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  * @author incheol.jung
  * @since 2021. 02. 19.
  */
-@Api(value = "member", description = "회원 관련 REST API")
+@Api(value = "members", tags = "회원 관련 REST API")
 @RestController
 @RequestMapping("members")
 @RequiredArgsConstructor

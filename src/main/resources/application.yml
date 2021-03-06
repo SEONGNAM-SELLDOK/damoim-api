@@ -1,9 +1,10 @@
 server:
-#  포트 확인
   port: 8080
 spring:
   application:
-    name: selldok-toy
+    name: damoim-rest-api
+  profiles:
+    active: local
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
@@ -24,7 +25,22 @@ spring:
       hibernate:
         format-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+
 damoim:
   file:
     pathPrefix: src/main/resources/static
     pathLast: /img/
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://118.67.130.14:3306/damoim?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
