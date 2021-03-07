@@ -3,7 +3,6 @@ package com.damoim.restapi.boards.dao;
 import static com.damoim.restapi.boards.entity.QBoard.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

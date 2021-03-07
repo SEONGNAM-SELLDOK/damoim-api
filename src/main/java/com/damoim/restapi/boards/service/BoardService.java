@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.damoim.restapi.boards.dao.BoardRepository;
-import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
@@ -38,10 +37,10 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public Board findById(Long id) {
-        Optional<Board> Id = boardRepository.findById(id);
-        return Id.orElseThrow(() -> new NotFoundPage(
+        Optional<Board> boardId = boardRepository.findById(id);
+        return boardId.orElseThrow(() -> new NotFoundPage(
                 HttpStatus.NOT_FOUND.toString(),
-                String.valueOf(Id))
+                String.valueOf(boardId))
         );
     }
 
@@ -59,5 +58,5 @@ public class BoardService {
         return boardRepository.findByBoardInfo(id, type);
     }
 
-    public String saveUploadFile(MultipartFile upload_file) { return damoimFileUtil.upload(upload_file); }
+    public String saveUploadFile(MultipartFile uploadFile) { return damoimFileUtil.upload(uploadFile); }
 }

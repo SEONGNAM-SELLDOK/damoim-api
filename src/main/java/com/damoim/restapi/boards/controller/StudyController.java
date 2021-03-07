@@ -78,9 +78,9 @@ public class StudyController {
 
     @DeleteMapping("{id}")
     @ResponseBody
-    public ResponseEntity.HeadersBuilder<?> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
         boardService.delete(id);
-        return ResponseEntity.noContent();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("pages")
