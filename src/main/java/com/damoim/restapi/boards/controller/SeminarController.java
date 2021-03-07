@@ -90,20 +90,20 @@ public class SeminarController {
 
     @DeleteMapping("{id}")
     @ResponseBody
-    public ResponseEntity delete(@PathVariable("id") Long id) {
+    public ResponseEntity.HeadersBuilder<?> delete(@PathVariable("id") Long id) {
         boardService.delete(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent();
     }
 
     @GetMapping("pages")
-    public ResponseEntity list(BoardSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition, Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
         Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
     }
 
     @PostMapping("files") // 파일 등록하기
-    public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
+    public ResponseEntity<HashMap<String, String>> handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
         String fileName = boardService.saveUploadFile(file);
         redirectAttr.addFlashAttribute("pictures", file);
 
