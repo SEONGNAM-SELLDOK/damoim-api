@@ -1,6 +1,8 @@
 package com.damoim.restapi.config.fileutil.model;
 
+import java.util.UUID;
 import lombok.Getter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
@@ -22,5 +24,9 @@ public class RequestFile {
 
     public static RequestFile of(String root, MultipartFile file) {
         return new RequestFile(root, file);
+    }
+
+    public String getUUIDFileName() {
+        return StringUtils.cleanPath(UUID.randomUUID() + file.getOriginalFilename());
     }
 }

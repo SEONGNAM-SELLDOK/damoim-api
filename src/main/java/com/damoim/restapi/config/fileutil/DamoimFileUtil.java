@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,32 +49,25 @@ public class DamoimFileUtil {
     }
 
     public String upload(RequestFile requestFile) {
-        MultipartFile file = requestFile.getFile();
 
-        fileValidation(file);
+        MultipartFile file = fileValidation(requestFile.getFile());
 
         Path rootLocation = Paths.get(fileProperties.getFinalPath() + requestFile.getRoot())
             .toAbsolutePath().normalize();
-        String filename = getFilename(file);
-        File convFile;
 
+        String filename = requestFile.getUUIDFileName();
         try {
             Files.createDirectories(rootLocation);
             Path targetPath = rootLocation.resolve(filename).normalize();
-            convFile = new File(String.valueOf(targetPath));
+            File convFile = new File(String.valueOf(targetPath));
             file.transferTo(convFile);
         } catch (Exception e) {
-            throw new FileNotSaveException(
-                "[File Not Save] file name:" + file.getOriginalFilename());
+            throw new FileNotSaveException("[FileNotSave]fileName:" + file.getOriginalFilename());
         }
         return fileProperties.getPathLast() + requestFile.getRoot() + filename;
     }
 
-    private String getFilename(MultipartFile file) {
-        return StringUtils.cleanPath(UUID.randomUUID() + file.getOriginalFilename());
-    }
-
-    private void fileValidation(MultipartFile file) throws NotSupportedTypeException {
+    private MultipartFile fileValidation(MultipartFile file) throws NotSupportedTypeException {
         String contentType = file.getContentType();
         List<String> supType = List
             .of(MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_GIF_VALUE);
@@ -84,5 +76,6 @@ public class DamoimFileUtil {
             throw new NotSupportedTypeException(contentType, supType,
                 HttpStatus.UNSUPPORTED_MEDIA_TYPE.value());
         }
+        return file;
     }
 }
