@@ -97,6 +97,7 @@ public class SeminarController {
 
     @GetMapping("pages")
     public ResponseEntity list(BoardSearchCondition condition, Pageable pageable) {
+        condition.setBoardType(BoardType.SEMINAR);
         Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
     }
