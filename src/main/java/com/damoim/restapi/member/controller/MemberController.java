@@ -15,11 +15,11 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 
 /**  * Controller
- *
- * @author incheol.jung
- * @since 2021. 02. 19.
- */
-@Api(value = "member", description = "회원 관련 REST API")
+*
+* @author incheol.jung
+* @since 2021. 02. 19.
+*/
+@Api(value = "members", tags = "회원 관련 REST API")
 @RestController
 @RequestMapping("members")
 @RequiredArgsConstructor

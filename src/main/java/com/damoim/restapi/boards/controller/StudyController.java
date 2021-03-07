@@ -1,16 +1,16 @@
 package com.damoim.restapi.boards.controller;
 
-import com.damoim.restapi.boards.dao.BoardsRepository;
-import com.damoim.restapi.boards.dao.BoardsSearchCondition;
+import com.damoim.restapi.boards.dao.BoardRepository;
+import com.damoim.restapi.boards.dao.BoardSearchCondition;
 import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.boards.entity.Boards;
 import com.damoim.restapi.boards.entity.DamoimTag;
 import com.damoim.restapi.boards.model.ListBoardsResponse;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
-import com.damoim.restapi.boards.service.BoardsService;
+import com.damoim.restapi.boards.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author gisung go
@@ -37,14 +36,14 @@ import java.util.Optional;
 @RequestMapping("study")
 @RequiredArgsConstructor
 public class StudyController {
-    private final BoardsService boardsService;
-    private final BoardsRepository boardsRepository;
+    private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     @PostMapping
     public ResponseEntity<ReadBoardsResponse> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
-        Boards boards = Boards.builder()
+        Board board = Board.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .image(request.getImage())
@@ -57,42 +56,43 @@ public class StudyController {
                 .boardType(BoardType.STUDY)
                 .build();
 
-        ReadBoardsResponse response = boardsService.save(boards);
+        ReadBoardsResponse response = boardService.save(board);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")
     @ResponseBody
     public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
-        List<ReadBoardsResponse> boardInfo = boardsService.findBoardInfo(id, BoardType.STUDY);
+        List<ReadBoardsResponse> boardInfo = boardService.findBoardInfo(id, BoardType.STUDY);
         return ResponseEntity.ok(boardInfo);
     }
 
     @PutMapping("{id}")
     @ResponseBody
-    public ResponseEntity<Boards> modify(
+    public ResponseEntity<Board> modify(
             @PathVariable("id") Long id,
             final @Valid @RequestBody ModifyBoardsRequest request) {
-        Boards boards = boardsService.modify(id, request);
+        Board boards = boardService.modify(id, request);
         return ResponseEntity.ok(boards);
     }
 
     @DeleteMapping("{id}")
     @ResponseBody
     public ResponseEntity delete(@PathVariable("id") Long id) {
-        boardsService.delete(id);
+        boardService.delete(id);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("pages")
-    public ResponseEntity list(BoardsSearchCondition condition, Pageable pageable) {
-        Page<ListBoardsResponse> listBoardsResponses = boardsRepository.searchBoard(condition, pageable);
+    public ResponseEntity list(BoardSearchCondition condition, Pageable pageable) {
+        condition.setBoardType(BoardType.STUDY);
+        Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
     }
 
     @PostMapping("files") // 파일 등록하기
     public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
-        String fileName = boardsService.saveUploadFile(file);
+        String fileName = boardService.saveUploadFile(file);
         redirectAttr.addFlashAttribute("pictures", file);
 
         HashMap<String, String> map = new HashMap<>();

@@ -1,9 +1,9 @@
 package com.damoim.restapi.boards.dao;
 
+import java.time.LocalDateTime;
+
 import com.damoim.restapi.boards.entity.BoardType;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 /**
  * @author gisung go
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * */
 
 @Data
-public class BoardsSearchCondition {
+public class BoardSearchCondition {
     private String title;
     private LocalDateTime endDate;
     private String boardsCountry;

@@ -1,13 +1,10 @@
 package com.damoim.restapi.member.service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.damoim.restapi.boards.controller.SeminarController;
-import com.damoim.restapi.boards.entity.Address;
-import com.damoim.restapi.boards.entity.Boards;
-import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import com.damoim.restapi.boards.model.SaveBoardRequest;
-import com.damoim.restapi.boards.service.BoardsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.DamoimTag;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.boards.model.SaveBoardRequest;
+import com.damoim.restapi.boards.service.BoardService;
 
 /**
  * @author gisung go
@@ -24,19 +26,19 @@ import java.time.LocalDateTime;
  * */
 @SpringBootTest
 @Transactional
-public class BoardsServiceTest {
+public class BoardServiceTest {
 
     @Autowired
-    BoardsService boardsService;
+    BoardService boardService;
     @Autowired
     SeminarController seminarController;
 
     private long id;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         Address address = new Address("KR", "seoul", "대왕판교로 1122 8층");
-        Boards boards = Boards.builder()
+        Board board = Board.builder()
             .title("스프링 JPA 세미나")
             .content("스프링 JPA 세미나 내용 입니다.")
             .image("/img/0000.jpg")
@@ -47,7 +49,7 @@ public class BoardsServiceTest {
             .damoimTag(new DamoimTag("JPA"))
             .endDate(LocalDateTime.now())
             .build();
-        ReadBoardsResponse response = boardsService.save(boards);
+        ReadBoardsResponse response = boardService.save(board);
         id = response.getId();
     }
 
@@ -72,7 +74,7 @@ public class BoardsServiceTest {
 
     @Test
     void findByIdTest() {
-        Boards boardId = boardsService.findById(id);
+        Board boardId = boardService.findById(id);
         Assertions.assertTrue(boardId.getId() == id);
     }
 
@@ -82,15 +84,15 @@ public class BoardsServiceTest {
             .title("스프링 세미나 수정")
             .build();
 
-        boardsService.modify(id, request);
-        Boards boardId = boardsService.findById(id);
+        boardService.modify(id, request);
+        Board boardId = boardService.findById(id);
         Assertions.assertTrue(boardId.getId() == id);
         Assertions.assertEquals(boardId.getTitle(), "스프링 세미나 수정");
     }
 
     @Test
     void deleteTest() {
-        boardsService.delete(id);
+        boardService.delete(id);
     }
 
 }
