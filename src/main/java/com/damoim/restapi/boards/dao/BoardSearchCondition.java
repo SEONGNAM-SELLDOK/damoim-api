@@ -1,9 +1,10 @@
 package com.damoim.restapi.boards.dao;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import com.damoim.restapi.boards.entity.BoardType;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * @author gisung go
@@ -13,7 +14,10 @@ import lombok.Data;
 @Data
 public class BoardSearchCondition {
     private String title;
-    private LocalDateTime endDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate from;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate to;
     private String boardsCountry;
     private String boardsCity;
     private String boardStreet;

@@ -2,6 +2,7 @@ package com.damoim.restapi.boards.dao;
 
 import static com.damoim.restapi.boards.entity.QBoard.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -67,7 +68,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
             .from(board)
                 .where(
                         titleEq(condition.getTitle()),
-                        endDateEq(condition.getEndDate()),
                         boardsCountryEq(condition.getBoardsCountry()),
                         boardsCityEq(condition.getBoardsCity()),
                         boardStreetEq(condition.getBoardStreet()),
@@ -75,7 +75,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         currentMemberEq(condition.getCurrentMember()),
                         subjectEq(condition.getSubject()),
                         damoimTagEq(condition.getDamoimTag()),
-                        boardTypeEq(condition.getBoardType())
+                        boardTypeEq(condition.getBoardType()),
+                        fromTo(condition.getFrom(), condition.getTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -89,6 +90,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private BooleanExpression titleEq(String title) {
         return StringUtils.hasText(title) ? board.title.eq(title) : null;
+    }
+
+    private BooleanExpression fromTo(LocalDate from, LocalDate to) {
+        return (from != null || to != null) ? board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L)) : null;
     }
 
     private BooleanExpression endDateEq(LocalDateTime endDate) {
