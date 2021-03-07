@@ -75,8 +75,8 @@ public class SeminarController {
     @GetMapping("{id}")
     @ResponseBody
     public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
-        List<ReadBoardsResponse> boardInfo = boardService.findBoardInfo(id, BoardType.SEMINAR);
-        return ResponseEntity.ok(boardInfo);
+        List<ReadBoardsResponse> seminarInfo = boardService.findBoardInfo(id, BoardType.SEMINAR);
+        return ResponseEntity.ok(seminarInfo);
     }
 
     @PutMapping("{id}")
@@ -84,8 +84,8 @@ public class SeminarController {
     public ResponseEntity<Board> modify(
             @PathVariable("id") Long id,
             final @Valid @RequestBody ModifyBoardsRequest request) {
-        Board boards = boardService.modify(id, request);
-        return ResponseEntity.ok(boards);
+        Board seminar = boardService.modify(id, request);
+        return ResponseEntity.ok(seminar);
     }
 
     @DeleteMapping("{id}")
@@ -98,8 +98,8 @@ public class SeminarController {
     @GetMapping("pages")
     public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition, Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
-        Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
-        return ResponseEntity.ok(listBoardsResponses);
+        Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
+        return ResponseEntity.ok(responses);
     }
 
     @PostMapping("files") // 파일 등록하기
