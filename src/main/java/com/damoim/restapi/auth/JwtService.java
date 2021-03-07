@@ -2,6 +2,7 @@ package com.damoim.restapi.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import lombok.AllArgsConstructor;
@@ -30,18 +31,22 @@ public class JwtService {
 
 
     public JwtUser decode(String jwtToken) {
-        DecodedJWT s = JWT.decode(jwtToken);
-        JWTVerifier verifier = JWT.require(SIGN_ALGORITHM).build();
+        try {
+            DecodedJWT s = JWT.decode(jwtToken);
+            JWTVerifier verifier = JWT.require(SIGN_ALGORITHM).build();
 
-        verifier.verify(s);
+            verifier.verify(s);
 
-        if (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) > s.getClaim(EXPIRY_TIME).asLong()) {
-            throw new BadCredentialsException("expired token");
+            if (LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) > s.getClaim(EXPIRY_TIME).asLong()) {
+                throw new BadCredentialsException("expired token");
+            }
+
+            return JwtUser.of(s.getClaim(ID).asLong(),
+                    LocalDateTime.ofEpochSecond(s.getClaim(ISSUED_AT).asLong(), 0, ZoneOffset.UTC),
+                    LocalDateTime.ofEpochSecond(s.getClaim(EXPIRY_TIME).asLong(), 0, ZoneOffset.UTC));
+        } catch (JWTDecodeException e) {
+            throw new BadCredentialsException("Invalid access token");
         }
-
-        return JwtUser.of(s.getClaim(ID).asLong(),
-                LocalDateTime.ofEpochSecond(s.getClaim(ISSUED_AT).asLong(), 0, ZoneOffset.UTC),
-                LocalDateTime.ofEpochSecond(s.getClaim(EXPIRY_TIME).asLong(), 0, ZoneOffset.UTC));
     }
 
     public String encode(JwtUser user) {

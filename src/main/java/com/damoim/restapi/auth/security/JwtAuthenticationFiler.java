@@ -6,6 +6,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -42,12 +44,15 @@ public class JwtAuthenticationFiler implements Filter {
             SecurityContextHolder.getContext().setAuthentication(result);
 
             chain.doFilter(request, response);
+
         } catch (BadCredentialsException e) {
             // 이상한 토큰은 지워준다.
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             Cookie cookie = new Cookie("AUTH_TOKEN", null);
             cookie.setMaxAge(0);
             httpServletResponse.addCookie(cookie);
+            // TODO 어떻게 리다이렉트 하는게 좋을까?
+            throw new BadCredentialsException("Invalid access token");
         } catch (IOException | ServletException e) {
             throw new BadCredentialsException("JwtAuthenticationFiler error");
         }
