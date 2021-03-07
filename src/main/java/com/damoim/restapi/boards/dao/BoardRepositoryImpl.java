@@ -96,10 +96,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return (from != null || to != null) ? board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L)) : null;
     }
 
-    private BooleanExpression endDateEq(LocalDateTime endDate) {
-        return endDate != null ? board.endDate.eq(endDate) : null;
-    }
-
     private BooleanExpression boardsCountryEq(String boardsCountry) {
         return StringUtils.hasText(boardsCountry) ? board.address.country.eq(boardsCountry) : null;
     }
