@@ -92,7 +92,10 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     private BooleanExpression fromTo(LocalDate from, LocalDate to) {
-        return (from != null || to != null) ? board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L)) : null;
+        if (from == null || to == null) {
+            return null;
+        }
+        return board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
     }
 
     private BooleanExpression boardsCountryEq(String boardsCountry) {
