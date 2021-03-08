@@ -1,6 +1,7 @@
 package com.damoim.restapi.recruit.dao;
 
 import com.damoim.restapi.recruit.entity.Recruit;
+import com.damoim.restapi.recruit.entity.RecruitTag;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -54,7 +55,7 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
                         likeSth(recruit.company, request.getCompany()),
                         eqSth(recruit.location, request.getLocation()),
                         gtSth(recruit.reward, request.getReward()),
-                        eqSthArray(recruit.tags, request.getTags()),
+                        eqSth(recruit.tag, request.getTag()),
                         likeSth(recruit.register, request.getRegister()),
                         afterSth(recruit.createdDate, request.getFrom()),
                         beforeSth(recruit.createdDate, request.getTo())
@@ -72,11 +73,11 @@ public class RecruitRepositorySupport extends QuerydslRepositorySupport {
         return compare1.gt(compare2);
     }
 
-    private BooleanExpression eqSthArray(ArrayPath<String[], String> array, String[] compare) {
-        if (Objects.isNull(array) || Objects.isNull(compare)) {
+    private BooleanExpression eqSth(EnumPath<RecruitTag> compare1, RecruitTag compare2){
+        if(Objects.isNull(compare1) || Objects.isNull(compare2)){
             return null;
         }
-        return array.in(compare);
+        return compare1.eq(compare2);
     }
 
     private BooleanExpression eqSth(StringPath compare1, String compare2) {

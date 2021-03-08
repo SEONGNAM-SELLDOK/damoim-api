@@ -1,5 +1,6 @@
 package com.damoim.restapi.recruit.model;
 
+import com.damoim.restapi.recruit.entity.RecruitTag;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -41,8 +42,8 @@ public class RecruitSaveRequest {
     @Min(0)
     private Integer reward;
 
-    @ApiModelProperty(value = "태그", example = "[\"복지좋은회사\",\"인센티브\",\"포털회사\",\"트래픽많은\"]")
-    private String[] tags;
+    @ApiModelProperty(value = "태그", example = "JAVA")
+    private RecruitTag tag;
 
     @ApiModelProperty(value = "내용", example = "B2B 서비스 고도화/안정화를 위하여 백엔드 개발자를 채용하고 있습니다!")
     private String description;
