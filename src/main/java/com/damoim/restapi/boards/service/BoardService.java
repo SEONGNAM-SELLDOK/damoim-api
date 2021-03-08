@@ -30,7 +30,11 @@ public class BoardService {
     private final DamoimFileUtil damoimFileUtil;
     private final ModelMapper modelMapper;
 
-    public ReadBoardsResponse save(Board board) {
+    public ReadBoardsResponse save(Board board, MultipartFile file) {
+        if(file != null) {
+            String upload = damoimFileUtil.upload(file);
+            board.setImage(upload);
+        }
         boardRepository.save(board);
         return modelMapper.map(board, ReadBoardsResponse.class);
     }
@@ -50,13 +54,12 @@ public class BoardService {
         return modelMapper.map(board, Board.class);
     }
 
-    public void delete(Long id) {
+    public Long delete(Long id) {
         boardRepository.deleteById(id);
+        return id;
     }
 
     public List<ReadBoardsResponse> findBoardInfo(Long id, BoardType type) {
         return boardRepository.findByBoardInfo(id, type);
     }
-
-    public String saveUploadFile(MultipartFile uploadFile) { return damoimFileUtil.upload(uploadFile); }
 }
