@@ -14,16 +14,8 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
-
     @CreatedDate
     private LocalDateTime createDate; // 등록일시
     @LastModifiedDate
     private LocalDateTime updateDate; // 수정일시
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-    public LocalDateTime getUpdateDate() {
-        return updateDate;
-    }
 }
