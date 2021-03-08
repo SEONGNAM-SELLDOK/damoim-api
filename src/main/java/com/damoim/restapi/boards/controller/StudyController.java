@@ -40,7 +40,9 @@ public class StudyController {
     private final BoardRepository boardRepository;
 
     @PostMapping
-    public ResponseEntity<ReadBoardsResponse> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
+    public ResponseEntity<ReadBoardsResponse> saveStudy(
+            final @Valid @RequestBody SaveBoardRequest request,
+            @RequestParam(required = false) MultipartFile file) {
         Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
         DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
         Board board = Board.builder()
@@ -56,7 +58,7 @@ public class StudyController {
                 .boardType(BoardType.STUDY)
                 .build();
 
-        ReadBoardsResponse response = boardService.save(board);
+        ReadBoardsResponse response = boardService.save(board, file);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -78,9 +80,9 @@ public class StudyController {
 
     @DeleteMapping("{id}")
     @ResponseBody
-    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
-        boardService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
+        Long boardId = boardService.delete(id);
+        return ResponseEntity.ok(boardId);
     }
 
     @GetMapping("pages")
@@ -88,16 +90,5 @@ public class StudyController {
         condition.setBoardType(BoardType.STUDY);
         Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
-    }
-
-    @PostMapping("files") // 파일 등록하기
-    public ResponseEntity<HashMap<String, String>> handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
-        String fileName = boardService.saveUploadFile(file);
-        redirectAttr.addFlashAttribute("pictures", file);
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("fileName", fileName);
-
-        return ResponseEntity.ok(map);
     }
 }

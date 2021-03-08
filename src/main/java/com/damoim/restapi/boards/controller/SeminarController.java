@@ -1,6 +1,5 @@
 package com.damoim.restapi.boards.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.damoim.restapi.boards.dao.BoardRepository;
 import com.damoim.restapi.boards.dao.BoardSearchCondition;
@@ -52,23 +50,21 @@ public class SeminarController {
     private final BoardRepository boardRepository;
 
     @PostMapping
-    public ResponseEntity<ReadBoardsResponse> saveSeminar(final @Valid @RequestBody SaveBoardRequest request) {
-        Address address = new Address(request.getCountry(), request.getCity(), request.getStreet());
-        DamoimTag damoimTag = new DamoimTag(request.getDamoimTag());
+    public ResponseEntity<ReadBoardsResponse> saveSeminar(
+            final @Valid @RequestBody SaveBoardRequest request,
+            @RequestParam(required = false) MultipartFile file) {
         Board board = Board.builder()
-            .title(request.getTitle())
-            .content(request.getContent())
-            .image(request.getImage())
-            .address(address)
-            .totalMember(request.getTotalMember())
-            .currentMember(request.getCurrentMember())
-            .subject(request.getSubject())
-            .damoimTag(damoimTag)
-            .endDate(request.getEndDate())
-            .boardType(BoardType.SEMINAR)
-            .build();
-
-        ReadBoardsResponse response  = boardService.save(board);
+                .title(request.getTitle())
+                .content(request.getContent())
+                .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
+                .totalMember(request.getTotalMember())
+                .currentMember(request.getCurrentMember())
+                .subject(request.getSubject())
+                .damoimTag(new DamoimTag(request.getDamoimTag()))
+                .endDate(request.getEndDate())
+                .boardType(BoardType.SEMINAR)
+                .build();
+        ReadBoardsResponse response  = boardService.save(board, file);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -90,9 +86,9 @@ public class SeminarController {
 
     @DeleteMapping("{id}")
     @ResponseBody
-    public ResponseEntity<Object> delete(@PathVariable("id") Long id) {
-        boardService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
+        Long boardId = boardService.delete(id);
+        return ResponseEntity.ok(boardId);
     }
 
     @GetMapping("pages")
@@ -100,16 +96,5 @@ public class SeminarController {
         condition.setBoardType(BoardType.SEMINAR);
         Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(responses);
-    }
-
-    @PostMapping("files") // 파일 등록하기
-    public ResponseEntity<HashMap<String, String>> handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttr) {
-        String fileName = boardService.saveUploadFile(file);
-        redirectAttr.addFlashAttribute("pictures", file);
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("fileName", fileName);
-
-        return ResponseEntity.ok(map);
     }
 }
