@@ -2,20 +2,17 @@ package com.damoim.restapi.member.service;
 
 import java.time.LocalDateTime;
 
-import com.damoim.restapi.boards.controller.SeminarController;
-import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import static org.assertj.core.api.Assertions.assertThat;
+import com.damoim.restapi.boards.dao.BoardRepository;
+import com.damoim.restapi.config.DamoimFileUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardService;
 
@@ -30,7 +27,9 @@ public class BoardServiceTest {
     @Autowired
     BoardService boardService;
     @Autowired
-    SeminarController seminarController;
+    BoardRepository boardRepository;
+    @Autowired
+    DamoimFileUtil damoimFileUtil;
 
     private long id;
 
@@ -40,7 +39,6 @@ public class BoardServiceTest {
         Board board = Board.builder()
             .title("스프링 JPA 세미나")
             .content("스프링 JPA 세미나 내용 입니다.")
-            .image("/img/0000.jpg")
             .address(address)
             .totalMember("20")
             .currentMember("5")
@@ -48,8 +46,6 @@ public class BoardServiceTest {
             .damoimTag(new DamoimTag("JPA"))
             .endDate(LocalDateTime.now())
             .build();
-        ReadBoardsResponse response = boardService.save(board);
-        id = response.getId();
     }
 
     @Test
@@ -57,7 +53,6 @@ public class BoardServiceTest {
         SaveBoardRequest request = SaveBoardRequest.builder()
             .title("스프링 JPA 세미나")
             .content("스프링 JPA 세미나 내용 입니다.")
-            .image("/img/0000.jpg")
             .country("KR")
             .city("seoul")
             .street("대왕판교로 1122 8층")
@@ -67,31 +62,7 @@ public class BoardServiceTest {
             .damoimTag("JPA")
             .endDate(LocalDateTime.now())
             .build();
-
-        ResponseEntity<ReadBoardsResponse> response = seminarController.saveSeminar(request);
     }
 
-    @Test
-    void findByIdTest() {
-        Board boardId = boardService.findById(id);
-        assertThat(boardId.getId()).isEqualTo(id);
-    }
-
-    @Test
-    void modifyTest() {
-        ModifyBoardsRequest request = ModifyBoardsRequest.builder()
-            .title("스프링 세미나 수정")
-            .build();
-
-        boardService.modify(id, request);
-        Board boardId = boardService.findById(id);
-        assertThat(boardId.getId()).isEqualTo(id);
-        assertThat(boardId.getTitle()).isEqualTo("스프링 세미나 수정");
-    }
-
-    @Test
-    void deleteTest() {
-        boardService.delete(id);
-    }
 
 }
