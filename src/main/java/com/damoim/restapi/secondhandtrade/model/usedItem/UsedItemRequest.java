@@ -1,13 +1,11 @@
-package com.damoim.restapi.secondhandtrade.model;
+package com.damoim.restapi.secondhandtrade.model.usedItem;
 
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
-
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

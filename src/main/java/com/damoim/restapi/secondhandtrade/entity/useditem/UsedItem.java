@@ -1,7 +1,11 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
-import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.entity.reply.Reply;
+import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -64,6 +69,11 @@ public class UsedItem {
   private LocalDateTime updateDate; //수정일시
 
   private String editWriter; //수정자 ID
+
+  @OneToMany(mappedBy = "usedItem")
+  @JsonManagedReference
+  List<Reply> replyList = new ArrayList<>();
+
   @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)
   @Builder.Default

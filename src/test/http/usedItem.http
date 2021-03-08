@@ -1,3 +1,13 @@
+### 댓글 추가.
+POST http://localhost:8080/useditems/item/2/reply
+Content-Type: application/json
+
+{
+  "writer": "KJJ",
+  "content": "너무비싸요 !!"
+}
+
+###
 
 ###
 ### 중고거래 게시글 생성
@@ -6,8 +16,8 @@ Content-Type: application/json
 
 {
   "writer": "KJJ",
-  "address" : "서울특별시",
-  "category" : "default",
+  "address": "서울특별시",
+  "category": "default",
   "description" : "Air",
   "negotiation" : "true",
   "tradeType": "ALL",
