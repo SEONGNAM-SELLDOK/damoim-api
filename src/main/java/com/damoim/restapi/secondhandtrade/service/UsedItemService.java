@@ -15,6 +15,7 @@ import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -94,7 +95,30 @@ public class UsedItemService {
 
     public ResponseReply reply(Long no, RequestReply requestReply) {
         UsedItem item = getItemFromId(no);
-        Reply reply = replyRepository.save(requestReply.toEntity(item));
+        Long parentId = requestReply.getNo();
+        Reply reply = null;
+        if (Objects.isNull(parentId)) {
+            reply = replyRepository.save(requestReply.toEntity(item));
+        }
+
+        if (Objects.nonNull(parentId)) {
+            Reply parentReply = getReply(parentId);
+            if (parentReply.isClosed()) {
+                throw new RuntimeException("parentReply is closed");
+            }
+            reply = requestReply.toEntity(item);
+            reply.setLevel(parentReply.getLevel() + 1);
+            parentReply.getChildReply().add(reply);
+            reply = replyRepository.save(reply);
+        }
+
         return ResponseReply.of(item.getNo(), reply);
+    }
+
+    private Reply getReply(Long parentId) {
+        return replyRepository.findById(parentId)
+            .orElseThrow(
+                () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(parentId))
+            );
     }
 }

@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UsedItemRepository extends JpaRepository<UsedItem, Long> {
 
-    @Query("select u from UsedItem u left join fetch  u.replyList where u.no = :no")
+    @Query("select u from UsedItem u left join fetch u.replyList r left join fetch  r.childReply "
+        + " where r.parentReplyNo is null and u.no =:no")
     Optional<UsedItem> findByIdJoinFetch(Long no);
 
 }

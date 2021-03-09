@@ -1,10 +1,11 @@
 ### 댓글 추가.
-POST http://localhost:8080/useditems/item/2/reply
+POST http://localhost:8080/useditems/item/1/reply
 Content-Type: application/json
 
 {
+  "no": 1,
   "writer": "KJJ",
-  "content": "너무비싸요 !!"
+  "content": "asdasd너무비싸요 !!"
 }
 
 ###

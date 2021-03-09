@@ -4,8 +4,8 @@ import com.damoim.restapi.secondhandtrade.entity.reply.Reply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -72,7 +72,7 @@ public class UsedItem {
 
   @OneToMany(mappedBy = "usedItem")
   @JsonManagedReference
-  List<Reply> replyList = new ArrayList<>();
+  Set<Reply> replyList = new LinkedHashSet<>();
 
   @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)

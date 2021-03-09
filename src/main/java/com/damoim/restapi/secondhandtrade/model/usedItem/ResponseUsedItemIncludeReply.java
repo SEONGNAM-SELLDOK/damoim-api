@@ -4,7 +4,7 @@ import com.damoim.restapi.secondhandtrade.entity.reply.Reply;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,5 +26,5 @@ public class ResponseUsedItemIncludeReply {
     private String editWriter; //수정자 ID
     private boolean close;
     private boolean negotiation;
-    private List<Reply> replyList;
+    private Set<Reply> replyList;
 }
