@@ -1,5 +1,8 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
+import static com.damoim.restapi.secondhandtrade.controller.UsedItemController.ROOT;
+
+import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
@@ -41,9 +44,11 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Api(value = "UsedItem", tags = "중고거래 관련 REST API")
 @RestController
-@RequestMapping("useditems")
+@RequestMapping(ROOT)
 @RequiredArgsConstructor
 public class UsedItemController {
+
+  public static final String ROOT = "useditems";
 
   private final UsedItemService usedItemService;
   private final EnumMapper enumMapper;
@@ -63,7 +68,7 @@ public class UsedItemController {
   public ResponseEntity<ResponseUsedItem> save(
       @Valid @RequestBody UsedItemRequest usedItemRequest,
       @RequestParam(required = false) MultipartFile file) {
-    ResponseUsedItem item = usedItemService.save(usedItemRequest, file);
+    ResponseUsedItem item = usedItemService.save(usedItemRequest, RequestFile.of(ROOT, file));
     return new ResponseEntity<>(item, HttpStatus.CREATED);
   }
 
