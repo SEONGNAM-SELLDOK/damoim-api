@@ -9,10 +9,10 @@ import com.damoim.restapi.member.model.SaveMemberRequest;
 import lombok.RequiredArgsConstructor;
 
 /**  * MemberService
- *
- * @author incheol.jung
- * @since 2021. 02. 19.
- */
+*
+* @author incheol.jung
+* @since 2021. 02. 19.
+*/
 @Service
 @Transactional
 @RequiredArgsConstructor
