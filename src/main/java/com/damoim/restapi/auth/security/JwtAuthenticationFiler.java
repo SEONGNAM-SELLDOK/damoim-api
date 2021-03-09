@@ -6,8 +6,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -31,6 +29,12 @@ public class JwtAuthenticationFiler implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         try {
+
+            if (httpServletRequest.getCookies() == null) {
+                chain.doFilter(request, response);
+                return;
+            }
+
             Optional<Cookie> optionalCookie = Arrays.stream(httpServletRequest.getCookies()).filter(c -> "AUTH_TOKEN".equals(c.getName())).findFirst();
 
             if (optionalCookie.isEmpty()) {
