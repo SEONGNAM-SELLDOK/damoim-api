@@ -1,6 +1,5 @@
 package com.damoim.restapi.boards.model;
 
-import com.damoim.restapi.boards.entity.DamoimTag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,5 +39,4 @@ public class SaveBoardRequest {
     private String damoimTag;
     @NotNull
     private LocalDateTime endDate;
-
 }

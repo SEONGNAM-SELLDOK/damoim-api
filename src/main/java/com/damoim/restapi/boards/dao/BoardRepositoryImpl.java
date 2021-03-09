@@ -2,7 +2,7 @@ package com.damoim.restapi.boards.dao;
 
 import static com.damoim.restapi.boards.entity.QBoard.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -33,12 +33,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     @Override
     public List<ReadBoardsResponse> findByBoardInfo(Long id, BoardType type) {
         return queryFactory.select(new QReadBoardsResponse(
+            board.id,
             board.title,
             board.content,
             board.image,
-            board.address.country.as("boardsCountry"),
-            board.address.city.as("boardsCity"),
-            board.address.street.as("boardsStreet"),
+            board.address,
             board.totalMember,
             board.currentMember,
             board.subject,
@@ -68,14 +67,15 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
             .from(board)
                 .where(
                         titleEq(condition.getTitle()),
-                        endDateEq(condition.getEndDate()),
                         boardsCountryEq(condition.getBoardsCountry()),
                         boardsCityEq(condition.getBoardsCity()),
                         boardStreetEq(condition.getBoardStreet()),
                         totalMemberEq(condition.getTotalMember()),
                         currentMemberEq(condition.getCurrentMember()),
                         subjectEq(condition.getSubject()),
-                        damoimTagEq(condition.getDamoimTag())
+                        damoimTagEq(condition.getDamoimTag()),
+                        boardTypeEq(condition.getBoardType()),
+                        fromTo(condition.getFrom(), condition.getTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -91,8 +91,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return StringUtils.hasText(title) ? board.title.eq(title) : null;
     }
 
-    private BooleanExpression endDateEq(LocalDateTime endDate) {
-        return endDate != null ? board.endDate.eq(endDate) : null;
+    private BooleanExpression fromTo(LocalDate from, LocalDate to) {
+        if (from == null || to == null) {
+            return null;
+        }
+        return board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
     }
 
     private BooleanExpression boardsCountryEq(String boardsCountry) {
@@ -121,5 +124,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 
     private BooleanExpression damoimTagEq(String damoimTag) {
         return StringUtils.hasText(damoimTag) ? board.damoimTag.tag.eq(damoimTag) : null;
+    }
+
+    private BooleanExpression boardTypeEq(BoardType type) {
+        return type != null ? board.boardType.eq(type) : null;
     }
 }
