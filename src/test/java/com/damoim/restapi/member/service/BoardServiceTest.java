@@ -6,7 +6,7 @@ import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.DamoimTag;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardService;
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
