@@ -55,9 +55,7 @@ public class UsedItemSearchRepository {
             eqEditWriter(request.getEditWriter()),
             eqClose(request.getClose()),
             eqNegotiation(request.getClose()),
-            fromTo(request.getFrom(), request.getTo()),
-            beforeFrom(request.getFrom(), request.getTo()),
-            afterTo(request.getFrom(), request.getTo())
+            fromTo(request.getFrom(), request.getTo())
         )
         .offset(pageable.getOffset())
         .limit(pageable.getPageSize())
@@ -66,25 +64,18 @@ public class UsedItemSearchRepository {
     return new PageImpl<>(results.getResults(), pageable, results.getTotal());
   }
 
-  private BooleanExpression beforeFrom(LocalDate from, LocalDate to) {
-    if (Objects.nonNull(from) && Objects.isNull(to)) {
-      return usedItem.createDate.before(from.atStartOfDay());
-    }
-    return null;
-  }
 
-  private BooleanExpression afterTo(LocalDate from, LocalDate to) {
+  private BooleanExpression fromTo(LocalDate from, LocalDate to) {
+    if (from == null && to == null) {
+      return null;
+    }
     if (Objects.nonNull(to) && Objects.isNull(from)) {
       return usedItem.createDate.after(to.atStartOfDay().plusDays(1L));
     }
-    return null;
-  }
-
-
-  private BooleanExpression fromTo(LocalDate from, LocalDate to) {
-    if (from == null || to == null) {
-      return null;
+    if (Objects.isNull(to)) {
+      return usedItem.createDate.before(from.atStartOfDay());
     }
+
     return usedItem.createDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
   }
 
