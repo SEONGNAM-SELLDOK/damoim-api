@@ -1,11 +1,8 @@
 package com.damoim.restapi.auth;
 
-import com.damoim.restapi.member.dao.MemberRepository;
-import com.damoim.restapi.member.entity.Member;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,8 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
-import java.util.Objects;
+import com.damoim.restapi.member.dao.MemberRepository;
+import com.damoim.restapi.member.entity.Member;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author dodo45133@gmail.com
@@ -31,8 +32,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     // FIXME secret 환경변수로 옮겨야 함
-    private static final String clientId = "qFAw79F6W2qVUb7lPG3F";
-    private static final String secret = "xvMLD0uRNK";
+    private static final String clientId = "zcz8QirgvnnplFhwtSKO";
+    private static final String secret = "74gYxcq5VF";
 
     @Transactional
     public String naverCallback(String code) {
@@ -41,7 +42,8 @@ public class AuthService {
 
         Member member = createOrUpdateMember(userInfo);
 
-        return jwtService.encode(JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
+        return jwtService.encode(
+            JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
     }
 
     private Member createOrUpdateMember(GetUserInfoResponse.UserInfo userInfo) {
@@ -62,7 +64,9 @@ public class AuthService {
     }
 
     private GetTokenResponse fetchAccessToken(String code) {
-        GetTokenResponse response = restTemplate.exchange(getAccessToken(code), HttpMethod.GET, null, GetTokenResponse.class).getBody();
+        String url = "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret
+            + "&grant_type=authorization_code&state=123&code=" + code;
+        GetTokenResponse response = restTemplate.exchange(url, HttpMethod.GET, null, GetTokenResponse.class).getBody();
 
         if (response == null) {
             throw new RuntimeException("error naver callback");
@@ -77,10 +81,6 @@ public class AuthService {
         HttpEntity<?> entity = new HttpEntity<>(header);
         ResponseEntity<GetUserInfoResponse> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me", HttpMethod.GET, entity, GetUserInfoResponse.class);
         return Objects.requireNonNull(response.getBody()).response;
-    }
-
-    private String getAccessToken(String code) {
-        return "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret + "&grant_type=authorization_code&state=123&code=" + code;
     }
 
     @Setter

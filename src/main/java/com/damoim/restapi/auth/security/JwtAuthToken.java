@@ -1,7 +1,9 @@
 package com.damoim.restapi.auth.security;
 
-import com.damoim.restapi.member.entity.Member;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.model.TestUser;
 
 /**
  * @author dodo45133@gmail.com
@@ -10,11 +12,11 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 public class JwtAuthToken extends AbstractAuthenticationToken {
 
-    private final Member member;
+    private final TestUser member;
 
     public JwtAuthToken(Member member) {
         super(null);
-        this.member = member;
+        this.member = new TestUser(member.getName());
         setAuthenticated(true);
     }
 
@@ -29,7 +31,7 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Member getPrincipal() {
+    public TestUser getPrincipal() {
         return member;
     }
 }
