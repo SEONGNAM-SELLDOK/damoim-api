@@ -1,6 +1,6 @@
 package com.damoim.restapi.recruit.service;
 
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.recruit.dao.RecruitRepository;
 import com.damoim.restapi.recruit.dao.RecruitRepositorySupport;
 import com.damoim.restapi.recruit.dao.RecruitSaveRequestMapper;
@@ -9,15 +9,14 @@ import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
+import java.util.Set;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.validation.Valid;
-import java.util.Set;
 
 /**
  * @author SeongRok.Oh
