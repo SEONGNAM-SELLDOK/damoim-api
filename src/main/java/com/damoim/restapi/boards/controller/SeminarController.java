@@ -1,9 +1,11 @@
 package com.damoim.restapi.boards.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import com.damoim.restapi.boards.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,10 +28,6 @@ import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.model.ListBoardsResponse;
-import com.damoim.restapi.boards.model.ModifyBoardsRequest;
-import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +54,14 @@ public class SeminarController {
         Board board = Board.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
+                .image(request.getImage())
                 .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
                 .totalMember(request.getTotalMember())
                 .currentMember(request.getCurrentMember())
                 .subject(request.getSubject())
                 .damoimTag(new DamoimTag(request.getDamoimTag()))
                 .endDate(request.getEndDate())
+                .boardLike("0")
                 .boardType(BoardType.SEMINAR)
                 .build();
         ReadBoardsResponse response  = boardService.save(board, file);
@@ -89,6 +89,17 @@ public class SeminarController {
     public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
         Long boardId = boardService.delete(id);
         return ResponseEntity.ok(boardId);
+    }
+
+    @PostMapping("like")
+    @ResponseBody
+    public ResponseEntity<String> changeLike(final @Valid @RequestBody ChangeLikeRequest request) {
+        String like = boardService.changeLike(request);
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("like", like);
+
+        return new ResponseEntity(map, HttpStatus.OK);
     }
 
     @GetMapping("pages")

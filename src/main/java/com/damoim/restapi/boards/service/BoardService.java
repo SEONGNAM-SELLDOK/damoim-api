@@ -3,6 +3,7 @@ package com.damoim.restapi.boards.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.damoim.restapi.boards.model.ChangeLikeRequest;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,20 @@ public class BoardService {
 
     public List<ReadBoardsResponse> findBoardInfo(Long id, BoardType type) {
         return boardRepository.findByBoardInfo(id, type);
+    }
+
+    public String changeLike(ChangeLikeRequest request) {
+        Optional<Board> boardId = Optional.ofNullable(boardRepository.getOne(request.getId()));
+        String like = request.getBoardLike();
+
+        String boardLike;
+        if (like.equals("1")) {
+            boardLike = "0";
+        } else {
+            boardLike = "1";
+        }
+        boardRepository.changeLike(request.getId(), boardLike);
+
+        return boardLike;
     }
 }
