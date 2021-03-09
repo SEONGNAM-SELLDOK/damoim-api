@@ -1,13 +1,11 @@
 package com.damoim.restapi.boards.model;
 
-import com.damoim.restapi.boards.entity.DamoimTag;
+import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 /**
  * @author gisung go
@@ -40,5 +38,4 @@ public class SaveBoardRequest {
     private String damoimTag;
     @NotNull
     private LocalDateTime endDate;
-
 }

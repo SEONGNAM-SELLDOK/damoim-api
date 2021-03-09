@@ -1,11 +1,16 @@
 package com.damoim.restapi.boards.model;
 
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import lombok.*;
-
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author gisung go
@@ -36,4 +41,15 @@ public class ModifyBoardsRequest {
     private DamoimTag damoimTag; // 태그
     @NotNull
     private LocalDateTime endDate; // 마감일
+
+    public Board updateTo(Board board) {
+        board.setTitle(title);
+        board.setContent(content);
+        board.setImage(image);
+        board.setAddress(new Address(country, city, street));
+        board.setSubject(subject);
+        board.setDamoimTag(damoimTag);
+        board.setEndDate(endDate);
+        return board;
+    }
 }

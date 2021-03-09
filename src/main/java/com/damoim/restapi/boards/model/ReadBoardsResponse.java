@@ -1,9 +1,12 @@
 package com.damoim.restapi.boards.model;
 
+import com.damoim.restapi.boards.entity.Address;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.*;
-
 import java.time.LocalDateTime;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Gisung Go
@@ -14,25 +17,25 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 public class ReadBoardsResponse {
+
+    private long id;
     private String title;
     private String content;
     private String image;
-    private String country;
-    private String city;
-    private String street;
+    private Address address;
     private String totalMember;
     private String currentMember;
     private String subject;
     private LocalDateTime endDate;
 
     @QueryProjection
-    public ReadBoardsResponse(String title, String content, String image, String country, String city, String street, String totalMember, String currentMember, String subject, LocalDateTime endDate) {
+    public ReadBoardsResponse(long id, String title, String content, String image, Address address,
+        String totalMember, String currentMember, String subject, LocalDateTime endDate) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.image = image;
-        this.country = country;
-        this.city = city;
-        this.street = street;
+        this.address = address;
         this.totalMember = totalMember;
         this.currentMember = currentMember;
         this.subject = subject;
