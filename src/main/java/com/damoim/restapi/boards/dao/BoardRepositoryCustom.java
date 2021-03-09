@@ -16,7 +16,5 @@ import com.damoim.restapi.boards.model.ReadBoardsResponse;
 
 public interface BoardRepositoryCustom {
     List<ReadBoardsResponse> findByBoardInfo(Long id, BoardType type);
-
     Page<ListBoardsResponse> searchBoard(BoardSearchCondition condition, Pageable pageable);
-
 }

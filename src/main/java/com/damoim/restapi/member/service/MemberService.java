@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 /**  * MemberService
- *
- * @author incheol.jung
- * @since 2021. 02. 19.
- */
+*
+* @author incheol.jung
+* @since 2021. 02. 19.
+*/
 @Service
 @Transactional
 @RequiredArgsConstructor
