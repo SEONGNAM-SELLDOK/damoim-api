@@ -1,13 +1,11 @@
 package com.damoim.restapi.boards.dao;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ListBoardsResponse;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author gisung go

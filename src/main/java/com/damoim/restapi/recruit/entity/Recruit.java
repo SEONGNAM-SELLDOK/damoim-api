@@ -36,7 +36,9 @@ public class Recruit {
     private String title;
     private String description;
     private String location;
-    private String[] tags;
+
+    @Enumerated(EnumType.STRING)
+    private RecruitTag tag;
     private Integer reward;
 
     private String image;
