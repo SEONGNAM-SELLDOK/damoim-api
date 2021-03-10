@@ -34,6 +34,9 @@ damoim:
   file:
     pathPrefix: src/main/resources/static
     pathLast: /img/
+  auth:
+    clientId: zcz8QirgvnnplFhwtSKO
+    secret: 74gYxcq5VF
 
 ---
 

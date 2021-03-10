@@ -32,15 +32,12 @@ public class AuthService {
 	private final RestTemplate restTemplate;
 	private final JwtService jwtService;
 	private final MemberRepository memberRepository;
-
-	// FIXME secret 환경변수로 옮겨야 함
-	private static final String clientId = "zcz8QirgvnnplFhwtSKO";
-	private static final String secret = "74gYxcq5VF";
+	private final AuthProperties authProperties;
 
 	@Transactional
 	public String naverCallback(String code) {
 		GetTokenResponse response = fetchAccessToken(code);
-		GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
+		GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.accessToken);
 
 		Member member = createOrUpdateMember(userInfo);
 
@@ -65,9 +62,11 @@ public class AuthService {
 		return member;
 	}
 
-	private GetTokenResponse fetchAccessToken(String code) throws RuntimeException {
-		String url = "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret
-			+ "&grant_type=authorization_code&state=123&code=" + code;
+	private GetTokenResponse fetchAccessToken(String code) throws SecurityException {
+		String url =
+			"https://nid.naver.com/oauth2.0/token?client_id=" + authProperties.getClientId() + "&client_secret="
+				+ authProperties.getSecret()
+				+ "&grant_type=authorization_code&state=123&code=" + code;
 		GetTokenResponse response = null;
 		try {
 			URL url2 = new URL(url);
@@ -76,10 +75,10 @@ public class AuthService {
 				.getBody();
 
 			if (response == null) {
-				throw new RuntimeException("error naver callback");
+				throw new SecurityException("error naver callback");
 			}
 		} catch (MalformedURLException e) {
-			throw new RuntimeException(e.getMessage());
+			throw new SecurityException(e.getMessage());
 		}
 		return response;
 	}
@@ -97,7 +96,7 @@ public class AuthService {
 	@Getter
 	@NoArgsConstructor
 	static class GetTokenResponse {
-		private String access_token;
+		private String accessToken;
 	}
 
 	@Setter
