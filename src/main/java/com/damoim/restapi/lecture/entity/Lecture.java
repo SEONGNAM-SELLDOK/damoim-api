@@ -27,15 +27,15 @@ public class Lecture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long no;
-    private long lectureId;
+    private Long id;
     private String title;
     private String description;       // 상세 내용
     private String image;             // 썸네일 이미지
     private String speaker;           // 발표자
-    private String subject;           // 주제
+    @Enumerated(EnumType.STRING)
+    private LectureSubject subject;  // 주제
     private String route;             // 수업 경로
-    private LocalDateTime deadline;   // 마감 기한
+    private LocalDate deadline;   // 마감 기한
 
     @Column(updatable = false)
     private String register;

@@ -4,12 +4,11 @@ Content-Type: application/json
 
 {
   "id": 2,
-  "lectureId": 2,
   "title": "Java Persistence API",
   "description": "김영한님의 JPA 실습 강의 입니다.",
-  "image": "/images/lectures-01.png",
-  "subject": "",
+  "subject": "JAVA",
   "speaker": "김영한",
+  "route" : "Google Meet",
   "register": "이경희",
   "deadline": "2021-03-05"
 }

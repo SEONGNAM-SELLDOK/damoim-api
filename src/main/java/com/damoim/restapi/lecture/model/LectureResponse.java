@@ -1,6 +1,6 @@
 package com.damoim.restapi.lecture.model;
 
-import com.damoim.restapi.lecture.entity.LectureType;
+import com.damoim.restapi.lecture.entity.LectureSubject;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public class LectureResponse {
     @ApiModelProperty(value = "썸네일 이미지", example = "/images/lectures-01.png")
     private String image;
     @ApiModelProperty(value = "주제", required = true, example = "SPRING")
-    private LectureType lectureType;
+    private LectureSubject subject;
     @ApiModelProperty(value = "등록자", example = "이경희")
     private String register;
     @ApiModelProperty(value = "수업 경로", example = "Zoom")

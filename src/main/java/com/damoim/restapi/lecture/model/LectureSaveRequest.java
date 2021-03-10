@@ -1,10 +1,8 @@
 package com.damoim.restapi.lecture.model;
 
-import com.damoim.restapi.lecture.entity.LectureType;
+import com.damoim.restapi.lecture.entity.LectureSubject;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -29,7 +27,7 @@ public class LectureSaveRequest {
     private String speaker;
 
     @ApiModelProperty(value = "주제", required = true, example = "SPRING")
-    private LectureType lectureType;
+    private LectureSubject subject;
 
     @ApiModelProperty(value = "수업 경로", example = "Zoom")
     private String route;
