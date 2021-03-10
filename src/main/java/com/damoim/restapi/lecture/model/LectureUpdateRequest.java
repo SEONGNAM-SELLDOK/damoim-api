@@ -4,6 +4,7 @@ import com.damoim.restapi.lecture.entity.LectureSubject;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Min;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class LectureUpdateRequest extends LectureSaveRequest {
 
     @ApiModelProperty(example = "1")

@@ -11,18 +11,22 @@ import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author leekyunghee
  * @since 2021. 02. 25
  */
 
-@Service
+@Validated
 @Transactional
 @RequiredArgsConstructor
+@Service
 public class LectureService {
     private final LectureRepository lectureRepository;
     private final LectureSaveRequestMapper saveRequestMapper;
@@ -31,8 +35,11 @@ public class LectureService {
 
     private static final String ROOT = "lecture";
 
-    public Lecture save(LectureSaveRequest request, MultipartFile file) {
-        String fileName = fileUtil.upload(RequestFile.of(ROOT, file));
+    public Lecture save(@Valid LectureSaveRequest request, MultipartFile file) {
+        String fileName = null;
+        if (Objects.nonNull(file)) {
+            fileName = fileUtil.upload(RequestFile.of(ROOT, file));
+        }
         Lecture lecture = saveRequestMapper.toEntity(request);
         lecture.setImage(fileName);
         return lectureRepository.save(lecture);
@@ -44,17 +51,20 @@ public class LectureService {
     }
 
     @Transactional(readOnly = true)
-    public Lecture findById(Long id) {
+    public Lecture findById(long id) {
         return lectureRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = {})", id)));
     }
 
-    public void delete(Long id) {
+    public void delete(long id) {
         lectureRepository.deleteById(id);
     }
 
-    public Lecture update(LectureUpdateRequest request, MultipartFile file) {
-        String fileName = fileUtil.upload(RequestFile.of(ROOT, file));
+    public Lecture update(@Valid LectureUpdateRequest request, MultipartFile file) {
+        String fileName = null;
+        if (Objects.nonNull(file)) {
+            fileName = fileUtil.upload(RequestFile.of(ROOT, file));
+        }
         Lecture lecture = updateRequestMapper.toEntity(request);
         lecture.setImage(fileName);
         return lecture;
