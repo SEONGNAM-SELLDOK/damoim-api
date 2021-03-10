@@ -21,7 +21,7 @@ public class LectureServiceTest {
     @Test
     public void save() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().register("이경희").title("토비의 스프링 5").build();
-        Lecture lecture = lectureService.save(lectureSaveRequest);
+        Lecture lecture = lectureService.save(lectureSaveRequest, null);
         Assertions.assertEquals(lectureSaveRequest.getTitle(), lecture.getTitle());
     }
 
@@ -32,7 +32,7 @@ public class LectureServiceTest {
                 .title("테스트 게시글")
                 .description("테스트 본문")
                 .register("이경희")
-                .build());
+                .build(), null);
 
         //when
         //List<Lecture> lectureList = lectureRepository.findAll();

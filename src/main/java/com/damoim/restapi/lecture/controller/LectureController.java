@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -27,8 +28,8 @@ public class LectureController {
     private final LectureResponseMapper lectureResponseMapper;
 
     @PostMapping
-    public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest) {
-        return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.save(lectureSaveRequest)), HttpStatus.CREATED);
+    public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
+        return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.save(lectureSaveRequest, file)), HttpStatus.CREATED);
     }
 
     @GetMapping
