@@ -11,6 +11,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.ap.internal.util.Strings;
 import org.springframework.data.domain.Page;
@@ -63,10 +64,18 @@ public class UsedItemSearchRepository {
     return new PageImpl<>(results.getResults(), pageable, results.getTotal());
   }
 
+
   private BooleanExpression fromTo(LocalDate from, LocalDate to) {
-    if (from == null || to == null) {
+    if (from == null && to == null) {
       return null;
     }
+    if (Objects.nonNull(to) && Objects.isNull(from)) {
+      return usedItem.createDate.after(to.atStartOfDay().plusDays(1L));
+    }
+    if (Objects.isNull(to)) {
+      return usedItem.createDate.before(from.atStartOfDay());
+    }
+
     return usedItem.createDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
   }
 
