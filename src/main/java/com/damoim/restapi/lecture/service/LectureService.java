@@ -27,16 +27,17 @@ public class LectureService {
         return lectureRepository.save(lecture);
     }
 
+    @Transactional(readOnly = true)
     public List<Lecture> list() {
         return lectureRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Lecture findById(Long id) {
         return lectureRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = {})", id)));
     }
 
-    @Transactional
     public void delete(Long id) {
         lectureRepository.deleteById(id);
     }
