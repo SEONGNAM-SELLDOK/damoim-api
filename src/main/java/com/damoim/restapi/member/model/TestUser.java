@@ -14,4 +14,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class TestUser {
 	private String name;
+	private String email;
 }

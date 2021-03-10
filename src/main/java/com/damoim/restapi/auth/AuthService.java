@@ -1,5 +1,7 @@
 package com.damoim.restapi.auth;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -27,85 +29,93 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final RestTemplate restTemplate;
-    private final JwtService jwtService;
-    private final MemberRepository memberRepository;
+	private final RestTemplate restTemplate;
+	private final JwtService jwtService;
+	private final MemberRepository memberRepository;
 
-    // FIXME secret 환경변수로 옮겨야 함
-    private static final String clientId = "zcz8QirgvnnplFhwtSKO";
-    private static final String secret = "74gYxcq5VF";
+	// FIXME secret 환경변수로 옮겨야 함
+	private static final String clientId = "zcz8QirgvnnplFhwtSKO";
+	private static final String secret = "74gYxcq5VF";
 
-    @Transactional
-    public String naverCallback(String code) {
-        GetTokenResponse response = fetchAccessToken(code);
-        GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
+	@Transactional
+	public String naverCallback(String code) {
+		GetTokenResponse response = fetchAccessToken(code);
+		GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
 
-        Member member = createOrUpdateMember(userInfo);
+		Member member = createOrUpdateMember(userInfo);
 
-        return jwtService.encode(
-            JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
-    }
+		return jwtService.encode(
+			JwtService.JwtUser.of(member.getNo(), LocalDateTime.now(), LocalDateTime.now().plusDays(30)));
+	}
 
-    private Member createOrUpdateMember(GetUserInfoResponse.UserInfo userInfo) {
-        Member member = memberRepository.findByEmail(userInfo.email);
-        if (member != null) {
-            member.setId(userInfo.nickname);
-            member.setName(userInfo.name);
-        } else {
-            Member newMember = Member.builder()
-                    .id(userInfo.nickname)
-                    .name(userInfo.name)
-                    .email(userInfo.email)
-                    .register("OAUTH")
-                    .build();
-            member = memberRepository.save(newMember);
-        }
-        return member;
-    }
+	private Member createOrUpdateMember(GetUserInfoResponse.UserInfo userInfo) {
+		Member member = memberRepository.findByEmail(userInfo.email);
+		if (member != null) {
+			member.setId(userInfo.email);
+			member.setName(userInfo.name);
+		} else {
+			Member newMember = Member.builder()
+				.id(userInfo.email)
+				.name(userInfo.name)
+				.email(userInfo.email)
+				.register("OAUTH")
+				.build();
+			member = memberRepository.save(newMember);
+		}
+		return member;
+	}
 
-    private GetTokenResponse fetchAccessToken(String code) {
-        String url = "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret
-            + "&grant_type=authorization_code&state=123&code=" + code;
-        GetTokenResponse response = restTemplate.exchange(url, HttpMethod.GET, null, GetTokenResponse.class).getBody();
+	private GetTokenResponse fetchAccessToken(String code) {
+		String url = "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret
+			+ "&grant_type=authorization_code&state=123&code=" + code;
+		try {
+			URL url2 = new URL(url);
 
-        if (response == null) {
-            throw new RuntimeException("error naver callback");
-        }
+			GetTokenResponse response = restTemplate.exchange(url2.toString(), HttpMethod.GET, null,
+				GetTokenResponse.class)
+				.getBody();
 
-        return response;
-    }
+			if (response == null) {
+				throw new RuntimeException("error naver callback");
+			}
 
-    private GetUserInfoResponse.UserInfo fetchUserInfoFromNaver(String accessToken) {
-        HttpHeaders header = new HttpHeaders();
-        header.add("Authorization", "Bearer " + accessToken);
-        HttpEntity<?> entity = new HttpEntity<>(header);
-        ResponseEntity<GetUserInfoResponse> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me", HttpMethod.GET, entity, GetUserInfoResponse.class);
-        return Objects.requireNonNull(response.getBody()).response;
-    }
+			return response;
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    @Setter
-    @Getter
-    @NoArgsConstructor
-    static class GetTokenResponse {
-        private String access_token;
-    }
+	private GetUserInfoResponse.UserInfo fetchUserInfoFromNaver(String accessToken) {
+		HttpHeaders header = new HttpHeaders();
+		header.add("Authorization", "Bearer " + accessToken);
+		HttpEntity<?> entity = new HttpEntity<>(header);
+		ResponseEntity<GetUserInfoResponse> response = restTemplate.exchange("https://openapi.naver.com/v1/nid/me",
+			HttpMethod.GET, entity, GetUserInfoResponse.class);
+		return Objects.requireNonNull(response.getBody()).response;
+	}
 
-    @Setter
-    @Getter
-    @NoArgsConstructor
-    static class GetUserInfoResponse {
-        private String resultcode;
-        private String message;
-        private UserInfo response;
+	@Setter
+	@Getter
+	@NoArgsConstructor
+	static class GetTokenResponse {
+		private String access_token;
+	}
 
-        @Setter
-        @Getter
-        @NoArgsConstructor
-        static class UserInfo {
-            private String id;
-            private String nickname;
-            private String email;
-            private String name;
-        }
-    }
+	@Setter
+	@Getter
+	@NoArgsConstructor
+	static class GetUserInfoResponse {
+		private String resultcode;
+		private String message;
+		private UserInfo response;
+
+		@Setter
+		@Getter
+		@NoArgsConstructor
+		static class UserInfo {
+			private String email;
+			private String name;
+		}
+	}
 }

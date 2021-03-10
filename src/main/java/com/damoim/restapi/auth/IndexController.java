@@ -17,6 +17,6 @@ public class IndexController {
     @GetMapping("/me")
     public String index(@AuthenticationPrincipal TestUser member) {
 
-        return "안뇽~ " + member.getName();
+        return "안뇽~ " + member.getName() + "(" + member.getEmail() + ")";
     }
 }

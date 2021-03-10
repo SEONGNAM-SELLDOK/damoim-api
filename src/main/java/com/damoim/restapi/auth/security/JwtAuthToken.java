@@ -16,7 +16,7 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
 
     public JwtAuthToken(Member member) {
         super(null);
-        this.member = new TestUser(member.getName());
+        this.member = new TestUser(member.getName(), member.getEmail());
         setAuthenticated(true);
     }
 
