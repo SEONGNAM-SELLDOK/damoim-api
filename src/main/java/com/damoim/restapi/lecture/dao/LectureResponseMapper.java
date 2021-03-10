@@ -2,7 +2,7 @@ package com.damoim.restapi.lecture.dao;
 
 import com.damoim.restapi.config.jpa.EntityMapper;
 import com.damoim.restapi.lecture.entity.Lecture;
-import com.damoim.restapi.lecture.model.GetLectureResponse;
+import com.damoim.restapi.lecture.model.LectureResponse;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -14,8 +14,8 @@ import java.util.List;
  */
 
 @Mapper(componentModel = "spring")
-public interface LectureMapper extends EntityMapper<GetLectureResponse, Lecture> {
-    List<GetLectureResponse> toGetDtos(List<Lecture> lectures);
+public interface LectureResponseMapper extends EntityMapper<LectureResponse, Lecture> {
+    List<LectureResponse> toGetDtos(List<Lecture> lectures);
 
     Lecture toGetDto(Lecture id);
 }

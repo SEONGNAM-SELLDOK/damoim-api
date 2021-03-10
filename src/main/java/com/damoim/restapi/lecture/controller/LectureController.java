@@ -1,8 +1,8 @@
 package com.damoim.restapi.lecture.controller;
 
-import com.damoim.restapi.lecture.dao.LectureMapper;
-import com.damoim.restapi.lecture.model.GetLectureResponse;
-import com.damoim.restapi.lecture.model.SaveLectureRequest;
+import com.damoim.restapi.lecture.dao.LectureResponseMapper;
+import com.damoim.restapi.lecture.model.LectureResponse;
+import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.service.LectureService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -24,21 +24,21 @@ import static org.springframework.http.ResponseEntity.status;
 public class LectureController {
 
     private final LectureService lectureService;
-    private final LectureMapper lectureMapper;
+    private final LectureResponseMapper lectureResponseMapper;
 
     @PostMapping
-    public ResponseEntity<GetLectureResponse> save(@Valid @RequestBody SaveLectureRequest saveLectureRequest) {
-        return new ResponseEntity<>(lectureMapper.toDto(lectureService.save(saveLectureRequest)), HttpStatus.CREATED);
+    public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest) {
+        return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.save(lectureSaveRequest)), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<GetLectureResponse>> retrieve() {
-        return new ResponseEntity<>(lectureMapper.toGetDtos(lectureService.list()), HttpStatus.OK);
+    public ResponseEntity<List<LectureResponse>> retrieve() {
+        return new ResponseEntity<>(lectureResponseMapper.toGetDtos(lectureService.list()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetLectureResponse> selectItem(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(lectureMapper.toDto(lectureService.findById(id)), HttpStatus.OK);
+    public ResponseEntity<LectureResponse> selectItem(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.findById(id)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

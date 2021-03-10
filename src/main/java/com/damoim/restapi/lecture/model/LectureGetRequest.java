@@ -14,8 +14,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class GetLectureRequest {
-    @ApiModelProperty(value = "강의 제목", required = true, example = "100001")
+public class LectureGetRequest {
+    @ApiModelProperty(value = "강의 제목", required = true, example = "토비의 스프링 강의")
     private String title;
 
     @ApiModelProperty(value = "상세 설명", required = true, example = "이 강의는 토비의 스프링 5 실습과 예제 중심의 바이블 입니다.")

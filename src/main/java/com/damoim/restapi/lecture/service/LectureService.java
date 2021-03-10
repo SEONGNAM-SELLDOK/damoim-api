@@ -1,8 +1,9 @@
 package com.damoim.restapi.lecture.service;
 
 import com.damoim.restapi.lecture.dao.LectureRepository;
+import com.damoim.restapi.lecture.dao.LectureSaveRequestMapper;
 import com.damoim.restapi.lecture.entity.Lecture;
-import com.damoim.restapi.lecture.model.SaveLectureRequest;
+import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

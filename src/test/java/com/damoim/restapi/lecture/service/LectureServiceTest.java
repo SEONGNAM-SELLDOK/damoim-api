@@ -1,8 +1,7 @@
 package com.damoim.restapi.lecture.service;
 
-import com.damoim.restapi.lecture.dao.LectureRepository;
 import com.damoim.restapi.lecture.entity.Lecture;
-import com.damoim.restapi.lecture.model.SaveLectureRequest;
+import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,15 +20,15 @@ public class LectureServiceTest {
     @DisplayName("강의 추천 저장 테스트")
     @Test
     public void save() {
-        SaveLectureRequest saveLectureRequest = SaveLectureRequest.builder().register("이경희").title("토비의 스프링 5").build();
-        Lecture lecture = lectureService.save(saveLectureRequest);
-        Assertions.assertEquals(saveLectureRequest.getTitle(), lecture.getTitle());
+        LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().register("이경희").title("토비의 스프링 5").build();
+        Lecture lecture = lectureService.save(lectureSaveRequest);
+        Assertions.assertEquals(lectureSaveRequest.getTitle(), lecture.getTitle());
     }
 
     @Test
     public void 게시글저장_불러오기() {
         //given
-        lectureService.save(SaveLectureRequest.builder()
+        lectureService.save(LectureSaveRequest.builder()
                 .title("테스트 게시글")
                 .description("테스트 본문")
                 .register("이경희")
