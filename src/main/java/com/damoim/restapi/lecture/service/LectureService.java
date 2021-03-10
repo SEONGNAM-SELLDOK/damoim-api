@@ -4,8 +4,10 @@ import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.lecture.dao.LectureRepository;
 import com.damoim.restapi.lecture.dao.LectureSaveRequestMapper;
+import com.damoim.restapi.lecture.dao.LectureUpdateRequestMapper;
 import com.damoim.restapi.lecture.entity.Lecture;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
+import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,12 @@ public class LectureService {
 
     public void delete(Long id) {
         lectureRepository.deleteById(id);
+    }
+
+    public Lecture update(LectureUpdateRequest request, MultipartFile file) {
+        String fileName = fileUtil.upload(RequestFile.of(ROOT, file));
+        Lecture lecture = updateRequestMapper.toEntity(request);
+        lecture.setImage(fileName);
+        return lecture;
     }
 }

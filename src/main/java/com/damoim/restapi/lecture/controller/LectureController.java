@@ -3,6 +3,7 @@ package com.damoim.restapi.lecture.controller;
 import com.damoim.restapi.lecture.dao.LectureResponseMapper;
 import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
+import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.lecture.service.LectureService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,11 @@ public class LectureController {
     @GetMapping("/{id}")
     public ResponseEntity<LectureResponse> selectItem(@PathVariable("id") Long id) {
         return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.findById(id)), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file) {
+        return new ResponseEntity<>(lectureResponseMapper.toDto(lectureService.update(lectureUpdateRequest,file)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
