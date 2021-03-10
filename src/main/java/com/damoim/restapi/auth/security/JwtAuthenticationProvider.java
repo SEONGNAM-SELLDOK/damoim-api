@@ -1,13 +1,15 @@
 package com.damoim.restapi.auth.security;
 
-import com.damoim.restapi.auth.JwtService;
-import com.damoim.restapi.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
+
+import com.damoim.restapi.auth.JwtService;
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author dodo45133@gmail.com
@@ -18,24 +20,22 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    private final JwtService jwtService;
-    private final MemberService memberService;
+	private final JwtService jwtService;
+	private final MemberService memberService;
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        if (authentication == null || !supports(authentication.getClass()))
-            return null;
+	@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		if (authentication == null || !supports(authentication.getClass()))
+			return null;
+		String token = ((NotYetJwtAuthToken)authentication).getPrincipal();
+		Member member = memberService.get(jwtService.decode(token).getUserId())
+			.orElseThrow(() -> new BadCredentialsException("Invalid jwt token."));
 
-        JwtService.JwtUser jwtUser = jwtService.decode(((NotYetJwtAuthToken) authentication).getPrincipal());
+		return new JwtAuthToken(member);
+	}
 
-        return new JwtAuthToken(memberService
-                .get(jwtUser.getUserId())
-                .orElseThrow(() -> new BadCredentialsException("Invalid jwt token."))
-        );
-    }
-
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return authentication.equals(NotYetJwtAuthToken.class);
-    }
+	@Override
+	public boolean supports(Class<?> authentication) {
+		return authentication.equals(NotYetJwtAuthToken.class);
+	}
 }
