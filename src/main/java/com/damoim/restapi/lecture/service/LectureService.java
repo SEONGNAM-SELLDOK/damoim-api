@@ -20,17 +20,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LectureService {
     private final LectureRepository lectureRepository;
+    private final LectureSaveRequestMapper saveRequestMapper;
 
-    public Lecture save(SaveLectureRequest request) {
-        Lecture lecture = Lecture.builder()
-                .lectureId(request.getLectureId())
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .image(request.getImage())
-                .register(request.getRegister())
-                .build();
-
-                return lectureRepository.save(lecture);
+    public Lecture save(LectureSaveRequest request) {
+        Lecture lecture = saveRequestMapper.toEntity(request);
+        return lectureRepository.save(lecture);
     }
 
     public List<Lecture> list() {

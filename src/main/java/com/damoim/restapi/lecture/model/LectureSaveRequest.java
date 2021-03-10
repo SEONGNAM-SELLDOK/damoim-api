@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LectureSaveRequest {
     @ApiModelProperty(value = "강의 제목", required = true, example = "토비의 스프링 5")
     private String title;
