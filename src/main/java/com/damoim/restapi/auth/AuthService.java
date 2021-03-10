@@ -65,25 +65,23 @@ public class AuthService {
 		return member;
 	}
 
-	private GetTokenResponse fetchAccessToken(String code) {
+	private GetTokenResponse fetchAccessToken(String code) throws RuntimeException {
 		String url = "https://nid.naver.com/oauth2.0/token?client_id=" + clientId + "&client_secret=" + secret
 			+ "&grant_type=authorization_code&state=123&code=" + code;
+		GetTokenResponse response = null;
 		try {
 			URL url2 = new URL(url);
-
-			GetTokenResponse response = restTemplate.exchange(url2.toString(), HttpMethod.GET, null,
+			response = restTemplate.exchange(url2.toString(), HttpMethod.GET, null,
 				GetTokenResponse.class)
 				.getBody();
 
 			if (response == null) {
 				throw new RuntimeException("error naver callback");
 			}
-
-			return response;
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		}
-		return null;
+		return response;
 	}
 
 	private GetUserInfoResponse.UserInfo fetchUserInfoFromNaver(String accessToken) {
