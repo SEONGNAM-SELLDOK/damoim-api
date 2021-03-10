@@ -18,4 +18,5 @@ import lombok.Setter;
 public class AuthProperties {
 	private String clientId;
 	private String secret;
+	private String signSecret;
 }

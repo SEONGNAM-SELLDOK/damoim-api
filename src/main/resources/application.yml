@@ -37,6 +37,7 @@ damoim:
   auth:
     clientId: zcz8QirgvnnplFhwtSKO
     secret: 74gYxcq5VF
+    signSecret: gEAAiEAu3X3OoILbAg0vdzjvc0MxIG0xP
 
 ---
 
