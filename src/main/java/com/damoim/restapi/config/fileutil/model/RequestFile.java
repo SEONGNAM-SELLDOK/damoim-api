@@ -1,5 +1,6 @@
 package com.damoim.restapi.config.fileutil.model;
 
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
@@ -20,6 +21,10 @@ public class RequestFile {
         }
         this.root = root;
         this.file = file;
+    }
+
+    public boolean nonNull() {
+        return Objects.nonNull(file);
     }
 
     public static RequestFile of(String root, MultipartFile file) {
