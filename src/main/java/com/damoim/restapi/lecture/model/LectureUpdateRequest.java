@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 
 /**
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 public class LectureUpdateRequest extends LectureSaveRequest {
 
     @ApiModelProperty(example = "1")
+    @Min(1)
     private long id;
 
     @Builder(builderMethodName = "updateRequestBuilder")
