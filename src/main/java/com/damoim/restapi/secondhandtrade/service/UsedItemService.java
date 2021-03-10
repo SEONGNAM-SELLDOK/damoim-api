@@ -33,7 +33,7 @@ public class UsedItemService {
 
   public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
     UsedItem item = request.toEntity();
-    if (file.getFile() != null) {
+    if (file.nonNull()) {
       String upload = damoimFileUtil.upload(file);
       item.setTitleImg(upload);
     }
