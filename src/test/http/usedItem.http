@@ -1,4 +1,14 @@
 ### 댓글 추가.
+POST http://localhost:8080/useditems/useditems/1/testreply
+Content-Type: application/json
+
+{
+  "no": 1,
+  "writer": "KJJ",
+  "content": "asdasd너무비싸요 !!"
+}
+
+### 댓글 추가.
 POST http://localhost:8080/useditems/item/1/reply
 Content-Type: application/json
 

@@ -9,10 +9,13 @@ import com.damoim.restapi.secondhandtrade.model.reply.RequestReply;
 import com.damoim.restapi.secondhandtrade.model.reply.ResponseReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
+import com.damoim.restapi.testReply.TReplyService;
+import com.damoim.restapi.testReply.TRequestReply;
+import com.damoim.restapi.testReply.TResponseReply;
+import com.damoim.restapi.testReply.UsedItemReply;
 import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +55,8 @@ public class UsedItemController {
   public static final String ROOT = "useditems";
 
   private final UsedItemService usedItemService;
-  private final EnumMapper enumMapper;
+    private final EnumMapper enumMapper;
+    private final TReplyService replyService;
 
     @ExceptionHandler(NotFoundPage.class)
     public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage) {
@@ -82,9 +86,9 @@ public class UsedItemController {
 
 
     @GetMapping("/item/{no}")
-    public ResponseEntity<ResponseUsedItemIncludeReply> selectItem(@PathVariable Long no) {
-        ResponseUsedItemIncludeReply item = usedItemService.selectItem(no);
-        return ResponseEntity.ok(item);
+    public ResponseEntity<List<UsedItemReply>> selectItem(@PathVariable Long no) {
+        List<UsedItemReply> usedItemReply = usedItemService.selectItem(no);
+        return ResponseEntity.ok(usedItemReply);
     }
 
     @GetMapping("/pages/search")
@@ -118,5 +122,13 @@ public class UsedItemController {
         @RequestBody RequestReply requestReply) {
         ResponseReply reply = usedItemService.reply(no, requestReply);
         return new ResponseEntity<>(reply, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{url}/{id}/testreply")
+    public ResponseEntity<TResponseReply> saveReply(@PathVariable String url, @PathVariable Long id,
+        @RequestBody TRequestReply tRequestReply) {
+
+        TRequestReply reply = tRequestReply.checkUrl(url);
+        return ResponseEntity.ok(replyService.replySave(id, reply));
     }
 }

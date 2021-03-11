@@ -13,9 +13,10 @@ import com.damoim.restapi.secondhandtrade.model.reply.RequestReply;
 import com.damoim.restapi.secondhandtrade.model.reply.ResponseReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
+import com.damoim.restapi.testReply.UsedItemReply;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,22 +43,19 @@ public class UsedItemService {
     UsedItem item = request.toEntity();
     if (file.nonNull()) {
       String upload = damoimFileUtil.upload(file);
-      item.setTitleImg(upload);
+        item.setTitleImg(upload);
     }
-    usedItemRepository.save(item);
-    return modelMapper.map(item, ResponseUsedItem.class);
+      usedItemRepository.save(item);
+      return modelMapper.map(item, ResponseUsedItem.class);
   }
 
     public UsedItem save(UsedItemRequest request) {
         return usedItemRepository.save(request.toEntity());
     }
 
-    public ResponseUsedItemIncludeReply selectItem(Long no) {
-        UsedItem item = usedItemRepository.findByIdJoinFetch(no)
-            .orElseThrow(
-                () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(no))
-            );
-        return modelMapper.map(item, ResponseUsedItemIncludeReply.class);
+    public List<UsedItemReply> selectItem(Long no) {
+        List<UsedItemReply> item = usedItemSearchRepository.usedItemSearch(no);
+        return item;
     }
 
     public ResponseUsedItem editItem(Long no, UsedItemRequest editRq) {
