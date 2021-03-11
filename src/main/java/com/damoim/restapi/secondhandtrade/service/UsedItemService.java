@@ -1,7 +1,8 @@
 package com.damoim.restapi.secondhandtrade.service;
 
 
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.secondhandtrade.dao.ReplyRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
@@ -25,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
