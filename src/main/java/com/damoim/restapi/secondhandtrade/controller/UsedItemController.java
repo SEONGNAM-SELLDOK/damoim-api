@@ -1,16 +1,16 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
+import static com.damoim.restapi.secondhandtrade.controller.UsedItemController.ROOT;
+
+import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
-import com.damoim.restapi.secondhandtrade.model.reply.RequestReply;
-import com.damoim.restapi.secondhandtrade.model.reply.ResponseReply;
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItemIncludeReply;
-import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
-import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
+import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import io.swagger.annotations.Api;
 import java.util.List;
@@ -48,8 +48,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UsedItemController {
 
-    private final UsedItemService usedItemService;
-    private final EnumMapper enumMapper;
+  public static final String ROOT = "useditems";
+
+  private final UsedItemService usedItemService;
+  private final EnumMapper enumMapper;
 
     @ExceptionHandler(NotFoundPage.class)
     public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage) {
@@ -62,13 +64,13 @@ public class UsedItemController {
     }
 
 
-    @PostMapping
-    public ResponseEntity<ResponseUsedItem> save(
-        @Valid @RequestBody UsedItemRequest usedItemRequest,
-        @RequestParam(required = false) MultipartFile file) {
-        ResponseUsedItem item = usedItemService.save(usedItemRequest, file);
-        return new ResponseEntity<>(item, HttpStatus.CREATED);
-    }
+  @PostMapping
+  public ResponseEntity<ResponseUsedItem> save(
+      @Valid @RequestBody UsedItemRequest usedItemRequest,
+      @RequestParam(required = false) MultipartFile file) {
+    ResponseUsedItem item = usedItemService.save(usedItemRequest, RequestFile.of(ROOT, file));
+    return new ResponseEntity<>(item, HttpStatus.CREATED);
+  }
 
     @GetMapping("/categories")
     public ResponseEntity<Map<String, List<EnumValue>>> categoryList() {

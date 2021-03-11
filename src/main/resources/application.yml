@@ -25,11 +25,19 @@ spring:
       hibernate:
         format-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
 
 damoim:
   file:
     pathPrefix: src/main/resources/static
     pathLast: /img/
+  auth:
+    clientId: zcz8QirgvnnplFhwtSKO
+    secret: 74gYxcq5VF
+    signSecret: gEAAiEAu3X3OoILbAg0vdzjvc0MxIG0xP
 
 ---
 

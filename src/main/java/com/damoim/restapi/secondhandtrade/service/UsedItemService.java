@@ -38,15 +38,15 @@ public class UsedItemService {
     private final DamoimFileUtil damoimFileUtil;
     private final ModelMapper modelMapper;
 
-    public ResponseUsedItem save(UsedItemRequest request, MultipartFile file) {
-        UsedItem item = request.toEntity();
-        if (file != null) {
-            String upload = damoimFileUtil.upload(file);
-            item.setTitleImg(upload);
-        }
-        usedItemRepository.save(item);
-        return modelMapper.map(item, ResponseUsedItem.class);
+  public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
+    UsedItem item = request.toEntity();
+    if (file.nonNull()) {
+      String upload = damoimFileUtil.upload(file);
+      item.setTitleImg(upload);
     }
+    usedItemRepository.save(item);
+    return modelMapper.map(item, ResponseUsedItem.class);
+  }
 
     public UsedItem save(UsedItemRequest request) {
         return usedItemRepository.save(request.toEntity());
