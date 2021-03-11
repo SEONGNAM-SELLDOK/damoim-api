@@ -49,22 +49,21 @@ public class SeminarController {
 
     @PostMapping
     public ResponseEntity<ReadBoardsResponse> saveSeminar(
-            final @Valid @RequestBody SaveBoardRequest request,
-            @RequestParam(required = false) MultipartFile file) {
+        final @Valid @RequestBody SaveBoardRequest request,
+        @RequestParam(required = false) MultipartFile file) {
         Board board = Board.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .image(request.getImage())
-                .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
-                .totalMember(request.getTotalMember())
-                .currentMember(request.getCurrentMember())
-                .subject(request.getSubject())
-                .damoimTag(new DamoimTag(request.getDamoimTag()))
-                .endDate(request.getEndDate())
-                .boardLike("0")
-                .boardType(BoardType.SEMINAR)
-                .build();
-        ReadBoardsResponse response  = boardService.save(board, file);
+            .title(request.getTitle())
+            .content(request.getContent())
+            .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
+            .totalMember(request.getTotalMember())
+            .currentMember(request.getCurrentMember())
+            .subject(request.getSubject())
+            .damoimTag(new DamoimTag(request.getDamoimTag()))
+            .boardLike("0")
+            .endDate(request.getEndDate())
+            .boardType(BoardType.SEMINAR)
+            .build();
+        ReadBoardsResponse response = boardService.save(board, file);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -78,8 +77,8 @@ public class SeminarController {
     @PutMapping("{id}")
     @ResponseBody
     public ResponseEntity<Board> modify(
-            @PathVariable("id") Long id,
-            final @Valid @RequestBody ModifyBoardsRequest request) {
+        @PathVariable("id") Long id,
+        final @Valid @RequestBody ModifyBoardsRequest request) {
         Board seminar = boardService.modify(id, request);
         return ResponseEntity.ok(seminar);
     }
@@ -103,7 +102,8 @@ public class SeminarController {
     }
 
     @GetMapping("pages")
-    public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition,
+        Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
         Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(responses);

@@ -16,7 +16,7 @@ import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -32,7 +32,7 @@ public class BoardService {
     private final ModelMapper modelMapper;
 
     public ReadBoardsResponse save(Board board, MultipartFile file) {
-        if(file != null) {
+        if (file != null) {
             String upload = damoimFileUtil.upload(file);
             board.setImage(upload);
         }
@@ -44,8 +44,8 @@ public class BoardService {
     public Board findById(Long id) {
         Optional<Board> boardId = boardRepository.findById(id);
         return boardId.orElseThrow(() -> new NotFoundPage(
-                HttpStatus.NOT_FOUND.toString(),
-                String.valueOf(boardId))
+            HttpStatus.NOT_FOUND.toString(),
+            String.valueOf(boardId))
         );
     }
 
