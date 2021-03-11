@@ -1,15 +1,16 @@
 package com.damoim.restapi.secondhandtrade.service;
 
 
-import com.damoim.restapi.config.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ public class UsedItemService {
   private final DamoimFileUtil damoimFileUtil;
   private final ModelMapper modelMapper;
 
-  public ResponseUsedItem save(UsedItemRequest request, MultipartFile file) {
+  public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
     UsedItem item = request.toEntity();
-    if (file != null) {
+    if (file.nonNull()) {
       String upload = damoimFileUtil.upload(file);
       item.setTitleImg(upload);
     }
