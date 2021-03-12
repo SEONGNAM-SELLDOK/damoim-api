@@ -138,6 +138,18 @@ public class LectureServiceTest {
         LectureGetRequest noRequest = LectureGetRequest.builder().build();
         Set<Lecture> noConditionLecture = lectureService.getLectureByCondition(pageRequest, noRequest);
         assertEquals(6, noConditionLecture.size());
+
+        LectureGetRequest deadlineFromRequest = LectureGetRequest.builder().deadLineFrom(LocalDate.of(2022, 8, 1)).build();
+        Set<Lecture> deadlineFromLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromRequest);
+        assertEquals(1, deadlineFromLecture.size());
+
+        LectureGetRequest deadlineToRequest = LectureGetRequest.builder().deadLineTo(LocalDate.of(2022, 5, 1)).build();
+        Set<Lecture> deadlineToLecture = lectureService.getLectureByCondition(pageRequest, deadlineToRequest);
+        assertEquals(4, deadlineToLecture.size());
+
+        LectureGetRequest deadlineFromToRequest = LectureGetRequest.builder().deadLineTo(LocalDate.of(2022, 8, 1)).deadLineFrom(LocalDate.of(2022, 5, 1)).build();
+        Set<Lecture> deadlineFromToLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromToRequest);
+        assertEquals(2, deadlineFromToLecture.size());
     }
 
 }

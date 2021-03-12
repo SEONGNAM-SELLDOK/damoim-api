@@ -4,6 +4,7 @@ import com.damoim.restapi.lecture.entity.Lecture;
 import com.damoim.restapi.lecture.entity.LectureSubject;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DatePath;
 import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -53,12 +55,28 @@ public class LectureRepositorySupport extends QuerydslRepositorySupport {
                         likeSth(lecture.speaker, getRequest.getSpeaker()),
                         eqEnumSth(lecture.subject, getRequest.getSubject()),
                         likeSth(lecture.route, getRequest.getRoute()),
-                        likeSth(lecture.register,getRequest.getRegister())
+                        likeSth(lecture.register, getRequest.getRegister()),
+                        afterSth(lecture.deadline, getRequest.getDeadLineFrom()),
+                        beforeSth(lecture.deadline, getRequest.getDeadLineTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()
         );
+    }
+
+    private BooleanExpression beforeSth(DatePath<LocalDate> time, LocalDate compare) {
+        if (Objects.isNull(time) || Objects.isNull(compare)) {
+            return null;
+        }
+        return time.before(compare);
+    }
+
+    private BooleanExpression afterSth(DatePath<LocalDate> time, LocalDate compare) {
+        if (Objects.isNull(time) || Objects.isNull(compare)) {
+            return null;
+        }
+        return time.after(compare);
     }
 
     private BooleanExpression eqEnumSth(EnumPath<LectureSubject> subject, LectureSubject compareSub) {
