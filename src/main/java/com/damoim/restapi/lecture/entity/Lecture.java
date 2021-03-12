@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
  * @since 2021. 02. 25.
  */
 
+@EqualsAndHashCode(of = "id")
 @Entity
 @Getter
 @Setter

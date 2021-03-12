@@ -23,7 +23,7 @@ public class LectureResponse {
     private String description;
     @ApiModelProperty(value = "썸네일 이미지", example = "/images/lectures-01.png")
     private String image;
-    @ApiModelProperty(value = "주제", required = true, example = "SPRING")
+    @ApiModelProperty(value = "주제", example = "SPRING")
     private LectureSubject subject;
     @ApiModelProperty(value = "등록자", example = "이경희")
     private String register;
@@ -35,7 +35,7 @@ public class LectureResponse {
     private String modifier;
     @ApiModelProperty(value = "수정일", example = "2021-02-25T18:30:33.121")
     private LocalDateTime modifiedDate;
-    @ApiModelProperty(value = "마감 기한", required = true, example = "2021-02-25")
+    @ApiModelProperty(value = "마감 기한", example = "2021-02-25")
     private LocalDate deadline;
 
 }
