@@ -81,4 +81,18 @@ public class LectureServiceTest {
         LectureUpdateRequest pastDeadLine = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2020, 2, 2)).build();
         assertThrows(RuntimeException.class, () -> lectureService.update(pastDeadLine, null));
     }
+
+    @DisplayName("강의 삭제")
+    @Test
+    void deleteTest() {
+        LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
+        Lecture savedLecture = lectureService.save(lectureSaveRequest, null);
+        Lecture getLecture = lectureService.findById(savedLecture.getId());
+        assertEquals(savedLecture.getSpeaker(), getLecture.getSpeaker());
+        assertEquals(savedLecture.getRegister(), getLecture.getRegister());
+
+        lectureService.delete(savedLecture.getId());
+        assertThrows(RuntimeException.class, () -> lectureService.findById(savedLecture.getId()));
+    }
+
 }
