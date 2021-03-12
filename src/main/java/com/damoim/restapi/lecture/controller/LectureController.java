@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.springframework.http.ResponseEntity.status;
 
-@Api(value = "lecture", description = "강의 추천 REST API")
+@Api(value = "lecture")
 @Slf4j
 @RestController
 @RequestMapping("lectures")

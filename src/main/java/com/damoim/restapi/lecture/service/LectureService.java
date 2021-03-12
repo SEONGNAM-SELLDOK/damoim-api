@@ -58,7 +58,7 @@ public class LectureService {
     @Transactional(readOnly = true)
     public Lecture findById(long id) {
         return lectureRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = {})", id)));
+                .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = %s)", id)));
     }
 
     public void delete(long id) {

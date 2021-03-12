@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("강의 테스트")
 @SpringBootTest
 @Transactional
-public class LectureServiceTest {
+class LectureServiceTest {
 
     @Autowired
     LectureService lectureService;
@@ -90,12 +90,13 @@ public class LectureServiceTest {
     void deleteTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
         Lecture savedLecture = lectureService.save(lectureSaveRequest, null);
-        Lecture getLecture = lectureService.findById(savedLecture.getId());
+        final Long savedLectureId = savedLecture.getId();
+        Lecture getLecture = lectureService.findById(savedLectureId);
         assertEquals(savedLecture.getSpeaker(), getLecture.getSpeaker());
         assertEquals(savedLecture.getRegister(), getLecture.getRegister());
 
-        lectureService.delete(savedLecture.getId());
-        assertThrows(RuntimeException.class, () -> lectureService.findById(savedLecture.getId()));
+        lectureService.delete(savedLectureId);
+        assertThrows(RuntimeException.class, () -> lectureService.findById(savedLectureId));
     }
 
     @DisplayName("강의 조건별 가져오기")
