@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
+import com.damoim.restapi.like.entity.BoardLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,11 +23,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Board extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long id;
+
     @NotBlank
     private String title;
+
     @NotBlank
     private String content;
     @NotBlank
@@ -40,12 +43,13 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DamoimTag damoimTag;
 
-    @NotBlank
-    private String boardLike;
-
     private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "like_id")
+    private BoardLike boardLike;
 
 }

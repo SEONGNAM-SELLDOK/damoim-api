@@ -1,14 +1,6 @@
 package com.damoim.restapi.boards.dao;
 
-import static com.damoim.restapi.boards.entity.QBoard.*;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
+import static com.damoim.restapi.boards.entity.QBoard.board;
 
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ListBoardsResponse;
@@ -18,6 +10,12 @@ import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDate;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
 
 /**
  * @author gisung go
@@ -66,16 +64,16 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 board.image))
             .from(board)
                 .where(
-                        titleEq(condition.getTitle()),
-                        boardsCountryEq(condition.getBoardsCountry()),
-                        boardsCityEq(condition.getBoardsCity()),
-                        boardStreetEq(condition.getBoardStreet()),
-                        totalMemberEq(condition.getTotalMember()),
-                        currentMemberEq(condition.getCurrentMember()),
-                        subjectEq(condition.getSubject()),
-                        damoimTagEq(condition.getDamoimTag()),
-                        boardTypeEq(condition.getBoardType()),
-                        fromTo(condition.getFrom(), condition.getTo())
+                    titleEq(condition.getTitle()),
+                    boardsCountryEq(condition.getBoardsCountry()),
+                    boardsCityEq(condition.getBoardsCity()),
+                    boardStreetEq(condition.getBoardStreet()),
+                    totalMemberEq(condition.getTotalMember()),
+                    currentMemberEq(condition.getCurrentMember()),
+                    subjectEq(condition.getSubject()),
+                    damoimTagEq(condition.getDamoimTag()),
+                    boardTypeEq(condition.getBoardType()),
+                    fromTo(condition.getFrom(), condition.getTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

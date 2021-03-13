@@ -1,4 +1,4 @@
-package com.damoim.restapi.boards.model;
+package com.damoim.restapi.like.model;
 
 import lombok.*;
 

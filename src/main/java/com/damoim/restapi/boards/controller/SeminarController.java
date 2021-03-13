@@ -1,11 +1,21 @@
 package com.damoim.restapi.boards.controller;
 
-import java.util.HashMap;
+import com.damoim.restapi.boards.dao.BoardRepository;
+import com.damoim.restapi.boards.dao.BoardSearchCondition;
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.boards.entity.DamoimTag;
+import com.damoim.restapi.boards.model.ListBoardsResponse;
+import com.damoim.restapi.boards.model.ModifyBoardsRequest;
+import com.damoim.restapi.boards.model.ReadBoardsResponse;
+import com.damoim.restapi.boards.model.SaveBoardRequest;
+import com.damoim.restapi.boards.service.BoardService;
+import io.swagger.annotations.Api;
 import java.util.List;
-
 import javax.validation.Valid;
-
-import com.damoim.restapi.boards.model.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,21 +32,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.damoim.restapi.boards.dao.BoardRepository;
-import com.damoim.restapi.boards.dao.BoardSearchCondition;
-import com.damoim.restapi.boards.entity.Address;
-import com.damoim.restapi.boards.entity.Board;
-import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.service.BoardService;
-import io.swagger.annotations.Api;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * @author gisung go
  * @since 2021-03-03
- * */
+ */
 
 @Slf4j
 @Api(value = "boards", tags = "보드 관련 REST API")
@@ -44,27 +43,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("seminar")
 @RequiredArgsConstructor
 public class SeminarController {
+
     private final BoardService boardService;
     private final BoardRepository boardRepository;
 
     @PostMapping
     public ResponseEntity<ReadBoardsResponse> saveSeminar(
-            final @Valid @RequestBody SaveBoardRequest request,
-            @RequestParam(required = false) MultipartFile file) {
+        final @Valid @RequestBody SaveBoardRequest request,
+        @RequestParam(required = false) MultipartFile file) {
         Board board = Board.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .image(request.getImage())
-                .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
-                .totalMember(request.getTotalMember())
-                .currentMember(request.getCurrentMember())
-                .subject(request.getSubject())
-                .damoimTag(new DamoimTag(request.getDamoimTag()))
-                .endDate(request.getEndDate())
-                .boardLike("0")
-                .boardType(BoardType.SEMINAR)
-                .build();
-        ReadBoardsResponse response  = boardService.save(board, file);
+            .title(request.getTitle())
+            .content(request.getContent())
+            .address(new Address(request.getCountry(), request.getCity(), request.getStreet()))
+            .totalMember(request.getTotalMember())
+            .currentMember(request.getCurrentMember())
+            .subject(request.getSubject())
+            .damoimTag(new DamoimTag(request.getDamoimTag()))
+            .endDate(request.getEndDate())
+            .boardType(BoardType.SEMINAR)
+            .build();
+        ReadBoardsResponse response = boardService.save(board, file);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -78,8 +76,8 @@ public class SeminarController {
     @PutMapping("{id}")
     @ResponseBody
     public ResponseEntity<Board> modify(
-            @PathVariable("id") Long id,
-            final @Valid @RequestBody ModifyBoardsRequest request) {
+        @PathVariable("id") Long id,
+        final @Valid @RequestBody ModifyBoardsRequest request) {
         Board seminar = boardService.modify(id, request);
         return ResponseEntity.ok(seminar);
     }
@@ -91,19 +89,11 @@ public class SeminarController {
         return ResponseEntity.ok(boardId);
     }
 
-    @PostMapping("like")
-    @ResponseBody
-    public ResponseEntity<String> changeLike(final @Valid @RequestBody ChangeLikeRequest request) {
-        String like = boardService.changeLike(request);
 
-        HashMap<String, String> map = new HashMap<>();
-        map.put("like", like);
-
-        return new ResponseEntity(map, HttpStatus.OK);
-    }
 
     @GetMapping("pages")
-    public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition, Pageable pageable) {
+    public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition,
+        Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
         Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(responses);
