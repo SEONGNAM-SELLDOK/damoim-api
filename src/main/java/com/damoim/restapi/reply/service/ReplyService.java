@@ -1,9 +1,7 @@
 package com.damoim.restapi.reply.service;
 
 
-import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.reply.dao.ChildReplyRepository;
 import com.damoim.restapi.reply.dao.ReplyRepository;
 import com.damoim.restapi.reply.entity.ChildReply;
@@ -96,16 +94,6 @@ public class ReplyService {
         UsedItem board = boardValidationService.getUsedItem(boardId);
         List<Reply> replyList = getReplyList(boardType, boardId);
         return ResponseUsedItemIncludeReply.toMapper(board, replyList);
-    }
-
-    public void getBoardIncludeReply(Long boardId, BoardType boardType) {
-        Board board = boardValidationService.getBoard(boardId);
-        List<Reply> replyList = getReplyList(boardType, boardId);
-    }
-
-    public void getRecruitIncludeReply(Long boardId, BoardType boardType) {
-        Recruit recruit = boardValidationService.getRecruit(boardId);
-        List<Reply> replyList = getReplyList(boardType, boardId);
     }
 
     private ChildReply getChildReplyIncludeParentReply(Long id) {
