@@ -1,21 +1,20 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
-import com.damoim.restapi.secondhandtrade.model.reply.RequestReply;
-import com.damoim.restapi.secondhandtrade.model.reply.ResponseReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
-import com.damoim.restapi.testReply.TReplyService;
-import com.damoim.restapi.testReply.TRequestReply;
-import com.damoim.restapi.testReply.TResponseReply;
-import com.damoim.restapi.testReply.UsedItemReply;
 import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +51,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UsedItemController {
 
-  public static final String ROOT = "useditems";
+    public static final String ROOT = "useditems";
 
-  private final UsedItemService usedItemService;
+    private final UsedItemService usedItemService;
     private final EnumMapper enumMapper;
-    private final TReplyService replyService;
+    private final ReplyService replyService;
 
     @ExceptionHandler(NotFoundPage.class)
     public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage) {
@@ -69,13 +68,13 @@ public class UsedItemController {
     }
 
 
-  @PostMapping
-  public ResponseEntity<ResponseUsedItem> save(
-      @Valid @RequestBody UsedItemRequest usedItemRequest,
-      @RequestParam(required = false) MultipartFile file) {
-    ResponseUsedItem item = usedItemService.save(usedItemRequest, RequestFile.of(ROOT, file));
-    return new ResponseEntity<>(item, HttpStatus.CREATED);
-  }
+    @PostMapping
+    public ResponseEntity<ResponseUsedItem> save(
+        @Valid @RequestBody UsedItemRequest usedItemRequest,
+        @RequestParam(required = false) MultipartFile file) {
+        ResponseUsedItem item = usedItemService.save(usedItemRequest, RequestFile.of(ROOT, file));
+        return new ResponseEntity<>(item, HttpStatus.CREATED);
+    }
 
     @GetMapping("/categories")
     public ResponseEntity<Map<String, List<EnumValue>>> categoryList() {
@@ -86,8 +85,8 @@ public class UsedItemController {
 
 
     @GetMapping("/item/{no}")
-    public ResponseEntity<List<UsedItemReply>> selectItem(@PathVariable Long no) {
-        List<UsedItemReply> usedItemReply = usedItemService.selectItem(no);
+    public ResponseEntity<ResponseUsedItem> selectItem(@PathVariable Long no) {
+        ResponseUsedItem usedItemReply = usedItemService.selectItem(no);
         return ResponseEntity.ok(usedItemReply);
     }
 
@@ -118,17 +117,16 @@ public class UsedItemController {
     }
 
     @PostMapping("/item/{no}/reply")
-    public ResponseEntity<ResponseReply> addReply(@PathVariable Long no,
-        @RequestBody RequestReply requestReply) {
-        ResponseReply reply = usedItemService.reply(no, requestReply);
-        return new ResponseEntity<>(reply, HttpStatus.CREATED);
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+        @Valid @RequestBody RequestSaveReply requestSaveReply) {
+        RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
+        return ResponseEntity.ok(replyService.replySave(no, reply));
     }
 
-    @PostMapping("/{url}/{id}/testreply")
-    public ResponseEntity<TResponseReply> saveReply(@PathVariable String url, @PathVariable Long id,
-        @RequestBody TRequestReply tRequestReply) {
-
-        TRequestReply reply = tRequestReply.checkUrl(url);
-        return ResponseEntity.ok(replyService.replySave(id, reply));
+    @GetMapping("/item/{no}/test")
+    public ResponseEntity<ResponseUsedItemIncludeReply> getReply(@PathVariable Long no) {
+        ResponseUsedItemIncludeReply item = replyService
+            .getUsedItemIncludeReply(no, BoardType.USEDITEMS);
+        return ResponseEntity.ok(item);
     }
 }

@@ -1,21 +1,16 @@
 package com.damoim.restapi.secondhandtrade.dao;
 
 import static com.damoim.restapi.secondhandtrade.entity.useditem.QUsedItem.usedItem;
-import static com.damoim.restapi.testReply.QTReply.tReply;
 
-import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.model.usedItem.QResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
-import com.damoim.restapi.testReply.UsedItemReply;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.ap.internal.util.Strings;
@@ -29,22 +24,6 @@ import org.springframework.stereotype.Repository;
 public class UsedItemSearchRepository {
 
     private final JPAQueryFactory queryFactory;
-
-    public List<UsedItemReply> usedItemSearch(Long id) {
-        return queryFactory
-            .select(Projections
-                .fields(UsedItemReply.class, usedItem.as("usedItem"), Projections.bean(tReply)))
-            .distinct()
-            .from(usedItem)
-            .leftJoin(tReply)
-            .on(usedItem.no.eq(tReply.boardId))
-            .fetchJoin()
-            .where(
-                usedItem.no.eq(id),
-                tReply.parentReplyNo.isNull().and(tReply.boardType.eq(BoardType.USEDITEMS))
-            )
-            .fetch();
-    }
 
     public Page<ResponseUsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
         QueryResults<ResponseUsedItem> results = queryFactory

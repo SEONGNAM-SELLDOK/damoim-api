@@ -3,21 +3,14 @@ package com.damoim.restapi.secondhandtrade.service;
 
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
-import com.damoim.restapi.secondhandtrade.dao.ReplyRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
-import com.damoim.restapi.secondhandtrade.entity.reply.Reply;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
-import com.damoim.restapi.secondhandtrade.model.reply.RequestReply;
-import com.damoim.restapi.secondhandtrade.model.reply.ResponseReply;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.usedItem.SearchUsedItemRequest;
 import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
-import com.damoim.restapi.testReply.UsedItemReply;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -35,27 +28,25 @@ public class UsedItemService {
 
     private final UsedItemRepository usedItemRepository;
     private final UsedItemSearchRepository usedItemSearchRepository;
-    private final ReplyRepository replyRepository;
     private final DamoimFileUtil damoimFileUtil;
     private final ModelMapper modelMapper;
 
-  public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
-    UsedItem item = request.toEntity();
-    if (file.nonNull()) {
-      String upload = damoimFileUtil.upload(file);
-        item.setTitleImg(upload);
+    public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
+        UsedItem item = request.toEntity();
+        if (file.nonNull()) {
+            String upload = damoimFileUtil.upload(file);
+            item.setTitleImg(upload);
+        }
+        usedItemRepository.save(item);
+        return modelMapper.map(item, ResponseUsedItem.class);
     }
-      usedItemRepository.save(item);
-      return modelMapper.map(item, ResponseUsedItem.class);
-  }
 
     public UsedItem save(UsedItemRequest request) {
         return usedItemRepository.save(request.toEntity());
     }
 
-    public List<UsedItemReply> selectItem(Long no) {
-        List<UsedItemReply> item = usedItemSearchRepository.usedItemSearch(no);
-        return item;
+    public ResponseUsedItem selectItem(Long no) {
+        return modelMapper.map(getItemFromId(no), ResponseUsedItem.class);
     }
 
     public ResponseUsedItem editItem(Long no, UsedItemRequest editRq) {
@@ -89,34 +80,5 @@ public class UsedItemService {
 
     public Page<ResponseUsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
         return usedItemSearchRepository.search(request, pageable);
-    }
-
-    public ResponseReply reply(Long no, RequestReply requestReply) {
-        UsedItem item = getItemFromId(no);
-        Long parentId = requestReply.getNo();
-        Reply reply = null;
-        if (Objects.isNull(parentId)) {
-            reply = replyRepository.save(requestReply.toEntity(item));
-        }
-
-        if (Objects.nonNull(parentId)) {
-            Reply parentReply = getReply(parentId);
-            if (parentReply.isClosed()) {
-                throw new RuntimeException("parentReply is closed");
-            }
-            reply = requestReply.toEntity(item);
-            reply.setLevel(parentReply.getLevel() + 1);
-            parentReply.getChildReply().add(reply);
-            reply = replyRepository.save(reply);
-        }
-
-        return ResponseReply.of(item.getNo(), reply);
-    }
-
-    private Reply getReply(Long parentId) {
-        return replyRepository.findById(parentId)
-            .orElseThrow(
-                () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(parentId))
-            );
     }
 }
