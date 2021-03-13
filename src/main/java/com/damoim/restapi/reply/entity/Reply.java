@@ -64,7 +64,7 @@ public class Reply {
 
 
     public boolean isClosed() {
-        return this.closed == true;
+        return closed;
     }
 
     public boolean childListIsEmpty() {
