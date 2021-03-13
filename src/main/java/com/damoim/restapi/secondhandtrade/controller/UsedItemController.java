@@ -1,5 +1,7 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
+import static com.damoim.restapi.secondhandtrade.controller.UsedItemController.ROOT;
+
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
@@ -47,7 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Api(value = "UsedItem", tags = "중고거래 관련 REST API")
 @RestController
-@RequestMapping("useditems")
+@RequestMapping(ROOT)
 @RequiredArgsConstructor
 public class UsedItemController {
 
@@ -123,8 +125,8 @@ public class UsedItemController {
         return ResponseEntity.ok(replyService.replySave(no, reply));
     }
 
-    @GetMapping("/item/{no}/test")
-    public ResponseEntity<ResponseUsedItemIncludeReply> getReply(@PathVariable Long no) {
+    @GetMapping("/item/{no}/reply")
+    public ResponseEntity<ResponseUsedItemIncludeReply> getReplyAndUsedItem(@PathVariable Long no) {
         ResponseUsedItemIncludeReply item = replyService
             .getUsedItemIncludeReply(no, BoardType.USEDITEMS);
         return ResponseEntity.ok(item);
