@@ -6,8 +6,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author dodo45133@gmail.com
@@ -37,16 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin().disable()
             .logout().disable();
 
-        http.sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         http.authorizeRequests()
-            .antMatchers(PUBLIC_URIS).permitAll()
-            .anyRequest().authenticated();
-
-        http.addFilterBefore(new JwtAuthenticationFiler(authenticationManagerBean()),
-            UsernamePasswordAuthenticationFilter.class);
+            .anyRequest().permitAll();
 
         http.headers().frameOptions().disable();
+
     }
 }

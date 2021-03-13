@@ -1,4 +1,4 @@
-package com.damoim.restapi.secondhandtrade.errormsg;
+package com.damoim.restapi.config.errorhandler.message;
 
 
 import lombok.Builder;

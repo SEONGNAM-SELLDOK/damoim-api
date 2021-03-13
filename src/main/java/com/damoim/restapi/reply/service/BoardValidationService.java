@@ -8,7 +8,7 @@ import com.damoim.restapi.recruit.dao.RecruitRepository;
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,7 +39,8 @@ public class BoardValidationService {
         }
 
         if (!result) {
-            throw new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(boarId));
+            throw new NotFoundPageException(HttpStatus.NOT_FOUND.toString(),
+                String.valueOf(boarId));
         }
         return boarId;
     }
@@ -71,8 +72,8 @@ public class BoardValidationService {
     }
 
 
-    private Supplier<NotFoundPage> getFoundPageSupplier(Long id) {
-        return () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
+    private Supplier<NotFoundPageException> getFoundPageSupplier(Long id) {
+        return () -> new NotFoundPageException(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
     }
 
 }

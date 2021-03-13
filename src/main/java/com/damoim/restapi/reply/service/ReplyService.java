@@ -11,7 +11,7 @@ import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
 import java.util.List;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class ReplyService {
             Long parentId = requestSaveReply.getParentReplyId();
             Reply parentReply = getReply(parentId);
             if (parentReply.isClosed()) {
-                throw new RuntimeException("parentReply is closed");
+                throw new ReplyClosedException(parentId);
             }
             ChildReply childReply = modelMapper
                 .map(requestSaveReply.toEntity(validBoardId), ChildReply.class);
@@ -64,7 +64,7 @@ public class ReplyService {
             childReply = childReplyRepository.save(childReply);
             return ResponseReply.of(validBoardId, childReply);
         }
-        throw new RuntimeException("댓글 생성 실패!");
+        throw new IllegalArgumentException();
     }
 
     public void deleteReply(RequestDeleteReply requestDeleteReply) {
@@ -118,8 +118,8 @@ public class ReplyService {
         return replyRepository.parentList(boardType, boardId);
     }
 
-    private Supplier<NotFoundPage> getFoundPageSupplier(Long id) {
-        return () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
+    private Supplier<NotFoundPageException> getFoundPageSupplier(Long id) {
+        return () -> new NotFoundPageException(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
     }
 
 }

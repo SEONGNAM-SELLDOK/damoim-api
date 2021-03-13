@@ -6,7 +6,7 @@ import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.model.ModifyBoardsRequest;
 import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Board findById(Long id) {
         Optional<Board> boardId = boardRepository.findById(id);
-        return boardId.orElseThrow(() -> new NotFoundPage(
+        return boardId.orElseThrow(() -> new NotFoundPageException(
             HttpStatus.NOT_FOUND.toString(),
             String.valueOf(boardId))
         );

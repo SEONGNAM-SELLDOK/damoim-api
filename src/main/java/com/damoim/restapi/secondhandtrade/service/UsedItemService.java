@@ -6,7 +6,7 @@ import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
 import com.damoim.restapi.secondhandtrade.model.useditem.ResponseModifyUsedItemClosed;
 import com.damoim.restapi.secondhandtrade.model.useditem.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.model.useditem.SearchUsedItemRequest;
@@ -75,7 +75,8 @@ public class UsedItemService {
         Optional<UsedItem> item = usedItemRepository.findById(no);
         return item
             .orElseThrow(
-                () -> new NotFoundPage(HttpStatus.NOT_FOUND.toString(), String.valueOf(no)));
+                () -> new NotFoundPageException(HttpStatus.NOT_FOUND.toString(),
+                    String.valueOf(no)));
     }
 
     public Page<ResponseUsedItem> search(SearchUsedItemRequest request, Pageable pageable) {
