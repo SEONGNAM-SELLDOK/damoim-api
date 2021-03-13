@@ -1,4 +1,4 @@
-package com.damoim.restapi.secondhandtrade.model.usedItem;
+package com.damoim.restapi.secondhandtrade.model.useditem;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

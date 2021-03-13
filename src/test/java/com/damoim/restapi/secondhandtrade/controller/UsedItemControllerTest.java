@@ -12,7 +12,7 @@ import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.model.usedItem.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.useditem.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.Cookie;

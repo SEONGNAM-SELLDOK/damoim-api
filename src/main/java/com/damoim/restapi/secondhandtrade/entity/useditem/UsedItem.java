@@ -1,6 +1,6 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
-import com.damoim.restapi.secondhandtrade.model.usedItem.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.useditem.ResponseModifyUsedItemClosed;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;

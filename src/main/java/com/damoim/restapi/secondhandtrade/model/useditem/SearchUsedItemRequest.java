@@ -1,4 +1,4 @@
-package com.damoim.restapi.secondhandtrade.model.usedItem;
+package com.damoim.restapi.secondhandtrade.model.useditem;
 
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
