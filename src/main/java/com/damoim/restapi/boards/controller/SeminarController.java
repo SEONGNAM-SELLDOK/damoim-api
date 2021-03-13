@@ -1,21 +1,11 @@
 package com.damoim.restapi.boards.controller;
 
-import com.damoim.restapi.boards.dao.BoardRepository;
-import com.damoim.restapi.boards.dao.BoardSearchCondition;
-import com.damoim.restapi.boards.entity.Address;
-import com.damoim.restapi.boards.entity.Board;
-import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.boards.model.ListBoardsResponse;
-import com.damoim.restapi.boards.model.ModifyBoardsRequest;
-import com.damoim.restapi.boards.model.ReadBoardsResponse;
-import com.damoim.restapi.boards.model.SaveBoardRequest;
-import com.damoim.restapi.boards.service.BoardService;
-import io.swagger.annotations.Api;
+import java.util.HashMap;
 import java.util.List;
+
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import com.damoim.restapi.boards.model.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -32,10 +22,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.damoim.restapi.boards.dao.BoardRepository;
+import com.damoim.restapi.boards.dao.BoardSearchCondition;
+import com.damoim.restapi.boards.entity.Address;
+import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.boards.entity.DamoimTag;
+import com.damoim.restapi.boards.service.BoardService;
+import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author gisung go
  * @since 2021-03-03
- */
+ * */
 
 @Slf4j
 @Api(value = "boards", tags = "보드 관련 REST API")
@@ -43,7 +44,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("seminar")
 @RequiredArgsConstructor
 public class SeminarController {
-
     private final BoardService boardService;
     private final BoardRepository boardRepository;
 
@@ -59,6 +59,7 @@ public class SeminarController {
             .currentMember(request.getCurrentMember())
             .subject(request.getSubject())
             .damoimTag(new DamoimTag(request.getDamoimTag()))
+            .boardLike("0")
             .endDate(request.getEndDate())
             .boardType(BoardType.SEMINAR)
             .build();
