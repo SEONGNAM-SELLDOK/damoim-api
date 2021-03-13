@@ -98,11 +98,12 @@ class ReplyServiceTest {
     @DisplayName("저장실패 - 존재하지않는 부모 댓글")
     void replySave_fail_NotFound_ParentReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
+        long usedItemNo = usedItem.getNo();
         RequestSaveReply reply = getSaveReply();
         reply.setBoardType(BoardType.USEDITEMS);
         reply.setParentReplyId(999L);
 
-        assertThatThrownBy(() -> replyService.replySave(usedItem.getNo(), reply))
+        assertThatThrownBy(() -> replyService.replySave(usedItemNo, reply))
             .isInstanceOf(NotFoundPage.class);
     }
 
