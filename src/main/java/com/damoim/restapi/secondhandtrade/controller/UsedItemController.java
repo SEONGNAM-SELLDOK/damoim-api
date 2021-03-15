@@ -113,8 +113,6 @@ public class UsedItemController {
 
     @GetMapping("/item/{no}/reply")
     public ResponseEntity<ResponseUsedItemIncludeReply> getReplyAndUsedItem(@PathVariable Long no) {
-        ResponseUsedItemIncludeReply item = replyService
-            .getUsedItemIncludeReply(no, BoardType.USEDITEMS);
-        return ResponseEntity.ok(item);
+        return ResponseEntity.ok(usedItemService.getUsedItemIncludeReply(no, BoardType.USEDITEMS));
     }
 }

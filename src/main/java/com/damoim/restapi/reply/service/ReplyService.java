@@ -9,8 +9,6 @@ import com.damoim.restapi.reply.entity.Reply;
 import com.damoim.restapi.reply.model.request.RequestDeleteReply;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
-import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
-import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import java.util.List;
 import java.util.function.Supplier;
@@ -94,12 +92,9 @@ public class ReplyService {
         }
     }
 
-    public ResponseUsedItemIncludeReply getUsedItemIncludeReply(Long boardId, BoardType boardType) {
-        UsedItem item = boardValidationService.getEntity(UsedItem.class, boardId);
-        List<Reply> replyList = getReplyList(boardType, boardId);
-        return ResponseUsedItemIncludeReply.toMapper(item, replyList);
+    public List<Reply> getReplyList(BoardType boardType, Long boardId) {
+        return replyRepository.parentList(boardType, boardId);
     }
-
 
     private ChildReply getChildReplyIncludeParentReply(Long id) {
         return childReplyRepository.getChildReplyIncludeParentReply(id)
@@ -116,11 +111,6 @@ public class ReplyService {
 
     private Reply getReplyIncludeChildList(Long id) {
         return replyRepository.findByIdIncludeChildList(id).orElseThrow(getFoundPageSupplier(id));
-    }
-
-
-    private List<Reply> getReplyList(BoardType boardType, Long boardId) {
-        return replyRepository.parentList(boardType, boardId);
     }
 
     private Supplier<NotFoundResource> getFoundPageSupplier(Long id) {

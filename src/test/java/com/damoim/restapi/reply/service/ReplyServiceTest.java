@@ -73,7 +73,7 @@ class ReplyServiceTest {
         saveReply.setBoardType(BoardType.RECRUIT);
         replyService.replySave(recruit.getId(), saveReply); // 다른 보드타입 댓글 저장.
 
-        ResponseUsedItemIncludeReply usedItemIncludeReply = replyService
+        ResponseUsedItemIncludeReply usedItemIncludeReply = usedItemService
             .getUsedItemIncludeReply(usedItemNo, BoardType.USEDITEMS);
 
         List<Reply> replyList = usedItemIncludeReply.getReplyList();
