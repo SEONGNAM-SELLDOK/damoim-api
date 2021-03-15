@@ -95,10 +95,11 @@ public class ReplyService {
     }
 
     public ResponseUsedItemIncludeReply getUsedItemIncludeReply(Long boardId, BoardType boardType) {
-        UsedItem board = boardValidationService.getUsedItem(boardId);
+        UsedItem item = boardValidationService.getEntity(UsedItem.class, boardId);
         List<Reply> replyList = getReplyList(boardType, boardId);
-        return ResponseUsedItemIncludeReply.toMapper(board, replyList);
+        return ResponseUsedItemIncludeReply.toMapper(item, replyList);
     }
+
 
     private ChildReply getChildReplyIncludeParentReply(Long id) {
         return childReplyRepository.getChildReplyIncludeParentReply(id)

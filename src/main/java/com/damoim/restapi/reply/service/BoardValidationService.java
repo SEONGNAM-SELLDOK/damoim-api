@@ -11,6 +11,7 @@ import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class BoardValidationService {
     private final UsedItemRepository usedItemRepository;
     private final RecruitRepository recruitRepository;
     private final BoardRepository boardRepository;
+    private final ModelMapper modelMapper;
 
     public Long existBoard(Long boarId, BoardType boardType) {
         boolean result = false;
@@ -49,16 +51,29 @@ public class BoardValidationService {
         return boarId;
     }
 
+    public <T> T getEntity(Class<T> tClass, Long id) {
+        if (tClass == UsedItem.class) {
+            return modelMapper.map(getUsedItem(id), tClass);
+        }
+        if (tClass == Board.class) {
+            return modelMapper.map(getBoard(id), tClass);
+        }
+        if (tClass == Recruit.class) {
+            return modelMapper.map(getRecruit(id), tClass);
+        }
+        throw new IllegalArgumentException(tClass.getName());
+    }
 
-    public UsedItem getUsedItem(Long id) {
+
+    private UsedItem getUsedItem(Long id) {
         return usedItemRepository.findById(id).orElseThrow(getFoundPageSupplier(id));
     }
 
-    public Recruit getRecruit(Long id) {
+    private Recruit getRecruit(Long id) {
         return recruitRepository.findById(id).orElseThrow(getFoundPageSupplier(id));
     }
 
-    public Board getBoard(Long id) {
+    private Board getBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(getFoundPageSupplier(id));
     }
 
