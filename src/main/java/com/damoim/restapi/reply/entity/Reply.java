@@ -24,7 +24,10 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 @Entity
 @Getter
 @Setter

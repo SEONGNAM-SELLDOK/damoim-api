@@ -15,6 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

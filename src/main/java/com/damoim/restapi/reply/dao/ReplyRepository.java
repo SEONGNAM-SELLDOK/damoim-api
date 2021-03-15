@@ -7,6 +7,10 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
     @Query("select distinct r from Reply r left join fetch r.childReply"

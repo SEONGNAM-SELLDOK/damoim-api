@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 @Getter
 @JsonInclude(Include.NON_NULL)
 public class ResponseReply {

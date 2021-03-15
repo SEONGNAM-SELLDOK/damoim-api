@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

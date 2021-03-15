@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 
+/**
+ * @author dkansk924@naver.com
+ * @since 2021. 03. 13
+ */
 @Getter
 public class ResponseUsedItemIncludeReply {
 
