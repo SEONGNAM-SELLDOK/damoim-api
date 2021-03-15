@@ -4,6 +4,7 @@ import com.damoim.restapi.reply.entity.ChildReply;
 import com.damoim.restapi.reply.entity.Reply;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -12,27 +13,18 @@ import lombok.Getter;
  */
 @Getter
 @JsonInclude(Include.NON_NULL)
+@Builder
 public class ResponseReply {
 
     private final Long boardId;
-    private Reply reply;
-    private ChildReply childReply;
-
-    private ResponseReply(Long boardId, Reply reply) {
-        this.boardId = boardId;
-        this.reply = reply;
-    }
-
-    private ResponseReply(Long boardId, ChildReply childReply) {
-        this.boardId = boardId;
-        this.childReply = childReply;
-    }
+    private final Reply reply;
+    private final ChildReply childReply;
 
     public static ResponseReply of(Long boardId, Reply reply) {
-        return new ResponseReply(boardId, reply);
+        return ResponseReply.builder().boardId(boardId).reply(reply).build();
     }
 
     public static ResponseReply of(Long boardId, ChildReply childReply) {
-        return new ResponseReply(boardId, childReply);
+        return ResponseReply.builder().boardId(boardId).childReply(childReply).build();
     }
 }
