@@ -1,10 +1,10 @@
 package com.damoim.restapi.secondhandtrade.errormsg;
 
-public class NotFoundPageException extends RuntimeException {
+public class NotFoundResource extends RuntimeException {
 
   private final String value;
 
-  public NotFoundPageException(String message, String value) {
+  public NotFoundResource(String message, String value) {
     super(message);
     this.value = value;
   }

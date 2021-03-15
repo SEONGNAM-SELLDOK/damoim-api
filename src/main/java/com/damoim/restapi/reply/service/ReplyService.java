@@ -11,7 +11,7 @@ import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import java.util.List;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
@@ -122,8 +122,8 @@ public class ReplyService {
         return replyRepository.parentList(boardType, boardId);
     }
 
-    private Supplier<NotFoundPageException> getFoundPageSupplier(Long id) {
-        return () -> new NotFoundPageException(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
+    private Supplier<NotFoundResource> getFoundPageSupplier(Long id) {
+        return () -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
     }
 
 }

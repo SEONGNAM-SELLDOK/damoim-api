@@ -4,7 +4,7 @@ import com.damoim.restapi.config.errorhandler.message.ApiMessage;
 import com.damoim.restapi.config.errorhandler.message.TypeErrorMessage;
 import com.damoim.restapi.config.fileutil.error.NotSupportedTypeException;
 import com.damoim.restapi.reply.service.ReplyClosedException;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,12 +20,12 @@ public class ExceptionController {
         return ResponseEntity.status(e.getStatus()).body(new TypeErrorMessage(e));
     }
 
-    @ExceptionHandler(NotFoundPageException.class)
+    @ExceptionHandler(NotFoundResource.class)
     public ResponseEntity<ApiMessage> notFoundException(
-        NotFoundPageException notFoundPageException) {
+        NotFoundResource notFoundResource) {
         ApiMessage apiMessage = ApiMessage.builder()
-            .message(notFoundPageException.getMessage())
-            .inputValue(notFoundPageException.getValue())
+            .message(notFoundResource.getMessage())
+            .inputValue(notFoundResource.getValue())
             .statusCode(HttpStatus.NOT_FOUND.value())
             .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiMessage);

@@ -17,7 +17,7 @@ import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPageException;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import com.damoim.restapi.secondhandtrade.model.useditem.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,7 +91,7 @@ class ReplyServiceTest {
         reply.setBoardType(BoardType.USEDITEMS);
 
         assertThatThrownBy(() -> replyService.replySave(9999L, reply))
-            .isInstanceOf(NotFoundPageException.class);
+            .isInstanceOf(NotFoundResource.class);
     }
 
     @Test
@@ -104,7 +104,7 @@ class ReplyServiceTest {
         reply.setParentReplyId(999L);
 
         assertThatThrownBy(() -> replyService.replySave(usedItemNo, reply))
-            .isInstanceOf(NotFoundPageException.class);
+            .isInstanceOf(NotFoundResource.class);
     }
 
     @Test
@@ -125,7 +125,7 @@ class ReplyServiceTest {
         reply.setParentReplyId(999L); //존재하지 않는 댓글 번호 설정.
 
         assertThatThrownBy(() -> replyService.replySave(usedItemNo, reply))
-            .isInstanceOf(NotFoundPageException.class);
+            .isInstanceOf(NotFoundResource.class);
     }
 
     @Test
