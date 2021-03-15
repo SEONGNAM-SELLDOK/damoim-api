@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedBy;
 
 /**
  * @author gjsung.Go
@@ -32,7 +33,7 @@ public class Board extends BaseEntity {
 
     @NotBlank
     private String content;
-    @NotBlank
+
     private String image;
     @Embedded
     private Address address;
@@ -48,8 +49,11 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "like_id")
+    @OneToOne
+    @JoinColumn(name = "board_like_id")
     private BoardLike boardLike;
+
+    @LastModifiedBy
+    private String modifier;
 
 }

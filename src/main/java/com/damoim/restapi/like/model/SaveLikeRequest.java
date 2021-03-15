@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChangeLikeRequest {
-    private Long boardId;
-    private String boardLike;
+public class SaveLikeRequest {
+    int likeCount;
+    Long boardId;
 }

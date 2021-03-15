@@ -2,14 +2,23 @@ package com.damoim.restapi.boards.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
+import com.damoim.restapi.like.entity.BoardLike;
+import com.damoim.restapi.like.model.ReadLikeResponse;
+import com.damoim.restapi.like.model.SaveLikeRequest;
+import com.damoim.restapi.like.service.BoardLikeService;
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.model.TestUser;
+import com.damoim.restapi.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,9 +55,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SeminarController {
     private final BoardService boardService;
     private final BoardRepository boardRepository;
+    private final BoardLikeService boardLikeService;
+    private final MemberService memberService;
 
     @PostMapping
     public ResponseEntity<ReadBoardsResponse> saveSeminar(
+        @AuthenticationPrincipal TestUser testUser,
         final @Valid @RequestBody SaveBoardRequest request,
         @RequestParam(required = false) MultipartFile file) {
         Board board = Board.builder()
@@ -59,11 +71,30 @@ public class SeminarController {
             .currentMember(request.getCurrentMember())
             .subject(request.getSubject())
             .damoimTag(new DamoimTag(request.getDamoimTag()))
-            .boardLike("0")
             .endDate(request.getEndDate())
             .boardType(BoardType.SEMINAR)
             .build();
+
+
         ReadBoardsResponse response = boardService.save(board, file);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("{id}/like")
+    public ResponseEntity<ReadLikeResponse> likeSeminar(
+            @AuthenticationPrincipal TestUser testUser,
+            final @Valid @RequestBody SaveLikeRequest request) {
+        Optional<Member> memberId = memberService.get(testUser.getId());
+        Board boardId = boardService.findById(request.getBoardId());
+        BoardLike boardLike = BoardLike.builder()
+                .memberLike(memberId.get())
+                .PageId(boardId.getId().toString())
+                .boardCount(0)
+                .boardType(BoardType.SEMINAR)
+                .build();
+
+        ReadLikeResponse response = boardLikeService.saveLike(boardLike);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

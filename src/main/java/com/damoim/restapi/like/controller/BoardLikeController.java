@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -22,10 +21,9 @@ import java.util.HashMap;
 @RequestMapping("like")
 @RequiredArgsConstructor
 public class BoardLikeController {
-
     private final BoardLikeService boardLikeService;
 
-    @ResponseBody
+    @PostMapping
     public ResponseEntity<String> changeLike(final @Valid @RequestBody ChangeLikeRequest request) {
         String like = boardLikeService.changeLike(request);
 

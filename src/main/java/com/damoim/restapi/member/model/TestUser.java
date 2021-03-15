@@ -13,6 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class TestUser {
+	private Long id;
 	private String name;
 	private String email;
 }

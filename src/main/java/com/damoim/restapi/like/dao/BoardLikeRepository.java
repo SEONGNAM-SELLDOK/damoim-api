@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
-    @Query("update BoardLike l set l.boardLike = :boardLike + 1 where b.id = :id")
+    @Query("update BoardLike l set l.boardCount = l.boardCount + 1  where l.id = :id")
     int addLikeCount(Long id);
 
-    @Query("update BoardLike l set l.boardLike = :boardLike - 1 where b.id = :id")
+    @Query("update BoardLike l set l.boardCount = l.boardCount - 1 where l.id = :id")
     int subtractLikeCount(Long id);
 }

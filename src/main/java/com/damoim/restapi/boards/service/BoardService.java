@@ -3,7 +3,6 @@ package com.damoim.restapi.boards.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.damoim.restapi.boards.model.ChangeLikeRequest;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;

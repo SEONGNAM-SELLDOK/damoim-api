@@ -1,9 +1,10 @@
 package com.damoim.restapi.like.entity;
 
-import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.member.entity.Member;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
@@ -18,22 +19,27 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BoardLike {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+    @Column(name = "board_like_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member memberLike;
 
-    @OneToOne(mappedBy = "boardLike")
-    private Board board;
+    private String PageId;
+
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
 
     @Min(0)
-    private int boardLike;
+    private int boardCount;
 
     @CreatedDate
     private LocalDateTime createDate; // 등록일시
 
     @LastModifiedDate
     private LocalDateTime updateDate; // 수정일시
+
+    @LastModifiedBy
+    private String modifier;
 }
