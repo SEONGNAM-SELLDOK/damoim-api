@@ -72,7 +72,7 @@ public class LectureService {
         }
         Lecture lecture = updateRequestMapper.toEntity(request);
         lecture.setImage(fileName);
-        return lecture;
+        return lectureRepository.save(lecture);
     }
 
     public Set<Lecture> getLectureByCondition(Pageable pageable, LectureGetRequest getRequest) {
