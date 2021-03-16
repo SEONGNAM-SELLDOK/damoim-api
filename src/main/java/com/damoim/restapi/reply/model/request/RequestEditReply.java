@@ -15,7 +15,12 @@ public class RequestEditReply {
     private String writer;
     @NotEmpty
     private String content;
+
     @NotNull
     private Boolean isParentReply;
 
+
+    public boolean isParentReply() {
+        return isParentReply.equals(true);
+    }
 }

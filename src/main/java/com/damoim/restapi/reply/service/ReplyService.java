@@ -72,7 +72,7 @@ public class ReplyService {
     }
 
     public ResponseEditReply editReply(Long id, RequestEditReply requestEditReply) {
-        if (requestEditReply.getIsParentReply()) {
+        if (requestEditReply.isParentReply()) {
             Reply reply = getReply(id);
             if (reply.isClosed()) {
                 throw new ReplyClosedException(id);
