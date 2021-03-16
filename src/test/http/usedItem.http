@@ -29,6 +29,17 @@ Content-Type: application/json
   "content": "너무비싸요.."
 }
 
+### 부모 댓글 수정.(isParentId == true) query total = 2
+PUT http://localhost:8080/reply/1
+Content-Type: application/json
+
+{
+  "writer": "구매자",
+  "isParentReply": true,
+  "content": "(수정) 엄청 비 싸 요 ! !"
+}
+
+
 ### 부모에 자식 댓글 추가. (isChildId == false and parentReplyId == n (Min(1))) query total = 3
 POST http://localhost:8080/useditems/item/1/reply
 Content-Type: application/json
@@ -38,6 +49,17 @@ Content-Type: application/json
   "isChildId": false,
   "writer": "작성자",
   "content": "안 비싸요.."
+}
+
+
+### 자식 댓글 수정.(isChildId == false) query total = 2
+PUT http://localhost:8080/reply/1
+Content-Type: application/json
+
+{
+  "writer": "작성자",
+  "isParentReply": false,
+  "content": "(수정) 사지마세요 "
 }
 
 ### 자식에 자식 댓글 추가. (isChildId == true and parentReplyId == n (Min(1)) ) query total = 3

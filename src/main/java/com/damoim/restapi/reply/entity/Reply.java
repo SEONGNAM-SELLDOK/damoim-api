@@ -65,7 +65,6 @@ public class Reply {
     @UpdateTimestamp
     private LocalDateTime updateDate;
 
-
     public boolean isClosed() {
         return closed;
     }

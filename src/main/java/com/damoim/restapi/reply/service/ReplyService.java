@@ -7,7 +7,9 @@ import com.damoim.restapi.reply.dao.ReplyRepository;
 import com.damoim.restapi.reply.entity.ChildReply;
 import com.damoim.restapi.reply.entity.Reply;
 import com.damoim.restapi.reply.model.request.RequestDeleteReply;
+import com.damoim.restapi.reply.model.request.RequestEditReply;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseEditReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import java.util.List;
@@ -67,6 +69,22 @@ public class ReplyService {
             return ResponseReply.of(validBoardId, childReply);
         }
         throw new IllegalArgumentException();
+    }
+
+    public ResponseEditReply editReply(Long id, RequestEditReply requestEditReply) {
+        if (requestEditReply.getIsParentReply()) {
+            Reply reply = getReply(id);
+            if (reply.isClosed()) {
+                throw new ReplyClosedException(id);
+            }
+            reply.setContent(requestEditReply.getContent());
+            replyRepository.save(reply);
+            return ResponseEditReply.of(reply.getNo(), reply.getContent());
+        }
+        ChildReply childReply = getChildReply(id);
+        childReply.setContent(requestEditReply.getContent());
+        childReplyRepository.save(childReply);
+        return ResponseEditReply.of(childReply.getNo(), childReply.getContent());
     }
 
     public void deleteReply(RequestDeleteReply requestDeleteReply) {
