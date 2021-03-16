@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     protected static final String[] PUBLIC_URIS = {
-        "/", "/auth/**"
+        "/", "/auth/**", "/h2-db"
     };
 
     @Override
