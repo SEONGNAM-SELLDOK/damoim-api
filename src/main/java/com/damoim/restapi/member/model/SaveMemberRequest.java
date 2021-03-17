@@ -14,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SaveMemberRequest {
-	@ApiModelProperty(value = "회원 아이디(이메일)", required = true, example = "incheol@naver.com")
+	@ApiModelProperty(value = "아이디", required = true, example = "incheol@naver.com")
 	private String id;
 	@ApiModelProperty(value = "회원 이름", required = true, example = "정인철")
 	private String name;
