@@ -11,7 +11,6 @@ import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,7 @@ public class BookReviewService {
     private final DamoimFileUtil damoimFileUtil;
     private final BookReviewSaveRequestMapper saveRequestMapper;
     private final BookReviewUpdateRequestMapper updateRequestMapper;
-    private static String ROOT = "book_review";
+    private static String ROOT = "bookreview";
 
     public BookReview save(@Valid BookReviewSaveRequest saveRequest, MultipartFile multipartFile) {
         String imageUrl = null;
