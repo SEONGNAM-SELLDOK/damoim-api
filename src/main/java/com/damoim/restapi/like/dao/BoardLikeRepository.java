@@ -2,12 +2,21 @@ package com.damoim.restapi.like.dao;
 
 import com.damoim.restapi.like.entity.BoardLike;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
-    @Query("update BoardLike l set l.boardCount = l.boardCount + 1  where l.id = :id")
-    int addLikeCount(Long id);
+    @Modifying(clearAutomatically = true)
+    @Query("update BoardLike set boardCount = boardCount + 1  where boardId = :boardId")
+    int addLikeCount(@Param("boardId") Long boardId);
 
-    @Query("update BoardLike l set l.boardCount = l.boardCount - 1 where l.id = :id")
-    int subtractLikeCount(Long id);
+    @Modifying(clearAutomatically = true)
+    @Query("update BoardLike set boardCount = boardCount - 1 where boardId = :boardId")
+    int subtractLikeCount(@Param("boardId") Long boardId);
+
+    @Query("select b from BoardLike b where b.id = :id and b.boardId = :boardId")
+    BoardLike getBoardLikeInfo(@Param("id") Long id, @Param("boardId") Long boardId);
 }

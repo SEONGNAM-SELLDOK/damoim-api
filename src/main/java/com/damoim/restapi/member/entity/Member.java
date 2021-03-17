@@ -28,6 +28,7 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_no")
     private long no;
     @Column(name = "member_id")
     private String id;

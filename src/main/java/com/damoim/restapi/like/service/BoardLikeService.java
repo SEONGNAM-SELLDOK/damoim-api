@@ -6,8 +6,11 @@ import com.damoim.restapi.like.entity.BoardLike;
 import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.dao.BoardLikeRepository;
 import com.damoim.restapi.like.model.ReadLikeResponse;
+import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,20 +38,26 @@ public class BoardLikeService {
         return modelMapper.map(boardLike, ReadLikeResponse.class);
     }
 
-    public String changeLike(ChangeLikeRequest request) {
-        Board boardId = boardService.findById(request.getBoardId());
-        System.out.println("boardId = " + boardId);
-        String boardLike = request.getBoardLike();
+    public BoardLike changeLike(Member member, ChangeLikeRequest request) {
+        Board board = boardService.findById(request.getBoardId());
+        Long boardId = board.getId();
 
-//        String like;
-        if (boardLike.equals("1")) {
-//            boardLike = "0";
-            boardLikeRepository.subtractLikeCount(boardId.getId());
+        String afterLike;
+        if (request.getBoardLike().equals("1")) {
+            afterLike = "0";
+            boardLikeRepository.subtractLikeCount(boardId);
         } else {
-//            boardLike = "1";
-            boardLikeRepository.addLikeCount(boardId.getId());
+            afterLike = "1";
+            boardLikeRepository.addLikeCount(boardId);
         }
-//        boardLikeRepository.changeLike(request.getId(), boardLike);
+        BoardLike like = boardLikeRepository.findById(request.getBoardLikeId()).orElseThrow(() -> new NotFoundPage(
+                HttpStatus.NOT_FOUND.toString(),
+                String.valueOf(request.getBoardLikeId())));
+
+        Long id = like.getId();
+        BoardLike boardLike = boardLikeRepository.getBoardLikeInfo(id, boardId);
+
+        System.out.println("id = " + boardLike.getBoardCount());
 
         return boardLike;
     }

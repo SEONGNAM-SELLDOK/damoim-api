@@ -8,6 +8,7 @@ import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.SaveMemberRequest;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 /**  * MemberService
@@ -36,5 +37,15 @@ public class MemberService {
 	@Transactional(readOnly = true)
 	public Optional<Member> get(Long memberId) {
 		return memberRepository.findById(memberId);
+	}
+
+	@Transactional(readOnly = true)
+	public Member findByName(String email) {
+		return memberRepository.findByEmail(email);
+	}
+
+	@Transactional(readOnly = true)
+	public Member findByNo(long no) {
+		return memberRepository.findByNo(no);
 	}
 }

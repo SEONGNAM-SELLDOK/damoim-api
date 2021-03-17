@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class BoardLike {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_like_id")
@@ -26,7 +28,7 @@ public class BoardLike {
     @JoinColumn(name = "member_id")
     private Member memberLike;
 
-    private String PageId;
+    private Long boardId;
 
     @Enumerated(EnumType.STRING)
     private BoardType boardType;

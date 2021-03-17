@@ -9,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class ChangeLikeRequest {
     private Long boardId;
+    private Long boardLikeId;
     private String boardLike;
 }
