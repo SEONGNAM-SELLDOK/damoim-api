@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.damoim.restapi.member.dao.MemberMapper;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.member.model.GetMemberResponse;
 import com.damoim.restapi.member.model.SaveMemberRequest;
 import com.damoim.restapi.member.model.SaveMemberResponse;
-import com.damoim.restapi.member.model.TestUser;
 import com.damoim.restapi.member.service.MemberService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity<GetMemberResponse> get(
-        @AuthenticationPrincipal TestUser member
+        @AuthenticationPrincipal AuthUser member
     ) {
         GetMemberResponse response = new GetMemberResponse();
         BeanUtils.copyProperties(member, response, GetMemberResponse.class);

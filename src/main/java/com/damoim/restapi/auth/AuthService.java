@@ -1,7 +1,5 @@
 package com.damoim.restapi.auth;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -37,7 +35,7 @@ public class AuthService {
 	@Transactional
 	public String naverCallback(String code) {
 		GetTokenResponse response = fetchAccessToken(code);
-		GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.accessToken);
+		GetUserInfoResponse.UserInfo userInfo = fetchUserInfoFromNaver(response.access_token);
 
 		Member member = createOrUpdateMember(userInfo);
 
@@ -63,24 +61,18 @@ public class AuthService {
 	}
 
 	private GetTokenResponse fetchAccessToken(String code) throws SecurityException {
-		String url =
-			"https://nid.naver.com/oauth2.0/token?client_id=" + authProperties.getClientId() + "&client_secret="
-				+ authProperties.getSecret()
-				+ "&grant_type=authorization_code&state=123&code=" + code;
-		GetTokenResponse response = null;
-		try {
-			URL url2 = new URL(url);
-			response = restTemplate.exchange(url2.toString(), HttpMethod.GET, null,
-				GetTokenResponse.class)
-				.getBody();
-
-			if (response == null) {
-				throw new SecurityException("error naver callback");
-			}
-		} catch (MalformedURLException e) {
-			throw new SecurityException(e.getMessage());
+		ResponseEntity<GetTokenResponse> response = null;
+		response = restTemplate.getForEntity(getAccessToken(code), GetTokenResponse.class);
+		if (response == null) {
+			throw new SecurityException("error naver callback");
 		}
-		return response;
+		return response.getBody();
+	}
+
+	private String getAccessToken(String code) {
+		return "https://nid.naver.com/oauth2.0/token?client_id=" + authProperties.getClientId() + "&client_secret="
+			+ authProperties.getSecret()
+			+ "&grant_type=authorization_code&state=123&code=" + code;
 	}
 
 	private GetUserInfoResponse.UserInfo fetchUserInfoFromNaver(String accessToken) {
@@ -96,7 +88,7 @@ public class AuthService {
 	@Getter
 	@NoArgsConstructor
 	static class GetTokenResponse {
-		private String accessToken;
+		private String access_token;
 	}
 
 	@Setter
