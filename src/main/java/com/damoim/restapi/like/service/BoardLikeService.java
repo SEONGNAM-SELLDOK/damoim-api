@@ -33,8 +33,8 @@ public class BoardLikeService {
     }
 
     public ReadLikeResponse saveLike(BoardLike boardLike) {
-        boardLikeRepository.save(boardLike);
-        return modelMapper.map(boardLike, ReadLikeResponse.class);
+        BoardLike save = boardLikeRepository.save(boardLike);
+        return modelMapper.map(save, ReadLikeResponse.class);
     }
 
     public HashMap<String, String> changeLike(Member member, ChangeLikeRequest request) {
