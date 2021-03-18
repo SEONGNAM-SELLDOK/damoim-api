@@ -23,14 +23,13 @@ public class ReadBoardsResponse {
     private String content;
     private String image;
     private Address address;
-    private String totalMember;
-    private String currentMember;
+    private Integer totalMember;
+    private Integer currentMember;
     private String subject;
     private LocalDateTime endDate;
 
     @QueryProjection
-    public ReadBoardsResponse(long id, String title, String content, String image, Address address,
-        String totalMember, String currentMember, String subject, LocalDateTime endDate) {
+    public ReadBoardsResponse(long id, String title, String content, String image, Address address, Integer totalMember, Integer currentMember, String subject, LocalDateTime endDate) {
         this.id = id;
         this.title = title;
         this.content = content;

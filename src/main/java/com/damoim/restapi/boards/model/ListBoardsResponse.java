@@ -21,14 +21,14 @@ public class ListBoardsResponse {
     private String boardsCountry;
     private String boardsCity;
     private String boardStreet;
-    private String totalMember;
-    private String currentMember;
+    private Integer totalMember;
+    private Integer currentMember;
     private String subject;
     private String damoimTag;
     private String image;
 
     @QueryProjection
-    public ListBoardsResponse(String title, LocalDateTime endDate, String boardsCountry, String boardsCity, String boardStreet, String totalMember, String currentMember, String subject, String damoimTag, String image) {
+    public ListBoardsResponse(String title, LocalDateTime endDate, String boardsCountry, String boardsCity, String boardStreet, Integer totalMember, Integer currentMember, String subject, String damoimTag, String image) {
         this.title = title;
         this.endDate = endDate;
         this.boardsCountry = boardsCountry;

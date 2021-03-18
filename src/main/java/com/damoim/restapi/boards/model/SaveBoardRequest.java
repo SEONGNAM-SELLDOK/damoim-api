@@ -29,9 +29,9 @@ public class SaveBoardRequest {
     @NotNull
     private String street;
     @NotNull
-    private String totalMember;
+    private Integer totalMember;
     @NotNull
-    private String currentMember;
+    private Integer currentMember;
     @NotNull
     private String subject;
     @NotNull

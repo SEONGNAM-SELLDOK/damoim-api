@@ -108,12 +108,12 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return StringUtils.hasText(boardStreet) ? board.address.street.eq(boardStreet) : null;
     }
 
-    private BooleanExpression totalMemberEq(String totalMember) {
-        return StringUtils.hasText(totalMember) ? board.totalMember.eq(totalMember) : null;
+    private BooleanExpression totalMemberEq(Integer totalMember) {
+        return StringUtils.hasText(String.valueOf(totalMember)) ? board.totalMember.eq(totalMember) : null;
     }
 
-    private BooleanExpression currentMemberEq(String currentMember) {
-        return StringUtils.hasText(currentMember) ? board.currentMember.eq(currentMember) : null;
+    private BooleanExpression currentMemberEq(Integer currentMember) {
+        return StringUtils.hasText(String.valueOf(currentMember)) ? board.currentMember.eq(currentMember) : null;
     }
 
     private BooleanExpression subjectEq(String subject) {

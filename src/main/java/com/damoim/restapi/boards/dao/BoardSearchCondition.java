@@ -21,8 +21,8 @@ public class BoardSearchCondition {
     private String boardsCountry;
     private String boardsCity;
     private String boardStreet;
-    private String totalMember;
-    private String currentMember;
+    private Integer totalMember;
+    private Integer currentMember;
     private String subject;
     private String damoimTag;
     private BoardType boardType;
