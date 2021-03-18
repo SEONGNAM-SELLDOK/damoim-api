@@ -63,7 +63,13 @@ public class BookReviewService {
     }
 
     public void delete(long id) {
-        repository.deleteById(id);
+        BookReview bookReview = getById(id);
+        repository.delete(bookReview);
+    }
+
+    @Transactional(readOnly = true)
+    public BookReview getById(long id){
+        return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     @Transactional(readOnly = true)
