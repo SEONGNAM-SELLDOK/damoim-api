@@ -20,31 +20,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    protected static final String[] PUBLIC_URIS = {
-        "/", "/auth/**", "/h2-db"
-    };
+	protected static final String[] PUBLIC_URIS = {
+		"/", "/auth/**", "/h2-db", "/v2/api-docs", "/configuration/ui", "/swagger-ui.html", "/webjars/**",
+		"/swagger-resources/**", "/configuration/**"
+	};
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(jwtAuthenticationProvider);
-    }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) {
+		auth.authenticationProvider(jwtAuthenticationProvider);
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
-                .logout().disable();
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable()
+			.httpBasic().disable()
+			.formLogin().disable()
+			.logout().disable();
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests()
-                .antMatchers(PUBLIC_URIS).permitAll()
-                .anyRequest().authenticated();
+		http.authorizeRequests()
+			.antMatchers(PUBLIC_URIS).permitAll()
+			.anyRequest().authenticated();
 
-        http.addFilterBefore(new JwtAuthenticationFiler(authenticationManagerBean()), UsernamePasswordAuthenticationFilter.class);
-    }
+		http.addFilterBefore(new JwtAuthenticationFiler(authenticationManagerBean()),
+			UsernamePasswordAuthenticationFilter.class);
+	}
 }
