@@ -1,21 +1,21 @@
 package com.damoim.restapi.recruit.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
+import com.damoim.restapi.secondhandtrade.controller.WithAccount;
+import java.time.LocalDate;
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author SeongRok.Oh
@@ -30,6 +30,7 @@ class RecruitServiceTest {
     RecruitService recruitService;
 
     @DisplayName("구인 저장")
+    @WithAccount("test@Email.com")
     @Test
     void saveRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -57,15 +58,17 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 가져오기")
+    @WithAccount("test@Email.com")
     @Test
     void getRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("구인3").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Long id = recruitService.save(recruitSaveRequest, null).getId();
         Recruit recruit = recruitService.getById(id);
-        assertEquals("구인3", recruit.getRegister());
+        assertEquals("test@Email.com", recruit.getRegister());
     }
 
     @DisplayName("구인 가져오기 해당 아이디 없음")
+    @WithAccount("test@Email.com")
     @Test
     void getRecruitNoContentException() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -75,6 +78,7 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 업데이트")
+    @WithAccount("test@Email.com")
     @Test
     void updateRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -89,6 +93,7 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 업데이트 Dto 검증")
+    @WithAccount("test@Email.com")
     @Test
     void updateRecruitValidation() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("작성자").company("회사").title("구인 타이틀").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -109,6 +114,7 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 삭제")
+    @WithAccount("test@Email.com")
     @Test
     void deleteRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -122,6 +128,7 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 조건별 가져오기")
+    @WithAccount("test@Email.com")
     @Test
     void getRecruits() {
         RecruitSaveRequest recruitSaveRequest1 = RecruitSaveRequest.builder().register("오성록").company("Firm").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
