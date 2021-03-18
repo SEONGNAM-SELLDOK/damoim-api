@@ -3,14 +3,15 @@ package com.damoim.restapi.secondhandtrade.service;
 
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemSearchRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
-import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.SearchUsedItemRequest;
-import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseUsedItem;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -47,29 +48,33 @@ public class UsedItemService {
 
   public ResponseUsedItem selectItem(Long no) {
     UsedItem item = getItemFromId(no);
-    return modelMapper.map(item,ResponseUsedItem.class);
+    return modelMapper.map(item, ResponseUsedItem.class);
   }
 
-  public ResponseUsedItem editItem(Long no, UsedItemRequest editRq) {
-    UsedItem originItem = getItemFromId(no);
+  public ResponseUsedItem editItem(Long no, UsedItemRequest editRq, AuthUser authUser) {
+    UsedItem originItem = enableEditUser(no, authUser);
     UsedItem updateItem = usedItemRepository.save(editRq.updateTo(originItem));
     return modelMapper.map(updateItem, ResponseUsedItem.class);
   }
 
-  public ResponseModifyUsedItemClosed itemUpdateToClosed(Long no, String writer) {
-    UsedItem item = getItemFromId(no);
-    if (!item.isWriter(writer)) {
-      throw new AccessDeniedException("작성자 외 수정 불가능");
-    }
-
-    ResponseModifyUsedItemClosed closed = item.closed(writer);
+  public ResponseModifyUsedItemClosed itemUpdateToClosed(Long no, AuthUser authUser) {
+    UsedItem item = enableEditUser(no, authUser);
+    ResponseModifyUsedItemClosed closed = item.closed(authUser.getEmail());
     usedItemRepository.save(item);
     return closed;
   }
 
-  public void delete(Long no) {
-    UsedItem item = getItemFromId(no);
+  public void delete(Long no, AuthUser authUser) {
+    UsedItem item = enableEditUser(no, authUser);
     usedItemRepository.delete(item);
+  }
+
+  private UsedItem enableEditUser(Long id, AuthUser authUser) {
+    UsedItem usedItem = getItemFromId(id);
+    if (!usedItem.isWriter(authUser.getEmail())) {
+      throw new AccessDeniedException("작성자 외 변경 불가능");
+    }
+    return usedItem;
   }
 
   private UsedItem getItemFromId(Long no) {

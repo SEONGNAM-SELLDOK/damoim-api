@@ -1,4 +1,4 @@
-package com.damoim.restapi.secondhandtrade.model;
+package com.damoim.restapi.secondhandtrade.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
