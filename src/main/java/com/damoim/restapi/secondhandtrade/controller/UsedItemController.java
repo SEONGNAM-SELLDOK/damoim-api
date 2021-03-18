@@ -110,8 +110,8 @@ public class UsedItemController {
 
     @DeleteMapping("/item/{no}")
     public ResponseEntity<Object> delete(@PathVariable Long no,
-        @AuthenticationPrincipal AuthUser AuthUser) {
-        usedItemService.delete(no, AuthUser);
+        @AuthenticationPrincipal AuthUser authUser) {
+        usedItemService.delete(no, authUser);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
