@@ -8,7 +8,6 @@ import com.damoim.restapi.lecture.entity.LectureSubject;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
-import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import java.time.LocalDate;
 import java.util.Set;
 import javax.transaction.Transactional;
@@ -28,7 +27,6 @@ class LectureServiceTest {
 
     @DisplayName("강의 추천 저장 테스트")
     @Test
-    @WithAccount("test@Email.com")
     void saveTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
         Lecture lecture = lectureService.save(lectureSaveRequest, null);
@@ -36,7 +34,6 @@ class LectureServiceTest {
     }
 
     @DisplayName("강의 저장 테스트 Request 검증")
-    @WithAccount("test@Email.com")
     @Test
     void saveRequestValidate() {
         LectureSaveRequest noSpeaker = LectureSaveRequest.builder().register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
@@ -54,7 +51,6 @@ class LectureServiceTest {
     }
 
     @DisplayName("강의 업데이트 테스트")
-    @WithAccount("test@Email.com")
     @Test
     void updateTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
@@ -67,7 +63,6 @@ class LectureServiceTest {
     }
 
     @DisplayName("강의 업데이트 테스트 Request 검증")
-    @WithAccount("test@Email.com")
     @Test
     void updateRequestValidate() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
@@ -90,7 +85,6 @@ class LectureServiceTest {
     }
 
     @DisplayName("강의 삭제")
-    @WithAccount("test@Email.com")
     @Test
     void deleteTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
@@ -105,7 +99,6 @@ class LectureServiceTest {
     }
 
     @DisplayName("강의 조건별 가져오기")
-    @WithAccount("test@Email.com")
     @Test
     void getLectureByRequest() {
         LectureSaveRequest lectureSaveRequest1 = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("애플을 왜 좋은가?").subject(LectureSubject.FRONT).deadline(LocalDate.of(2022, 2, 2)).build();

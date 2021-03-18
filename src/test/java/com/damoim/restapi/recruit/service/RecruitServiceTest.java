@@ -30,7 +30,6 @@ class RecruitServiceTest {
     RecruitService recruitService;
 
     @DisplayName("구인 저장")
-    @WithAccount("test@Email.com")
     @Test
     void saveRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -58,17 +57,15 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 가져오기")
-    @WithAccount("test@Email.com")
     @Test
     void getRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("구인3").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Long id = recruitService.save(recruitSaveRequest, null).getId();
         Recruit recruit = recruitService.getById(id);
-        assertEquals("test@Email.com", recruit.getRegister());
+        assertEquals("구인3", recruit.getRegister());
     }
 
     @DisplayName("구인 가져오기 해당 아이디 없음")
-    @WithAccount("test@Email.com")
     @Test
     void getRecruitNoContentException() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -78,7 +75,6 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 업데이트")
-    @WithAccount("test@Email.com")
     @Test
     void updateRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -93,7 +89,6 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 업데이트 Dto 검증")
-    @WithAccount("test@Email.com")
     @Test
     void updateRecruitValidation() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("작성자").company("회사").title("구인 타이틀").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
@@ -114,7 +109,6 @@ class RecruitServiceTest {
     }
 
     @DisplayName("구인 삭제")
-    @WithAccount("test@Email.com")
     @Test
     void deleteRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
