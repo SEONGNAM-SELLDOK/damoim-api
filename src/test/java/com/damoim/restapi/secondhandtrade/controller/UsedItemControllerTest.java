@@ -150,13 +150,17 @@ class UsedItemControllerTest {
     void editItem() {
         //given
         UsedItem save = usedItemService.save(getItemRequest());
+        AuthUser principal = getAuthUser();
         //when
         UsedItemRequest itemRequest = getItemRequest();
+        itemRequest.setTitle("수정");
+        usedItemService.editItem(save.getNo(), itemRequest, principal);
 
         //then
         UsedItem usedItem = usedItemRepository.findById(save.getNo()).get();
 
         assertThat(usedItem.getNo()).isEqualTo(save.getNo());
+        assertThat(usedItem.getTitle()).isEqualTo("수정");
         assertThat(usedItem.getEditWriter()).isEqualTo("kjj@naver.com");
     }
 
@@ -165,17 +169,21 @@ class UsedItemControllerTest {
     @DisplayName("게시글 삭제")
     @WithAccount("kjj@naver.com")
     void itemDelete() {
-        AuthUser principal = (AuthUser) SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getPrincipal();
         //given
+        AuthUser principal = getAuthUser();
         UsedItem save = usedItemService.save(getItemRequest());
         //when
         usedItemService.delete(save.getNo(), principal);
         //then
         boolean result = usedItemRepository.existsById(save.getNo());
         assertThat(result).isFalse();
+    }
+
+    private AuthUser getAuthUser() {
+        return (AuthUser) SecurityContextHolder
+            .getContext()
+            .getAuthentication()
+            .getPrincipal();
     }
 
     private <T> T valueToObject(ResultActions resultActions, Class<T> target) throws Exception {

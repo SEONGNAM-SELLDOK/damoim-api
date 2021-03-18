@@ -3,7 +3,7 @@
 ### 중고거래 게시글 생성
 POST http://localhost:8080/useditems
 Content-Type: application/json
-Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4NjE1NzMwLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTYwMjM3MzAsImp0aSI6ImQ2MTI1ZjU1LTY2N2MtNGMyNi1hYWMzLTZjYzM1ZjU3NmM2MSJ9.ccyPP02s5sJp3clf_7DFvWdl0dqJsDWeRYlR56I6osU
+Cookie: AUTH_TOKEN=
 
 {
   "address" : "서울특별시",
@@ -24,12 +24,13 @@ client.test("Request executed successfully", function() {
 
 ### 게시글 지우기
 DELETE http://localhost:8080/useditems/item/1
+Cookie: AUTH_TOKEN=
 
 
 ### 게시글 수정
 PUT http://localhost:8080/useditems/item/1
 Content-Type: application/json
-Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4NjEwODU0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTYwMTg4NTQsImp0aSI6IjY3MDgwZjhhLTdjNmItNDMxYy1hNTY0LTE0Mjg3OWMxZDBkNCJ9.2LHFe9Pm7i4YaSwCk7nXSuFSieta7EspTsOFYXY4nfk
+Cookie: AUTH_TOKEN=
 
 
 {
@@ -47,24 +48,23 @@ Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4
 ### 게시글 닫기
 PATCH http://localhost:8080//useditems/item/1/closed
 Content-Type: application/x-www-form-urlencoded
-
-writer=KJJ
+Cookie: AUTH_TOKEN=
 
 ### 검색
 GET http://localhost:8080/useditems/pages/search
 Accept: application/json
-Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4NjExNjM0LCJpZCI6MiwiaXNzdWVkQXQiOjE2MTYwMTk2MzQsImp0aSI6IjJhMWNhYTgxLWQ0NjktNDQ4MS05NzVkLWVkMGQ5YmZlNzIxOCJ9.objEUy-YFBgY32upzASN3S8zyyDFpef7uBB4vpLFUms
+Cookie: AUTH_TOKEN=
 
 
 ### 카테고리 종류 가져오기
 GET http://localhost:8080/useditems/categories
 Accept: application/json
-Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4NjEwODU0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTYwMTg4NTQsImp0aSI6IjY3MDgwZjhhLTdjNmItNDMxYy1hNTY0LTE0Mjg3OWMxZDBkNCJ9.2LHFe9Pm7i4YaSwCk7nXSuFSieta7EspTsOFYXY4nfk
+Cookie: AUTH_TOKEN=
 
 ### 특정 게시글 가져오기
 GET http://localhost:8080/useditems/item/1
 Accept: application/json
-Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE4NjEwODU0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTYwMTg4NTQsImp0aSI6IjY3MDgwZjhhLTdjNmItNDMxYy1hNTY0LTE0Mjg3OWMxZDBkNCJ9.2LHFe9Pm7i4YaSwCk7nXSuFSieta7EspTsOFYXY4nfk
+Cookie: AUTH_TOKEN=
 
 
 
