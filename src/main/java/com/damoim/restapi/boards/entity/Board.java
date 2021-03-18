@@ -37,8 +37,8 @@ public class Board extends BaseEntity {
     private String image;
     @Embedded
     private Address address;
-    private String totalMember;
-    private String currentMember;
+    private Integer totalMember;
+    private Integer currentMember;
     private String subject;
 
     @Enumerated(EnumType.STRING)
