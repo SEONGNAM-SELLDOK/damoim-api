@@ -17,6 +17,6 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     @Query("update BoardLike set boardCount = boardCount - 1 where boardId = :boardId")
     int subtractLikeCount(@Param("boardId") Long boardId);
 
-    @Query("select b from BoardLike b where b.id = :id and b.boardId = :boardId")
-    BoardLike getBoardLikeInfo(@Param("id") Long id, @Param("boardId") Long boardId);
+    @Query("select b.boardCount from BoardLike b where b.boardId = :boardId")
+    int getBoardCount(@Param("boardId") Long boardId);
 }

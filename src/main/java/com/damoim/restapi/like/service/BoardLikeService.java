@@ -7,13 +7,12 @@ import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.dao.BoardLikeRepository;
 import com.damoim.restapi.like.model.ReadLikeResponse;
 import com.damoim.restapi.member.entity.Member;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -38,27 +37,26 @@ public class BoardLikeService {
         return modelMapper.map(boardLike, ReadLikeResponse.class);
     }
 
-    public BoardLike changeLike(Member member, ChangeLikeRequest request) {
+    public HashMap<String, String> changeLike(Member member, ChangeLikeRequest request) {
         Board board = boardService.findById(request.getBoardId());
         Long boardId = board.getId();
 
-        String afterLike;
+        String likeResult;
+        int i;
         if (request.getBoardLike().equals("1")) {
-            afterLike = "0";
-            boardLikeRepository.subtractLikeCount(boardId);
+            likeResult = "0";
+             i = boardLikeRepository.subtractLikeCount(boardId);
         } else {
-            afterLike = "1";
-            boardLikeRepository.addLikeCount(boardId);
+            likeResult = "1";
+            i = boardLikeRepository.addLikeCount(boardId);
         }
-        BoardLike like = boardLikeRepository.findById(request.getBoardLikeId()).orElseThrow(() -> new NotFoundPage(
-                HttpStatus.NOT_FOUND.toString(),
-                String.valueOf(request.getBoardLikeId())));
 
-        Long id = like.getId();
-        BoardLike boardLike = boardLikeRepository.getBoardLikeInfo(id, boardId);
+        int byBoardCount = boardLikeRepository.getBoardCount(boardId);
 
-        System.out.println("id = " + boardLike.getBoardCount());
+        HashMap<String, String> map = new HashMap<>();
+        map.put("like_result", likeResult);
+        map.put("board_count", String.valueOf(byBoardCount));
 
-        return boardLike;
+        return map;
     }
 }

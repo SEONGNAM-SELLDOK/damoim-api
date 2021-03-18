@@ -1,15 +1,13 @@
 package com.damoim.restapi.boards.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
 import com.damoim.restapi.like.entity.BoardLike;
 import com.damoim.restapi.like.model.ChangeLikeRequest;
-import com.damoim.restapi.like.model.ReadLikeResponse;
-import com.damoim.restapi.like.model.SaveLikeRequest;
 import com.damoim.restapi.like.service.BoardLikeService;
 import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.AuthUser;
@@ -84,20 +82,20 @@ public class SeminarController {
                 .boardCount(0)
                 .boardType(BoardType.SEMINAR)
                 .build();
-        ReadLikeResponse likeResponse = boardLikeService.saveLike(boardLike);
+        boardLikeService.saveLike(boardLike);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
     @PostMapping("like")
     @ResponseBody
-    public ResponseEntity<BoardLike> changeLike(
+    public ResponseEntity<HashMap<String, String>> changeLike(
             @AuthenticationPrincipal AuthUser member,
             final @Valid @RequestBody ChangeLikeRequest request) {
         Member nMember = memberService.findByName(member.getEmail());
-
-        BoardLike boardLike = boardLikeService.changeLike(nMember, request);
-        return ResponseEntity.ok(boardLike);
+        HashMap<String, String> like = boardLikeService.changeLike(nMember, request);
+        return ResponseEntity.ok(like);
     }
 
     @GetMapping("{id}")
