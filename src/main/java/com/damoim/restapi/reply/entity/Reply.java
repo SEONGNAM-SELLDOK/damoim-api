@@ -80,7 +80,7 @@ public class Reply {
     }
 
     public void checkClosed() {
-        if (this.closed) {
+        if (Boolean.TRUE.equals(closed)) {
             throw new ReplyClosedException(this.no);
         }
     }
