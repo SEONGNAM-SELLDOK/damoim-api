@@ -1,0 +1,106 @@
+### 도서 리뷰 작성
+POST http://localhost:8080/bookreviews
+Content-Type: application/json
+
+{
+  "title": "객체지향의 사실과 오해를 읽고...",
+  "description": "꼭 읽어 보세요.",
+  "isbn": "978-89-98139-76-6",
+  "publisher": "위키북스",
+  "writer": "조영호",
+  "subject": "객체지향",
+  "tag": [
+    "OOP",
+    "객체",
+    "SOLID"
+  ],
+  "deadline": "2022-03-16"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 201, "Response status is not 201, it is " + response.status);
+});
+%}
+
+### 도서 리뷰 가져오기
+GET http://localhost:8080/bookreviews/1
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 도서 리뷰 업데이트
+PUT http://localhost:8080/bookreviews
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "(수정)객체지향의 사실과 오해를 읽고...",
+  "description": "(수정)꼭 읽어 보세요.",
+  "isbn": "978-89-98139-76-6",
+  "publisher": "위키북스",
+  "writer": "조영호",
+  "subject": "객체지향",
+  "tag": [
+    "OOP",
+    "객체",
+    "SOLID",
+    "객체지향"
+  ],
+  "deadline": "2022-03-16"
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 도서 리뷰 삭제
+DELETE http://localhost:8080/bookreviews/1
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 204, "Response status is not 204, it is " + response.status);
+});
+%}
+
+### 다른 조건 넣기
+POST http://localhost:8080/bookreviews
+Content-Type: application/json
+
+{
+  "title": "토비의 스프링을 읽고...",
+  "description": "토비의 스프링은 꼭 읽어 보세요.",
+  "isbn": "978-89-6077-103-1",
+  "publisher": "에이콘",
+  "writer": "토비",
+  "subject": "스프링",
+  "tag": [
+    "스프링",
+    "객체",
+    "SPRING"
+  ],
+  "deadline": "2022-05-17"
+}
+
+
+### 조건 도서 리뷰 가져오기
+GET http://localhost:8080/bookreviews?description=토비
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 20, it is " + response.status);
+});
+%}
