@@ -7,7 +7,6 @@ import com.damoim.restapi.boards.entity.DamoimTag;
 import com.damoim.restapi.like.model.SaveLikeRequest;
 import com.damoim.restapi.member.dao.MemberRepository;
 import com.damoim.restapi.member.entity.Member;
-import com.damoim.restapi.member.service.MemberService;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,13 +35,7 @@ public class LikeServiceTest {
     WebApplicationContext webApplicationContext;
 
     @Autowired
-    BoardLikeService boardLikeService;
-
-    @Autowired
     MemberRepository memberRepository;
-
-    @Autowired
-    MemberService memberService;
 
     @Autowired
     ObjectMapper objectMapper;
