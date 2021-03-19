@@ -15,7 +15,6 @@ import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import java.util.List;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,75 +31,63 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
     private final ChildReplyRepository childReplyRepository;
     private final BoardValidationService boardValidationService;
-    private final ModelMapper modelMapper;
 
     public ResponseReply replySave(Long boardId, RequestSaveReply requestSaveReply) {
-        Long validBoardId = boardValidationService
+        Long replyId = requestSaveReply.getParentReplyId();
+        Long provenBoardId = boardValidationService
             .existBoard(boardId, requestSaveReply.getBoardType());
 
         if (requestSaveReply.isParentReply()) {
-            Reply reply = replyRepository.save(requestSaveReply.toEntity(validBoardId));
-            return ResponseReply.of(validBoardId, reply);
+            Reply newReply = replyRepository.save(requestSaveReply.toReply(provenBoardId));
+            return ResponseReply.of(provenBoardId, newReply);
         }
-        if (requestSaveReply.isParentChildReply()) {
-            Long parentId = requestSaveReply.getParentReplyId();
-            Reply parentReply = getReply(parentId);
-            if (parentReply.isClosed()) {
-                throw new ReplyClosedException(parentId);
-            }
-            ChildReply childReply = modelMapper
-                .map(requestSaveReply.toEntity(validBoardId), ChildReply.class);
-            childReply.setParentReply(parentReply);
-            childReply = childReplyRepository.save(childReply);
 
-            return ResponseReply.of(validBoardId, childReply);
+        if (requestSaveReply.isParentChildReply()) {
+            Reply parentReply = getReply(replyId);
+            ChildReply newReply = childReplyRepository
+                .save(requestSaveReply.toChildReply(parentReply));
+            return ResponseReply.of(provenBoardId, newReply);
         }
 
         if (requestSaveReply.isChildChildReply()) {
-            Long id = requestSaveReply.getParentReplyId();
-            ChildReply parentChildReply = getChildReply(id);
-            Reply parentReply = parentChildReply.getParentReply();
-            ChildReply childReply = modelMapper
-                .map(requestSaveReply.toEntity(validBoardId), ChildReply.class);
-            childReply.setParentReply(parentReply);
-            childReply
-                .setContent("@" + parentChildReply.getWriter() + " " + childReply.getContent());
-            childReply = childReplyRepository.save(childReply);
-            return ResponseReply.of(validBoardId, childReply);
+            ChildReply targetReply = getChildReply(replyId);
+            ChildReply newReply = requestSaveReply.toChildReply(targetReply.getParentReply());
+            String newContent = "@" + targetReply.getWriter() + " " + newReply.getContent();
+            newReply.updateContent(newContent);
+            newReply = childReplyRepository.save(newReply);
+            return ResponseReply.of(provenBoardId, newReply);
         }
         throw new IllegalArgumentException();
     }
 
     public ResponseEditReply editReply(Long id, RequestEditReply requestEditReply) {
+        String newContent = requestEditReply.getContent();
         if (requestEditReply.isParentReply()) {
             Reply reply = getReply(id);
-            if (reply.isClosed()) {
-                throw new ReplyClosedException(id);
-            }
-            reply.setContent(requestEditReply.getContent());
+            reply.updateContent(newContent);
             replyRepository.save(reply);
             return ResponseEditReply.of(reply.getNo(), reply.getContent());
         }
         ChildReply childReply = getChildReply(id);
-        childReply.setContent(requestEditReply.getContent());
+        childReply.updateContent(newContent);
         childReplyRepository.save(childReply);
         return ResponseEditReply.of(childReply.getNo(), childReply.getContent());
     }
 
     public void deleteReply(RequestDeleteReply requestDeleteReply) {
+        Long replyId = requestDeleteReply.getReplyId();
         if (requestDeleteReply.isParentId()) {
-            Reply reply = getReplyIncludeChildList(requestDeleteReply.getReplyId());
+            Reply reply = getReplyIncludeChildList(replyId);
             if (!reply.childListIsEmpty()) {
-                reply.setContent("삭제된 댓글입니다.");
-                reply.setClosed(true);
+                reply.closed();
+                replyRepository.save(reply);
             } else {
                 replyRepository.delete(reply);
             }
         }
 
         if (requestDeleteReply.isChildReplyId()) {
-            ChildReply childReply = getChildReplyIncludeParentReply(
-                requestDeleteReply.getReplyId());
+            ChildReply childReply = getChildReplyIncludeParentReply(replyId);
             Reply parentReply = childReply.getParentReply();
             parentReply.getChildReply().remove(childReply);
             if (parentReply.childListIsEmpty() && parentReply.isClosed()) {
@@ -124,7 +111,9 @@ public class ReplyService {
     }
 
     private Reply getReply(Long id) {
-        return replyRepository.findById(id).orElseThrow(getFoundPageSupplier(id));
+        Reply reply = replyRepository.findById(id).orElseThrow(getFoundPageSupplier(id));
+        reply.checkClosed();
+        return reply;
     }
 
     private Reply getReplyIncludeChildList(Long id) {

@@ -2,6 +2,7 @@ package com.damoim.restapi.reply.entity;
 
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.reply.service.ReplyClosedException;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,8 +66,23 @@ public class Reply {
     @UpdateTimestamp
     private LocalDateTime updateDate;
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
     public boolean isClosed() {
-        return closed;
+        return this.closed;
+    }
+
+    public void closed() {
+        this.content = "삭제된 댓글입니다.";
+        this.closed = true;
+    }
+
+    public void checkClosed() {
+        if (this.closed) {
+            throw new ReplyClosedException(this.no);
+        }
     }
 
     public boolean childListIsEmpty() {

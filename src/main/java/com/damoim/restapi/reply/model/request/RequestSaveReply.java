@@ -2,6 +2,7 @@ package com.damoim.restapi.reply.model.request;
 
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.reply.entity.ChildReply;
 import com.damoim.restapi.reply.entity.Reply;
 import java.util.Objects;
 import javax.validation.constraints.Min;
@@ -49,12 +50,20 @@ public class RequestSaveReply {
         return Objects.nonNull(parentReplyId) && isChildId;
     }
 
-    public Reply toEntity(Long boardId) {
+    public Reply toReply(Long boardId) {
         return Reply.builder()
             .writer(writer)
             .boardId(boardId)
             .boardType(boardType)
             .content(content)
+            .build();
+    }
+
+    public ChildReply toChildReply(Reply parentReply) {
+        return ChildReply.builder()
+            .content(content)
+            .parentReply(parentReply)
+            .writer(writer)
             .build();
     }
 

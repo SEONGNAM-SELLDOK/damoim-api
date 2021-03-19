@@ -49,4 +49,8 @@ public class ChildReply {
 
     @UpdateTimestamp
     private LocalDateTime updateDate;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
