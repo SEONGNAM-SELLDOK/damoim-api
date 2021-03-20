@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author gisung.go
@@ -17,12 +18,18 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 public class ListCommunityResponse {
+    private long id;
     private String title;
     private String content;
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
 
     @QueryProjection
-    public ListCommunityResponse(String title, String content) {
+    public ListCommunityResponse(long id, String title, String content, LocalDateTime createDate, LocalDateTime updateDate) {
+        this.id = id;
         this.title = title;
         this.content = content;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 }
