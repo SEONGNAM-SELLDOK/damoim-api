@@ -71,6 +71,7 @@ public class UsedItem {
 
   @LastModifiedBy
   private String editWriter; //수정자 ID
+
   @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)
   @Builder.Default

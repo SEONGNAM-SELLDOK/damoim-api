@@ -56,7 +56,6 @@ class UsedItemControllerTest {
     @Autowired
     ModelMapper modelMapper;
 
-
     @BeforeEach()
     public void setup() {
         //Init MockMvc Object and build

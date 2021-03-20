@@ -2,10 +2,13 @@ package com.damoim.restapi.secondhandtrade.controller;
 
 import static com.damoim.restapi.secondhandtrade.controller.UsedItemController.ROOT;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
-import com.damoim.restapi.secondhandtrade.errormsg.ApiMessage;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
 import com.damoim.restapi.secondhandtrade.model.request.SearchUsedItemRequest;
@@ -26,7 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,17 +56,7 @@ public class UsedItemController {
 
     private final UsedItemService usedItemService;
     private final EnumMapper enumMapper;
-
-    @ExceptionHandler(NotFoundPage.class)
-    public ResponseEntity<ApiMessage> notFoundException(NotFoundPage notFoundPage) {
-        ApiMessage apiMessage = ApiMessage.builder()
-            .message(notFoundPage.getMessage())
-            .inputValue(notFoundPage.getValue())
-            .statusCode(HttpStatus.NOT_FOUND.value())
-            .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiMessage);
-    }
-
+    private final ReplyService replyService;
 
     @PostMapping
     public ResponseEntity<ResponseUsedItem> save(
@@ -84,8 +76,8 @@ public class UsedItemController {
 
     @GetMapping("/item/{no}")
     public ResponseEntity<ResponseUsedItem> selectItem(@PathVariable Long no) {
-        ResponseUsedItem item = usedItemService.selectItem(no);
-        return ResponseEntity.ok(item);
+        ResponseUsedItem usedItemReply = usedItemService.selectItem(no);
+        return ResponseEntity.ok(usedItemReply);
     }
 
     @GetMapping("/pages/search")
@@ -113,5 +105,17 @@ public class UsedItemController {
         @AuthenticationPrincipal AuthUser authUser) {
         usedItemService.delete(no, authUser);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/item/{no}/reply")
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+        @Valid @RequestBody RequestSaveReply requestSaveReply) {
+        RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
+        return ResponseEntity.ok(replyService.replySave(no, reply));
+    }
+
+    @GetMapping("/item/{no}/reply")
+    public ResponseEntity<ResponseUsedItemIncludeReply> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(usedItemService.getUsedItemIncludeReply(no, BoardType.USEDITEMS));
     }
 }
