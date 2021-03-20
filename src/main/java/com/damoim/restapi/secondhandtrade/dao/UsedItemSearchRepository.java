@@ -4,9 +4,9 @@ import static com.damoim.restapi.secondhandtrade.entity.useditem.QUsedItem.usedI
 
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
-import com.damoim.restapi.secondhandtrade.model.useditem.QResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.useditem.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.useditem.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.response.QResponseUsedItem;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseUsedItem;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

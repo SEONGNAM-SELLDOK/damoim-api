@@ -1,22 +1,21 @@
 package com.damoim.restapi.lecture.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.damoim.restapi.lecture.entity.Lecture;
 import com.damoim.restapi.lecture.entity.LectureSubject;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
+import java.time.LocalDate;
+import java.util.Set;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("강의 테스트")
 @SpringBootTest

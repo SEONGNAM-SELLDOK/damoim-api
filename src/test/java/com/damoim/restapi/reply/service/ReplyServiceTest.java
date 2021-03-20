@@ -14,11 +14,12 @@ import com.damoim.restapi.reply.model.request.RequestDeleteReply;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
+import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
-import com.damoim.restapi.secondhandtrade.model.useditem.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
@@ -53,6 +54,7 @@ class ReplyServiceTest {
 
     @Test
     @DisplayName("댓글 등록")
+    @WithAccount("kjj@naver.com")
     void saveReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
         Recruit recruit = recruitService.save(getRecruitSaveRequest(), null);
@@ -96,6 +98,7 @@ class ReplyServiceTest {
 
     @Test
     @DisplayName("저장실패 - 존재하지않는 부모 댓글")
+    @WithAccount("kjj@naver.com")
     void replySave_fail_NotFound_ParentReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
         long usedItemNo = usedItem.getNo();
@@ -109,6 +112,7 @@ class ReplyServiceTest {
 
     @Test
     @DisplayName("저장실패 - 존재하지않는 부모의 자식의 댓글 ")
+    @WithAccount("kjj@naver.com")
     void replySave_fail_NotFound_ReplyChildReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
         long usedItemNo = usedItem.getNo();
@@ -130,6 +134,7 @@ class ReplyServiceTest {
 
     @Test
     @DisplayName("댓글삭제 - 자식이 없는 경우")
+    @WithAccount("kjj@naver.com")
     void replyDelete_None_ChildReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
         long usedItemNo = usedItem.getNo();
@@ -167,7 +172,6 @@ class ReplyServiceTest {
 
     private UsedItemRequest getItemRequest() {
         return UsedItemRequest.builder()
-            .writer("KJJ")
             .address("tempAddress")
             .category(Category.DEFAULT)
             .description("content")

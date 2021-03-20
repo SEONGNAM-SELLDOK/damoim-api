@@ -4,16 +4,17 @@ import static com.damoim.restapi.secondhandtrade.controller.UsedItemController.R
 
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.mapper.EnumMapper;
 import com.damoim.restapi.secondhandtrade.mapper.EnumValue;
-import com.damoim.restapi.secondhandtrade.model.useditem.ResponseModifyUsedItemClosed;
-import com.damoim.restapi.secondhandtrade.model.useditem.ResponseUsedItem;
-import com.damoim.restapi.secondhandtrade.model.useditem.SearchUsedItemRequest;
-import com.damoim.restapi.secondhandtrade.model.useditem.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.SearchUsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import io.swagger.annotations.Api;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -87,20 +89,21 @@ public class UsedItemController {
 
     @PutMapping("/item/{no}")
     public ResponseEntity<ResponseUsedItem> editItem(@PathVariable Long no,
-        @Valid @RequestBody UsedItemRequest editRq) {
-        ResponseUsedItem item = usedItemService.editItem(no, editRq);
+        @Valid @RequestBody UsedItemRequest editRq, @AuthenticationPrincipal AuthUser authUser) {
+        ResponseUsedItem item = usedItemService.editItem(no, editRq, authUser);
         return ResponseEntity.ok(item);
     }
 
     @PatchMapping("/item/{no}/closed")
     public ResponseEntity<ResponseModifyUsedItemClosed> closed(@PathVariable Long no,
-        @RequestParam String writer) {
-        return ResponseEntity.ok(usedItemService.itemUpdateToClosed(no, writer));
+        @AuthenticationPrincipal AuthUser authUser) {
+        return ResponseEntity.ok(usedItemService.itemUpdateToClosed(no, authUser));
     }
 
     @DeleteMapping("/item/{no}")
-    public ResponseEntity<Object> delete(@PathVariable Long no) {
-        usedItemService.delete(no);
+    public ResponseEntity<Object> delete(@PathVariable Long no,
+        @AuthenticationPrincipal AuthUser authUser) {
+        usedItemService.delete(no, authUser);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

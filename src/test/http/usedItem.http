@@ -1,9 +1,9 @@
 ### 중고거래 게시글 생성
 POST http://localhost:8080/useditems
 Content-Type: application/json
+Cookie: AUTH_TOKEN=
 
 {
-  "writer": "KJJ",
   "address": "서울특별시",
   "category": "default",
   "description": "Air",
@@ -12,6 +12,7 @@ Content-Type: application/json
   "title": "MackBook 판매합니다.",
   "price": "10000"
 }
+
 > {%
 client.test("Request executed successfully", function() {
     client.log("response.body" + response.status)
@@ -102,11 +103,14 @@ Accept: application/json
 
 ### 게시글 지우기
 DELETE http://localhost:8080/useditems/item/1
+Cookie: AUTH_TOKEN=
 
 
 ### 게시글 수정
 PUT http://localhost:8080/useditems/item/1
 Content-Type: application/json
+Cookie: AUTH_TOKEN=
+
 
 {
   "writer": "(수정자)JJ",
@@ -123,19 +127,14 @@ Content-Type: application/json
 ### 게시글 닫기
 PATCH http://localhost:8080//useditems/item/1/closed
 Content-Type: application/x-www-form-urlencoded
-
-writer=KJJ
+Cookie: AUTH_TOKEN=
 
 ### 검색
 GET http://localhost:8080/useditems/pages/search
 Accept: application/json
+Cookie: AUTH_TOKEN=
 
 
 ### 카테고리 종류 가져오기
 GET http://localhost:8080/useditems/categories
 Accept: application/json
-
-
-
-
-
