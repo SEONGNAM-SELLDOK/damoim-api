@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
 	protected static final String[] PUBLIC_URIS = {
-		"/", "/auth/**", "/h2-db", "/v2/api-docs", "/configuration/ui", "/swagger-ui.html", "/webjars/**",
+		"/", "/auth/**", "/h2-db/**", "/v2/api-docs", "/configuration/ui", "/swagger-ui.html", "/webjars/**",
 		"/swagger-resources/**", "/configuration/**"
 	};
 
