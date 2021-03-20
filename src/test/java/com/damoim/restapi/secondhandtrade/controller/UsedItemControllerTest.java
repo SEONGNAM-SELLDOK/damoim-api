@@ -1,12 +1,21 @@
 package com.damoim.restapi.secondhandtrade.controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
+import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
+import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
+import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
+import com.damoim.restapi.secondhandtrade.model.useditem.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.service.UsedItemService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.servlet.http.Cookie;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,14 +31,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
-import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
-import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
-import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
-import com.damoim.restapi.secondhandtrade.model.UsedItemRequest;
-import com.damoim.restapi.secondhandtrade.service.UsedItemService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc

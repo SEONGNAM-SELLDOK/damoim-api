@@ -1,6 +1,6 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
-import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.useditem.ResponseModifyUsedItemClosed;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,6 +64,7 @@ public class UsedItem {
   private LocalDateTime updateDate; //수정일시
 
   private String editWriter; //수정자 ID
+
   @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)
   @Builder.Default
