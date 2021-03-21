@@ -75,28 +75,22 @@ public class SeminarController {
             .build();
         ReadBoardsResponse response = boardService.save(board, file);
 
-        Member nMember = memberService.findByName(member.getEmail());
-        BoardLike boardLike = BoardLike.builder()
-                .memberLike(nMember)
-                .boardId(response.getId())
-                .boardCount(0)
-                .boardType(BoardType.SEMINAR)
-                .build();
-        boardLikeService.saveLike(boardLike);
+        // 좋아요 등록
+        boardLikeService.saveLike(BoardType.SEMINAR, response.getId(), member);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 
-    @PostMapping("like")
-    @ResponseBody
-    public ResponseEntity<HashMap<String, String>> changeLike(
-            @AuthenticationPrincipal AuthUser member,
-            final @Valid @RequestBody ChangeLikeRequest request) {
-        Member nMember = memberService.findByName(member.getEmail());
-        HashMap<String, String> like = boardLikeService.changeLike(nMember, request);
-        return ResponseEntity.ok(like);
-    }
+//    @PostMapping("like")
+//    @ResponseBody
+//    public ResponseEntity<HashMap<String, String>> changeLike(
+//            @AuthenticationPrincipal AuthUser member,
+//            final @Valid @RequestBody ChangeLikeRequest request) {
+//        Member nMember = memberService.findByName(member.getEmail());
+//        HashMap<String, String> like = boardLikeService.changeLike(request);
+//        return ResponseEntity.ok(like);
+//    }
 
     @GetMapping("{id}")
     @ResponseBody

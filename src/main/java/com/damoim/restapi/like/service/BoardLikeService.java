@@ -1,18 +1,25 @@
 package com.damoim.restapi.like.service;
 
 import com.damoim.restapi.boards.entity.Board;
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.service.BoardService;
+import com.damoim.restapi.like.dao.LikeStatusRepository;
 import com.damoim.restapi.like.entity.BoardLike;
+import com.damoim.restapi.like.entity.LikeStatus;
 import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.dao.BoardLikeRepository;
 import com.damoim.restapi.like.model.ReadLikeResponse;
+import com.damoim.restapi.like.model.SaveLikeRequest;
 import com.damoim.restapi.member.entity.Member;
+import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,37 +33,55 @@ import java.util.Optional;
 public class BoardLikeService {
     private final BoardLikeRepository boardLikeRepository;
     private final BoardService boardService;
+    private final LikeStatusRepository likeStatusRepository;
+    private final MemberService memberService;
     private final ModelMapper modelMapper;
 
     public Optional<BoardLike> findById(Long id) {
         return boardLikeRepository.findById(id);
     }
 
-    public ReadLikeResponse saveLike(BoardLike boardLike) {
+    public SaveLikeRequest saveLike(BoardType boardType, Long boardId, AuthUser member) {
+        Member byName = memberService.findByName(member.getEmail());
+        System.out.println("byName = " + byName);
+        LikeStatus likeStatus = LikeStatus.builder()
+                .memberLike(byName)
+                .status(false)
+                .build();
+        LikeStatus lSave = likeStatusRepository.save(likeStatus);
+
+        BoardLike boardLike = BoardLike.builder()
+                .boardId(boardId)
+                .boardType(boardType)
+                .boardCount(0)
+                .build();
         BoardLike save = boardLikeRepository.save(boardLike);
-        return modelMapper.map(save, ReadLikeResponse.class);
+
+        SaveLikeRequest request = new SaveLikeRequest(save.getBoardId(), save.getId(), lSave.getStatus());
+
+        return modelMapper.map(request, SaveLikeRequest.class);
     }
 
-    public HashMap<String, String> changeLike(Member member, ChangeLikeRequest request) {
+    public List<ReadLikeResponse> findByLikeInfo(Long boardId, BoardType type) {
+        return boardLikeRepository.findByLikeInfo(boardId, type);
+    }
+
+    public ReadLikeResponse changeLike(ChangeLikeRequest request) {
         Board board = boardService.findById(request.getBoardId());
+
         Long boardId = board.getId();
+        Long likeStatusId = request.getLikeStatusId();
 
-        String likeResult;
-        int i;
-        if (request.getBoardLike().equals("1")) {
-            likeResult = "0";
-             i = boardLikeRepository.subtractLikeCount(boardId);
+        BoardLike boardLike;
+        LikeStatus status;
+        if (request.getStatus().equals(true)) {
+            boardLikeRepository.addLikeCount(boardId);
+            likeStatusRepository.updateStatusTrue(likeStatusId);
         } else {
-            likeResult = "1";
-            i = boardLikeRepository.addLikeCount(boardId);
+            boardLikeRepository.subtractLikeCount(boardId);
+            likeStatusRepository.updateStatusFalse(likeStatusId);
         }
-
-        int byBoardCount = boardLikeRepository.getBoardCount(boardId);
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("like_result", likeResult);
-        map.put("board_count", String.valueOf(byBoardCount));
-
-        return map;
+        int boardCount = boardLikeRepository.getBoardCount(boardId);
+        return new ReadLikeResponse(boardId, false, boardCount);
     }
 }

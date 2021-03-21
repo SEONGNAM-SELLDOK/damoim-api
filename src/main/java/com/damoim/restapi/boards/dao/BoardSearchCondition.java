@@ -12,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class BoardSearchCondition {
-
     private String title;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate from;

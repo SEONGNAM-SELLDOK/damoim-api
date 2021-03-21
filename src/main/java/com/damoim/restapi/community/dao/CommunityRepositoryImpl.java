@@ -32,7 +32,9 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         return queryFactory.select(new QReadCommunityResponse(
                 community.id,
                 community.title,
-                community.content))
+                community.content,
+                community.createDate,
+                community.updateDate))
             .from(community)
             .where(community.id.eq(id))
             .fetch();
@@ -42,15 +44,18 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     public Page<ListCommunityResponse> searchCommunity(CommunitySearchCondition condition, Pageable pageable) {
         QueryResults<ListCommunityResponse> results = queryFactory
                 .select(new QListCommunityResponse(
+                        community.id,
                         community.title,
-                        community.content
-                    ))
+                        community.content,
+                        community.createDate,
+                        community.updateDate))
                 .from(community)
                     .where(
                         titleEq(condition.getTitle())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(community.createDate.desc())
                 .fetchResults();
 
         List<ListCommunityResponse> nResults = results.getResults();

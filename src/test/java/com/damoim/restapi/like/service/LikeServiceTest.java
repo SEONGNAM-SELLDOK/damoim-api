@@ -4,9 +4,7 @@ import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.entity.DamoimTag;
-import com.damoim.restapi.like.model.SaveLikeRequest;
 import com.damoim.restapi.member.dao.MemberRepository;
-import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,13 +62,13 @@ public class LikeServiceTest {
     @DisplayName("Save Like Test")
     @WithAccount("ggs0707@naver.com")
     void saveLikeTest() throws Exception{
-        SaveLikeRequest request = SaveLikeRequest.builder()
-                                        .likeCount(0)
-                                        .boardId(1L)
-                                        .build();
+//        SaveLikeRequest request = SaveLikeRequest.builder()
+//                                        .likeCount(0)
+//                                        .boardId(1L)
+//                                        .build();
 
-        String json = objectMapper.writeValueAsString(request);
-        Member byEmail = memberRepository.findByEmail("ggs0707@naver.com");
+//        String json = objectMapper.writeValueAsString(request);
+//        Member byEmail = memberRepository.findByEmail("ggs0707@naver.com");
 
     }
 

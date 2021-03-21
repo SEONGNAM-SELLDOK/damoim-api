@@ -1,5 +1,7 @@
 package com.damoim.restapi.like.model;
 
+import com.damoim.restapi.boards.entity.BoardType;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Getter
@@ -8,7 +10,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChangeLikeRequest {
+    @ApiModelProperty(value = "좋아요 상태 ID", example = "1")
+    private Long likeStatusId;
+    @ApiModelProperty(value = "보드 ID", example = "1")
     private Long boardId;
-    private Long boardLikeId;
-    private String boardLike;
+    @ApiModelProperty(value = "보드 타입", example = "STUDY")
+    private BoardType boardType;
+//    @ApiModelProperty(value = "좋아요 ID", example = "1")
+//    private Long boardLikeId;
+    @ApiModelProperty(value = "좋아요 상태", example = "true")
+    private Boolean status;
 }
