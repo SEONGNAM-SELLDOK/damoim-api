@@ -5,9 +5,15 @@ import static com.damoim.restapi.like.entity.QBoardLike.boardLike;
 import static com.damoim.restapi.like.entity.QLikeStatus.likeStatus;
 
 import com.damoim.restapi.like.model.*;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author gisung.go
@@ -36,19 +42,28 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
             .fetch();
     }
 
-//    public List<ReadLikeResponse> addLikeCount(Long boardId, Long likeStatusId) {
-//
-//        return queryFactory.update(boardLike)
-//                .set(
-//                        boardLike.boardCount.add(1),
-//                        likeStatus.status.isFalse()
-//                ).where()
-//                .execute();
-//    }
+    @Override
+    public Page<ListLikeResponse> searchBoardLike(BoardLikeSearchCondition condition, Pageable pageable) {
+        QueryResults<ListLikeResponse> results = queryFactory
+            .select(new QListLikeResponse(
+                boardLike.boardId,
+                likeStatus.status,
+                boardLike.boardCount))
+            .from(boardLike)
+            .leftJoin(boardLike.likeStatus, likeStatus)
+            .where(statusEq(condition.getStatus()))
+            .orderBy(boardLike.boardId.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchResults();
 
-//    @Override
-//    public List<ReadLikeResponse> changeLike(ChangeLikeRequest request) {
-//
-//        return new List<ReadLikeResponse>;
-//    }
+        List<ListLikeResponse> content = results.getResults();
+        long total = results.getTotal();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression statusEq(Boolean status) {
+        return Objects.nonNull(status) ? likeStatus.status.eq(status) : null;
+    }
 }

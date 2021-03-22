@@ -1,15 +1,11 @@
 package com.damoim.restapi.boards.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
-import com.damoim.restapi.like.entity.BoardLike;
-import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.service.BoardLikeService;
-import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.member.service.MemberService;
 import org.springframework.data.domain.Page;
@@ -80,17 +76,6 @@ public class SeminarController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-
-//    @PostMapping("like")
-//    @ResponseBody
-//    public ResponseEntity<HashMap<String, String>> changeLike(
-//            @AuthenticationPrincipal AuthUser member,
-//            final @Valid @RequestBody ChangeLikeRequest request) {
-//        Member nMember = memberService.findByName(member.getEmail());
-//        HashMap<String, String> like = boardLikeService.changeLike(request);
-//        return ResponseEntity.ok(like);
-//    }
 
     @GetMapping("{id}")
     @ResponseBody

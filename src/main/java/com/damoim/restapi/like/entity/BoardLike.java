@@ -1,7 +1,7 @@
 package com.damoim.restapi.like.entity;
 
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -26,8 +26,8 @@ public class BoardLike {
 
     private Long boardId;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "like_status_id")
+    @JsonIgnore
+    @OneToOne(mappedBy = "boardLike", fetch = FetchType.LAZY)
     private LikeStatus likeStatus;
 
     @Enumerated(EnumType.STRING)

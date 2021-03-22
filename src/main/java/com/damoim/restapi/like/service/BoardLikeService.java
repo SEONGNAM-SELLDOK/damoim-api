@@ -18,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,18 +43,22 @@ public class BoardLikeService {
     public SaveLikeRequest saveLike(BoardType boardType, Long boardId, AuthUser member) {
         Member byName = memberService.findByName(member.getEmail());
         System.out.println("byName = " + byName);
-        LikeStatus likeStatus = LikeStatus.builder()
-                .memberLike(byName)
-                .status(false)
-                .build();
-        LikeStatus lSave = likeStatusRepository.save(likeStatus);
-
+        // BoardLike 저장
         BoardLike boardLike = BoardLike.builder()
                 .boardId(boardId)
                 .boardType(boardType)
                 .boardCount(0)
                 .build();
         BoardLike save = boardLikeRepository.save(boardLike);
+
+        // LikeStatus 저장
+        LikeStatus likeStatus = LikeStatus.builder()
+                .boardLike(boardLike)
+                .memberLike(byName)
+                .status(false)
+                .build();
+        LikeStatus lSave = likeStatusRepository.save(likeStatus);
+
 
         SaveLikeRequest request = new SaveLikeRequest(save.getBoardId(), save.getId(), lSave.getStatus());
 
@@ -70,18 +73,19 @@ public class BoardLikeService {
         Board board = boardService.findById(request.getBoardId());
 
         Long boardId = board.getId();
-        Long likeStatusId = request.getLikeStatusId();
+        Long likeStatusId = request.getBoardLikeId();
+        Boolean status = request.getStatus();
 
-        BoardLike boardLike;
-        LikeStatus status;
         if (request.getStatus().equals(true)) {
             boardLikeRepository.addLikeCount(boardId);
-            likeStatusRepository.updateStatusTrue(likeStatusId);
+            likeStatusRepository.updateStatusTrue(status, likeStatusId);
+            status = true;
         } else {
             boardLikeRepository.subtractLikeCount(boardId);
-            likeStatusRepository.updateStatusFalse(likeStatusId);
+            likeStatusRepository.updateStatusFalse(status, likeStatusId);
+            status = false;
         }
         int boardCount = boardLikeRepository.getBoardCount(boardId);
-        return new ReadLikeResponse(boardId, false, boardCount);
+        return new ReadLikeResponse(boardId, status, boardCount);
     }
 }

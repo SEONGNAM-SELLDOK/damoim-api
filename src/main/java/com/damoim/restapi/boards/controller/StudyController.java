@@ -12,16 +12,11 @@ import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.boards.model.SaveBoardRequest;
 import com.damoim.restapi.boards.service.BoardService;
 
-import java.util.HashMap;
 import java.util.List;
 import javax.validation.Valid;
 
-import com.damoim.restapi.like.entity.BoardLike;
-import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.service.BoardLikeService;
-import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.AuthUser;
-import com.damoim.restapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,7 +50,6 @@ public class StudyController {
     private final BoardService boardService;
     private final BoardRepository boardRepository;
     private final BoardLikeService boardLikeService;
-    private final MemberService memberService;
 
     @PostMapping
     public ResponseEntity<ReadBoardsResponse> saveStudy(
@@ -78,18 +72,11 @@ public class StudyController {
             .build();
         ReadBoardsResponse response = boardService.save(board, file);
 
+        // 좋아요 등록
+        boardLikeService.saveLike(BoardType.STUDY, response.getId(), member);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-//    @PostMapping("like")
-//    @ResponseBody
-//    public ResponseEntity<HashMap<String, String>> changeLike(
-//            @AuthenticationPrincipal AuthUser member,
-//            final @Valid @RequestBody ChangeLikeRequest request) {
-//        Member nMember = memberService.findByName(member.getEmail());
-//        HashMap<String, String> like = boardLikeService.changeLike(request);
-//        return ResponseEntity.ok(like);
-//    }
 
     @GetMapping("{id}")
     @ResponseBody
