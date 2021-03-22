@@ -11,4 +11,5 @@ import lombok.Data;
 public class BoardLikeSearchCondition {
     private Boolean status;
     private int boardCount;
+    private String popular;
 }

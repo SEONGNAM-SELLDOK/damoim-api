@@ -86,6 +86,6 @@ public class BoardLikeService {
             status = false;
         }
         int boardCount = boardLikeRepository.getBoardCount(boardId);
-        return new ReadLikeResponse(boardId, status, boardCount);
+        return new ReadLikeResponse(likeStatusId, boardId, status, boardCount);
     }
 }

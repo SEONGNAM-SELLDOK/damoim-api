@@ -6,6 +6,7 @@ import static com.damoim.restapi.like.entity.QLikeStatus.likeStatus;
 
 import com.damoim.restapi.like.model.*;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
     @Override
     public List<ReadLikeResponse> findByLikeInfo(Long boardId, BoardType type) {
         return queryFactory.select(new QReadLikeResponse(
+                likeStatus.boardLike.id,
                 boardLike.boardId,
                 likeStatus.status,
                 boardLike.boardCount))
@@ -52,7 +54,11 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
             .from(boardLike)
             .leftJoin(boardLike.likeStatus, likeStatus)
             .where(statusEq(condition.getStatus()))
-            .orderBy(boardLike.boardId.desc())
+            .orderBy(
+                    boardLike.boardCount.desc(),
+                    boardLike.boardId.desc()
+//                    popularity(condition.getPopular())
+            )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
@@ -66,4 +72,10 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
     private BooleanExpression statusEq(Boolean status) {
         return Objects.nonNull(status) ? likeStatus.status.eq(status) : null;
     }
+
+    private OrderSpecifier popularity(String popular) {
+        return Objects.nonNull(popular) ? boardLike.boardCount.desc() : null;
+    }
+
+
 }
