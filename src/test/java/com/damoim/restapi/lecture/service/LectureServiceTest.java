@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.damoim.restapi.lecture.entity.Lecture;
 import com.damoim.restapi.lecture.entity.LectureSubject;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
+import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ class LectureServiceTest {
     @Test
     void saveTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        Lecture lecture = lectureService.save(lectureSaveRequest, null);
+        LectureResponse lecture = lectureService.save(lectureSaveRequest, null);
         assertEquals(lectureSaveRequest.getTitle(), lecture.getTitle());
     }
 
@@ -54,10 +55,10 @@ class LectureServiceTest {
     @Test
     void updateTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        Lecture savedLecture = lectureService.save(lectureSaveRequest, null);
+        LectureResponse savedLecture = lectureService.save(lectureSaveRequest, null);
         String updateSpeaker = "홍길동";
         LectureUpdateRequest updateRequest = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        Lecture updatedLecture = lectureService.update(updateRequest, null);
+        LectureResponse updatedLecture = lectureService.update(updateRequest, null);
         assertEquals(savedLecture.getId(), updatedLecture.getId());
         assertEquals(updateSpeaker, updatedLecture.getSpeaker());
     }
@@ -66,7 +67,7 @@ class LectureServiceTest {
     @Test
     void updateRequestValidate() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        Lecture savedLecture = lectureService.save(lectureSaveRequest, null);
+        LectureResponse savedLecture = lectureService.save(lectureSaveRequest, null);
         String updateSpeaker = "홍길동";
         LectureUpdateRequest noId = LectureUpdateRequest.updateRequestBuilder().speaker(updateSpeaker).register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
         assertThrows(RuntimeException.class, () -> lectureService.update(noId, null));
@@ -88,9 +89,9 @@ class LectureServiceTest {
     @Test
     void deleteTest() {
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").register("이경희").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        Lecture savedLecture = lectureService.save(lectureSaveRequest, null);
+        LectureResponse savedLecture = lectureService.save(lectureSaveRequest, null);
         final Long savedLectureId = savedLecture.getId();
-        Lecture getLecture = lectureService.findById(savedLectureId);
+        LectureResponse getLecture = lectureService.findById(savedLectureId);
         assertEquals(savedLecture.getSpeaker(), getLecture.getSpeaker());
         assertEquals(savedLecture.getRegister(), getLecture.getRegister());
 
@@ -120,35 +121,35 @@ class LectureServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 6);
 
         LectureGetRequest speaker오성록Request = LectureGetRequest.builder().speaker("오성록").build();
-        Set<Lecture> speaker오성록Lecture = lectureService.getLectureByCondition(pageRequest, speaker오성록Request);
+        Set<LectureResponse> speaker오성록Lecture = lectureService.getLectureByCondition(pageRequest, speaker오성록Request);
         assertEquals(2, speaker오성록Lecture.size());
 
         LectureGetRequest register오성록Request = LectureGetRequest.builder().register("오성록").build();
-        Set<Lecture> register오성록Lecture = lectureService.getLectureByCondition(pageRequest, register오성록Request);
+        Set<LectureResponse> register오성록Lecture = lectureService.getLectureByCondition(pageRequest, register오성록Request);
         assertEquals(1, register오성록Lecture.size());
 
         LectureGetRequest titleRequest = LectureGetRequest.builder().title("토비의 스프링 5").build();
-        Set<Lecture> titleLecture = lectureService.getLectureByCondition(pageRequest, titleRequest);
+        Set<LectureResponse> titleLecture = lectureService.getLectureByCondition(pageRequest, titleRequest);
         assertEquals(1, titleLecture.size());
 
         LectureGetRequest subjectJavaRequest = LectureGetRequest.builder().subject(LectureSubject.JAVA).build();
-        Set<Lecture> subjectJavaLecture = lectureService.getLectureByCondition(pageRequest, subjectJavaRequest);
+        Set<LectureResponse> subjectJavaLecture = lectureService.getLectureByCondition(pageRequest, subjectJavaRequest);
         assertEquals(3, subjectJavaLecture.size());
 
         LectureGetRequest noRequest = LectureGetRequest.builder().build();
-        Set<Lecture> noConditionLecture = lectureService.getLectureByCondition(pageRequest, noRequest);
+        Set<LectureResponse> noConditionLecture = lectureService.getLectureByCondition(pageRequest, noRequest);
         assertEquals(6, noConditionLecture.size());
 
         LectureGetRequest deadlineFromRequest = LectureGetRequest.builder().deadLineFrom(LocalDate.of(2022, 8, 1)).build();
-        Set<Lecture> deadlineFromLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromRequest);
+        Set<LectureResponse> deadlineFromLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromRequest);
         assertEquals(1, deadlineFromLecture.size());
 
         LectureGetRequest deadlineToRequest = LectureGetRequest.builder().deadLineTo(LocalDate.of(2022, 5, 1)).build();
-        Set<Lecture> deadlineToLecture = lectureService.getLectureByCondition(pageRequest, deadlineToRequest);
+        Set<LectureResponse> deadlineToLecture = lectureService.getLectureByCondition(pageRequest, deadlineToRequest);
         assertEquals(4, deadlineToLecture.size());
 
         LectureGetRequest deadlineFromToRequest = LectureGetRequest.builder().deadLineTo(LocalDate.of(2022, 8, 1)).deadLineFrom(LocalDate.of(2022, 5, 1)).build();
-        Set<Lecture> deadlineFromToLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromToRequest);
+        Set<LectureResponse> deadlineFromToLecture = lectureService.getLectureByCondition(pageRequest, deadlineFromToRequest);
         assertEquals(2, deadlineFromToLecture.size());
     }
 
