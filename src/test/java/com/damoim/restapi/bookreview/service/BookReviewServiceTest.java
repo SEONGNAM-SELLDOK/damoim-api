@@ -1,7 +1,7 @@
 package com.damoim.restapi.bookreview.service;
 
-import com.damoim.restapi.bookreview.entity.BookReview;
 import com.damoim.restapi.bookreview.model.BookReviewGetRequest;
+import com.damoim.restapi.bookreview.model.BookReviewResponse;
 import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
 import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -36,7 +35,7 @@ class BookReviewServiceTest {
     @Test
     void createTest() {
         BookReviewSaveRequest saveRequest = BookReviewSaveRequest.builder().title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        BookReview savedBookReview = bookReviewService.save(saveRequest, null);
+        BookReviewResponse savedBookReview = bookReviewService.save(saveRequest, null);
         assertEquals(saveRequest.getTitle(), savedBookReview.getTitle());
         assertEquals(saveRequest.getDescription(), savedBookReview.getDescription());
         assertEquals(saveRequest.getIsbn(), savedBookReview.getIsbn());
@@ -78,10 +77,10 @@ class BookReviewServiceTest {
     @Test
     void updateTest() {
         BookReviewSaveRequest saveRequest = BookReviewSaveRequest.builder().title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        BookReview savedBookReview = bookReviewService.save(saveRequest, null);
+        BookReviewResponse savedBookReview = bookReviewService.save(saveRequest, null);
         String updateTitle = "(수정)객체지향의 사실과 오해를 읽고...";
         BookReviewUpdateRequest updateRequest = BookReviewUpdateRequest.updateBookReviewBuilder().id(savedBookReview.getId()).title(updateTitle).description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        BookReview updatedBookReview = bookReviewService.update(updateRequest, null);
+        BookReviewResponse updatedBookReview = bookReviewService.update(updateRequest, null);
         assertEquals(updateTitle, updatedBookReview.getTitle());
     }
 
@@ -110,7 +109,7 @@ class BookReviewServiceTest {
     @Test
     void deleteTest() {
         BookReviewSaveRequest saveRequest = BookReviewSaveRequest.builder().title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        BookReview savedBookReview = bookReviewService.save(saveRequest, null);
+        BookReviewResponse savedBookReview = bookReviewService.save(saveRequest, null);
         PageRequest pageRequest = PageRequest.of(0, 6);
         assertEquals(1, bookReviewService.getAll(pageRequest).size());
         bookReviewService.delete(savedBookReview.getId());
@@ -140,43 +139,43 @@ class BookReviewServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 6);
 
         BookReviewGetRequest oopTitleRequest = BookReviewGetRequest.builder().title("객체지향의 사실과 오해를 읽고...").build();
-        Set<BookReview> oopTitleBookReviewSet = bookReviewService.getByCondition(oopTitleRequest, pageRequest);
+        Set<BookReviewResponse> oopTitleBookReviewSet = bookReviewService.getByCondition(oopTitleRequest, pageRequest);
         assertEquals(2, oopTitleBookReviewSet.size());
 
         BookReviewGetRequest descriptionRequest = BookReviewGetRequest.builder().description("내용").build();
-        Set<BookReview> descriptionBookReviewSet = bookReviewService.getByCondition(descriptionRequest, pageRequest);
+        Set<BookReviewResponse> descriptionBookReviewSet = bookReviewService.getByCondition(descriptionRequest, pageRequest);
         assertEquals(4, descriptionBookReviewSet.size());
 
         BookReviewGetRequest isbnRequest = BookReviewGetRequest.builder().isbn("978-89-98139-76-6").build();
-        Set<BookReview> isbnBookReviewSet = bookReviewService.getByCondition(isbnRequest, pageRequest);
+        Set<BookReviewResponse> isbnBookReviewSet = bookReviewService.getByCondition(isbnRequest, pageRequest);
         assertEquals(3, isbnBookReviewSet.size());
 
         BookReviewGetRequest publisherRequest = BookReviewGetRequest.builder().publisher("에이콘").build();
-        Set<BookReview> publisherBookReviewSet = bookReviewService.getByCondition(publisherRequest, pageRequest);
+        Set<BookReviewResponse> publisherBookReviewSet = bookReviewService.getByCondition(publisherRequest, pageRequest);
         assertEquals(4, publisherBookReviewSet.size());
 
         BookReviewGetRequest writerRequest = BookReviewGetRequest.builder().writer("조영호").build();
-        Set<BookReview> writerBookReviewSet = bookReviewService.getByCondition(writerRequest, pageRequest);
+        Set<BookReviewResponse> writerBookReviewSet = bookReviewService.getByCondition(writerRequest, pageRequest);
         assertEquals(4, writerBookReviewSet.size());
 
         BookReviewGetRequest subjectRequest = BookReviewGetRequest.builder().subject("스프링").build();
-        Set<BookReview> subjectBookReviewSet = bookReviewService.getByCondition(subjectRequest, pageRequest);
+        Set<BookReviewResponse> subjectBookReviewSet = bookReviewService.getByCondition(subjectRequest, pageRequest);
         assertEquals(4, subjectBookReviewSet.size());
 
         BookReviewGetRequest tagRequest = BookReviewGetRequest.builder().tag("객체").build();
-        Set<BookReview> tagBookReviewSet = bookReviewService.getByCondition(tagRequest, pageRequest);
+        Set<BookReviewResponse> tagBookReviewSet = bookReviewService.getByCondition(tagRequest, pageRequest);
         assertEquals(5, tagBookReviewSet.size());
 
-        BookReviewGetRequest fromDeadLineRequest = BookReviewGetRequest.builder().deadlineFrom(LocalDate.of(2022,5,1)).build();
-        Set<BookReview> fromDeadLineBookReviewSet = bookReviewService.getByCondition(fromDeadLineRequest, pageRequest);
+        BookReviewGetRequest fromDeadLineRequest = BookReviewGetRequest.builder().deadlineFrom(LocalDate.of(2022, 5, 1)).build();
+        Set<BookReviewResponse> fromDeadLineBookReviewSet = bookReviewService.getByCondition(fromDeadLineRequest, pageRequest);
         assertEquals(3, fromDeadLineBookReviewSet.size());
 
-        BookReviewGetRequest toDeadLineRequest = BookReviewGetRequest.builder().deadlineTo(LocalDate.of(2022,5,1)).build();
-        Set<BookReview> toDeadLineBookReviewSet = bookReviewService.getByCondition(toDeadLineRequest, pageRequest);
+        BookReviewGetRequest toDeadLineRequest = BookReviewGetRequest.builder().deadlineTo(LocalDate.of(2022, 5, 1)).build();
+        Set<BookReviewResponse> toDeadLineBookReviewSet = bookReviewService.getByCondition(toDeadLineRequest, pageRequest);
         assertEquals(5, toDeadLineBookReviewSet.size());
 
-        BookReviewGetRequest fromToDeadLineRequest = BookReviewGetRequest.builder().deadlineFrom(LocalDate.of(2022,3,1)).deadlineTo(LocalDate.of(2022,5,1)).build();
-        Set<BookReview> fromToDeadLineBookReviewSet = bookReviewService.getByCondition(fromToDeadLineRequest, pageRequest);
+        BookReviewGetRequest fromToDeadLineRequest = BookReviewGetRequest.builder().deadlineFrom(LocalDate.of(2022, 3, 1)).deadlineTo(LocalDate.of(2022, 5, 1)).build();
+        Set<BookReviewResponse> fromToDeadLineBookReviewSet = bookReviewService.getByCondition(fromToDeadLineRequest, pageRequest);
         assertEquals(4, fromToDeadLineBookReviewSet.size());
 
 //        BookReviewGetRequest registerRequest = BookReviewGetRequest.builder().register("오성록").build();

@@ -1,11 +1,9 @@
 package com.damoim.restapi.bookreview.service;
 
-import com.damoim.restapi.bookreview.dao.BookReviewRepository;
-import com.damoim.restapi.bookreview.dao.BookReviewRepositorySupporter;
-import com.damoim.restapi.bookreview.dao.BookReviewSaveRequestMapper;
-import com.damoim.restapi.bookreview.dao.BookReviewUpdateRequestMapper;
+import com.damoim.restapi.bookreview.dao.*;
 import com.damoim.restapi.bookreview.entity.BookReview;
 import com.damoim.restapi.bookreview.model.BookReviewGetRequest;
+import com.damoim.restapi.bookreview.model.BookReviewResponse;
 import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
 import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
@@ -20,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author SeongRok.Oh
@@ -35,45 +34,50 @@ public class BookReviewService {
     private final DamoimFileUtil damoimFileUtil;
     private final BookReviewSaveRequestMapper saveRequestMapper;
     private final BookReviewUpdateRequestMapper updateRequestMapper;
+    private final BookReviewResponseMapper responseMapper;
     private static String ROOT = "bookreview";
 
-    public BookReview save(@Valid BookReviewSaveRequest saveRequest, MultipartFile multipartFile) {
+    public BookReviewResponse save(@Valid BookReviewSaveRequest saveRequest, MultipartFile multipartFile) {
         String imageUrl = null;
         if (Objects.nonNull(multipartFile)) {
             imageUrl = damoimFileUtil.upload(RequestFile.of(ROOT, multipartFile));
         }
         saveRequest.setImage(imageUrl);
         BookReview bookReview = saveRequestMapper.toEntity(saveRequest);
-        return repository.save(bookReview);
+        return responseMapper.toDto(repository.save(bookReview));
     }
 
     @Transactional(readOnly = true)
-    public Set<BookReview> getAll(Pageable pageable) {
-        return repository.findAll(pageable).toSet();
+    public Set<BookReviewResponse> getAll(Pageable pageable) {
+        return bookReviewResponseSet(repository.findAll(pageable).toSet());
     }
 
-    public BookReview update(@Valid BookReviewUpdateRequest updateRequest, MultipartFile multipartFile) {
+    public BookReviewResponse update(@Valid BookReviewUpdateRequest updateRequest, MultipartFile multipartFile) {
         String imageUrl = null;
         if (Objects.nonNull(multipartFile)) {
             imageUrl = damoimFileUtil.upload(RequestFile.of(ROOT, multipartFile));
         }
         updateRequest.setImage(imageUrl);
         BookReview bookReview = updateRequestMapper.toEntity(updateRequest);
-        return repository.save(bookReview);
+        return responseMapper.toDto(repository.save(bookReview));
     }
 
     public void delete(long id) {
-        BookReview bookReview = getById(id);
+        BookReview bookReview = repository.findById(id).orElseThrow(RuntimeException::new);
         repository.delete(bookReview);
     }
 
     @Transactional(readOnly = true)
-    public BookReview getById(long id){
-        return repository.findById(id).orElseThrow(RuntimeException::new);
+    public BookReviewResponse getById(long id) {
+        return responseMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
     }
 
     @Transactional(readOnly = true)
-    public Set<BookReview> getByCondition(BookReviewGetRequest getRequest, Pageable pageable) {
-        return repositorySupporter.search(getRequest, pageable);
+    public Set<BookReviewResponse> getByCondition(BookReviewGetRequest getRequest, Pageable pageable) {
+        return bookReviewResponseSet(repositorySupporter.search(getRequest, pageable));
+    }
+
+    private Set<BookReviewResponse> bookReviewResponseSet(Set<BookReview> bookReviewSet) {
+        return bookReviewSet.stream().map(responseMapper::toDto).collect(Collectors.toSet());
     }
 }

@@ -1,7 +1,7 @@
 package com.damoim.restapi.bookreview.controller;
 
-import com.damoim.restapi.bookreview.entity.BookReview;
 import com.damoim.restapi.bookreview.model.BookReviewGetRequest;
+import com.damoim.restapi.bookreview.model.BookReviewResponse;
 import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
 import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
 import com.damoim.restapi.bookreview.service.BookReviewService;
@@ -30,12 +30,12 @@ public class BookReviewController {
     private final BookReviewService bookReviewService;
 
     @PostMapping
-    public ResponseEntity<BookReview> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
+    public ResponseEntity<BookReviewResponse> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
         return new ResponseEntity<>(bookReviewService.save(reviewSaveRequest, multipartFile), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<BookReview> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile) {
+    public ResponseEntity<BookReviewResponse> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile) {
         return new ResponseEntity<>(bookReviewService.update(reviewUpdateRequest, multipartFile), HttpStatus.OK);
     }
 
@@ -46,7 +46,7 @@ public class BookReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<BookReview>> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
+    public ResponseEntity<Set<BookReviewResponse>> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
         return new ResponseEntity<>(bookReviewService.getByCondition(getRequest, pageable), HttpStatus.OK);
     }
 }
