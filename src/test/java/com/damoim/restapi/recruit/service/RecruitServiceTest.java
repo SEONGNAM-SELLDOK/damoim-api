@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
+import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
@@ -33,7 +34,7 @@ class RecruitServiceTest {
     @Test
     void saveRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
-        Recruit recruit = recruitService.save(recruitSaveRequest, null);
+        RecruitResponse recruit = recruitService.save(recruitSaveRequest, null);
         assertEquals(recruitSaveRequest.getTitle(), recruit.getTitle());
     }
 
@@ -61,7 +62,7 @@ class RecruitServiceTest {
     void getRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("구인3").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         Long id = recruitService.save(recruitSaveRequest, null).getId();
-        Recruit recruit = recruitService.getById(id);
+        RecruitResponse recruit = recruitService.getById(id);
         assertEquals("구인3", recruit.getRegister());
     }
 
@@ -78,12 +79,12 @@ class RecruitServiceTest {
     @Test
     void updateRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
-        Recruit saveRecruit = recruitService.save(recruitSaveRequest, null);
+        RecruitResponse saveRecruit = recruitService.save(recruitSaveRequest, null);
 
         String updateCompany = "Never";
         String updateTitle = "회사 이름 바뀜";
         RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
-        Recruit updateRecruit = recruitService.update(recruitUpdateRequest, null);
+        RecruitResponse updateRecruit = recruitService.update(recruitUpdateRequest, null);
         assertEquals(updateCompany, updateRecruit.getCompany());
         assertEquals(updateTitle, updateRecruit.getTitle());
     }
@@ -92,7 +93,7 @@ class RecruitServiceTest {
     @Test
     void updateRecruitValidation() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("작성자").company("회사").title("구인 타이틀").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
-        Recruit saveRecruit = recruitService.save(recruitSaveRequest, null);
+        RecruitResponse saveRecruit = recruitService.save(recruitSaveRequest, null);
         String updateCompany = "업데이트회사";
         RecruitUpdateRequest noIdRecruit = RecruitUpdateRequest.updateRequestBuilder().register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
         assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit, null));
@@ -112,8 +113,8 @@ class RecruitServiceTest {
     @Test
     void deleteRecruit() {
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().register("오성록").company("Naver").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
-        Recruit saveRecruit = recruitService.save(recruitSaveRequest, null);
-        Recruit getRecruit = recruitService.getById(saveRecruit.getId());
+        RecruitResponse saveRecruit = recruitService.save(recruitSaveRequest, null);
+        RecruitResponse getRecruit = recruitService.getById(saveRecruit.getId());
         assertEquals(saveRecruit.getId(), getRecruit.getId());
 
         recruitService.delete(saveRecruit.getId());
@@ -140,15 +141,15 @@ class RecruitServiceTest {
         recruitService.save(recruitSaveRequest6, null);
         recruitService.save(recruitSaveRequest7, null);
         PageRequest pageRequest = PageRequest.of(0, 6);
-        Set<Recruit> wooRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().company("Woo").build());
+        Set<RecruitResponse> wooRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().company("Woo").build());
         assertEquals(1, wooRecruit.size());
-        Set<Recruit> couRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().company("Cou").build());
+        Set<RecruitResponse> couRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().company("Cou").build());
         assertEquals(3, couRecruit.size());
-        Set<Recruit> javaRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().title("자바 개발자를 모집합니다.").build());
+        Set<RecruitResponse> javaRecruit = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().title("자바 개발자를 모집합니다.").build());
         assertEquals(2, javaRecruit.size());
-        Set<Recruit> notConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, null);
+        Set<RecruitResponse> notConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, null);
         assertEquals(6, notConditionRecruitSet.size());
-        Set<Recruit> emptyConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().title("").register("").build());
+        Set<RecruitResponse> emptyConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().title("").register("").build());
         assertEquals(6, emptyConditionRecruitSet.size());
     }
 }
