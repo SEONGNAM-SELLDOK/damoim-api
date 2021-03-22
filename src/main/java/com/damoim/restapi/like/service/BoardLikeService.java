@@ -47,7 +47,7 @@ public class BoardLikeService {
         BoardLike boardLike = BoardLike.builder()
                 .boardId(boardId)
                 .boardType(boardType)
-                .boardCount(0)
+                .likeCount(0)
                 .build();
         BoardLike save = boardLikeRepository.save(boardLike);
 
@@ -73,7 +73,8 @@ public class BoardLikeService {
         Board board = boardService.findById(request.getBoardId());
 
         Long boardId = board.getId();
-        Long likeStatusId = request.getBoardLikeId();
+        Long likeStatusId = request.getLikeStatusId();
+        Long boardLikeId = request.getBoardLikeId();
         Boolean status = request.getStatus();
 
         if (request.getStatus().equals(true)) {
@@ -85,7 +86,7 @@ public class BoardLikeService {
             likeStatusRepository.updateStatusFalse(status, likeStatusId);
             status = false;
         }
-        int boardCount = boardLikeRepository.getBoardCount(boardId);
-        return new ReadLikeResponse(likeStatusId, boardId, status, boardCount);
+        int likeCount = boardLikeRepository.getLikeCount(boardId);
+        return new ReadLikeResponse(likeStatusId, boardId, status, likeCount);
     }
 }

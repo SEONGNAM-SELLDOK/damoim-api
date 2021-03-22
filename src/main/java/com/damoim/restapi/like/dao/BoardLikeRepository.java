@@ -13,21 +13,16 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface BoardLikeRepository extends JpaRepository<BoardLike, Long>, BoardLikeRepositoryCustom{
+public interface BoardLikeRepository extends JpaRepository<BoardLike, Long>, BoardLikeRepositoryCustom {
 //     boarlike 카운도 +, likeStatus true
     @Modifying(clearAutomatically = true)
-    @Query("update BoardLike set boardCount = boardCount + 1 where boardId = :boardId")
+    @Query("update BoardLike set likeCount = likeCount + 1 where boardId = :boardId")
     int addLikeCount(@Param("boardId") Long boardId);
 
     @Modifying(clearAutomatically = true)
-    @Query("update BoardLike set boardCount = boardCount - 1 where boardId = :boardId")
+    @Query("update BoardLike set likeCount = likeCount - 1 where boardId = :boardId")
     int subtractLikeCount(@Param("boardId") Long boardId);
 
-    @Query("SELECT b.boardCount FROM BoardLike b WHERE b.boardId = :boardId")
-    int getBoardCount(@Param("boardId") Long boardId);
-
-    //    @Query("UPDATE BoardLike b, LikeStatus s " +
-//            "SET b.boardCount = b.boardCount - 1, s.status = true " +
-//            "WHERE b.boardId = :boardId AND s.likeStatusId = :likeStatusId")
-
+    @Query("SELECT b.likeCount FROM BoardLike b WHERE b.boardId = :boardId")
+    int getLikeCount(@Param("boardId") Long boardId);
 }

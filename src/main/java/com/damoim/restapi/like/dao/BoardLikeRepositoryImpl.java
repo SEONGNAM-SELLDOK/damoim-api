@@ -34,7 +34,7 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
                 likeStatus.boardLike.id,
                 boardLike.boardId,
                 likeStatus.status,
-                boardLike.boardCount))
+                boardLike.likeCount))
             .from(boardLike)
             .leftJoin(boardLike.likeStatus, likeStatus)
             .where(
@@ -50,13 +50,13 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
             .select(new QListLikeResponse(
                 boardLike.boardId,
                 likeStatus.status,
-                boardLike.boardCount))
+                boardLike.likeCount))
             .from(boardLike)
             .leftJoin(boardLike.likeStatus, likeStatus)
             .where(statusEq(condition.getStatus()))
             .orderBy(
-                    boardLike.boardCount.desc(),
-                    boardLike.boardId.desc()
+                    boardLike.likeCount.desc()
+//                    boardLike.boardId.desc()
 //                    popularity(condition.getPopular())
             )
             .offset(pageable.getOffset())
@@ -74,8 +74,6 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
     }
 
     private OrderSpecifier popularity(String popular) {
-        return Objects.nonNull(popular) ? boardLike.boardCount.desc() : null;
+        return Objects.nonNull(popular) ? boardLike.likeCount.desc() : null;
     }
-
-
 }

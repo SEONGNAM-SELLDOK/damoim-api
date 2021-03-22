@@ -34,7 +34,7 @@ public class BoardLike {
     private BoardType boardType;
 
     @Min(0)
-    private int boardCount;
+    private int likeCount;
 
     @CreatedDate
     private LocalDateTime createDate;

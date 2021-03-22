@@ -60,7 +60,6 @@ public class BoardLikeController {
 
     @GetMapping("pages")
     public ResponseEntity<Page<ListLikeResponse>> list(
-            @AuthenticationPrincipal AuthUser memner,
             BoardLikeSearchCondition condition,
             Pageable pageable) {
 

@@ -16,8 +16,8 @@ public class ChangeLikeRequest {
     private Long boardId;
     @ApiModelProperty(value = "보드 타입", example = "SEMINAR")
     private BoardType boardType;
-//    @ApiModelProperty(value = "좋아요 ID", example = "1")
-//    private Long boardLikeId;
+    @ApiModelProperty(value = "likeStatusId", example = "1")
+    private Long likeStatusId;
     @ApiModelProperty(value = "좋아요 상태", example = "true")
     private Boolean status;
 }

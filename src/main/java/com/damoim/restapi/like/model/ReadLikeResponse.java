@@ -11,20 +11,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ReadLikeResponse {
-    @ApiModelProperty(value = "boardLikeId", example = "1")
-    private Long boardLikeId;
+    @ApiModelProperty(value = "likeStatusId", example = "1")
+    private Long likeStatusId;
     @ApiModelProperty(value = "글 ID", example ="1")
     private long boardId;
     @ApiModelProperty(value = "좋아요 상태", example ="true")
     private Boolean status;
     @ApiModelProperty(value = "좋아요 총수", example ="100")
-    private int boardCount;
+    private int likeCount;
 
     @QueryProjection
-    public ReadLikeResponse(Long boardLikeId, long boardId, Boolean status, int boardCount) {
-        this.boardLikeId = boardLikeId;
+    public ReadLikeResponse(Long likeStatusId, long boardId, Boolean status, int likeCount) {
+        this.likeStatusId = likeStatusId;
         this.boardId = boardId;
         this.status = status;
-        this.boardCount = boardCount;
+        this.likeCount = likeCount;
     }
 }

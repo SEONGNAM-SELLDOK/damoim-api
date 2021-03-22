@@ -49,11 +49,6 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
-    @OneToOne
-    @JoinColumn(name = "board_like_id")
-    private BoardLike boardLike;
-
     @LastModifiedBy
     private String modifier;
-
 }

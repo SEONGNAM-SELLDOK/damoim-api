@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public class BoardLikeSearchCondition {
     private Boolean status;
-    private int boardCount;
+    private int likeCount;
     private String popular;
 }
