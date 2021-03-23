@@ -14,7 +14,4 @@ import com.damoim.restapi.boards.entity.Board;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
-    @Modifying(clearAutomatically = true)
-    @Query("update Board b set b.boardLike = :boardLike where b.id = :id")
-    int changeLike(Long id, String boardLike);
 }

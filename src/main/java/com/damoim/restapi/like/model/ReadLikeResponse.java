@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ReadLikeResponse {
+    @ApiModelProperty(value = "boardLikeId", example = "1")
+    private Long boardLikeId;
     @ApiModelProperty(value = "likeStatusId", example = "1")
     private Long likeStatusId;
     @ApiModelProperty(value = "글 ID", example ="1")
@@ -21,7 +23,8 @@ public class ReadLikeResponse {
     private int likeCount;
 
     @QueryProjection
-    public ReadLikeResponse(Long likeStatusId, long boardId, Boolean status, int likeCount) {
+    public ReadLikeResponse(Long boardLikeId, Long likeStatusId, long boardId, Boolean status, int likeCount) {
+        this.boardLikeId = boardLikeId;
         this.likeStatusId = likeStatusId;
         this.boardId = boardId;
         this.status = status;

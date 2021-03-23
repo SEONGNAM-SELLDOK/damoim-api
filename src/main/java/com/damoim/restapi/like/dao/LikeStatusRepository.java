@@ -16,9 +16,9 @@ import java.util.Optional;
 public interface LikeStatusRepository extends JpaRepository<LikeStatus, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE LikeStatus SET status=:status WHERE (status = false) AND (board_like_id = :boardLikeId)")
-    int updateStatusTrue(@Param("status") Boolean status, @Param("boardLikeId") Long boardLikeId);
+    void updateStatusTrue(@Param("status") Boolean status, @Param("boardLikeId") Long boardLikeId);
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE LikeStatus SET status=:status WHERE (status = true) AND (board_like_id = :boardLikeId)")
-    int updateStatusFalse(@Param("status") Boolean status, @Param("boardLikeId") Long boardLikeId);
+    void updateStatusFalse(@Param("status") Boolean status, @Param("boardLikeId") Long boardLikeId);
 }

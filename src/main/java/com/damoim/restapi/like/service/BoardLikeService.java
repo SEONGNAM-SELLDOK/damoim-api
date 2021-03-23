@@ -73,20 +73,20 @@ public class BoardLikeService {
         Board board = boardService.findById(request.getBoardId());
 
         Long boardId = board.getId();
-        Long likeStatusId = request.getLikeStatusId();
         Long boardLikeId = request.getBoardLikeId();
+        Long likeStatusId = request.getLikeStatusId();
         Boolean status = request.getStatus();
 
         if (request.getStatus().equals(true)) {
             boardLikeRepository.addLikeCount(boardId);
-            likeStatusRepository.updateStatusTrue(status, likeStatusId);
+            likeStatusRepository.updateStatusTrue(status, boardLikeId);
             status = true;
         } else {
             boardLikeRepository.subtractLikeCount(boardId);
-            likeStatusRepository.updateStatusFalse(status, likeStatusId);
+            likeStatusRepository.updateStatusFalse(status, boardLikeId);
             status = false;
         }
         int likeCount = boardLikeRepository.getLikeCount(boardId);
-        return new ReadLikeResponse(likeStatusId, boardId, status, likeCount);
+        return new ReadLikeResponse(boardLikeId, likeStatusId, boardId, status, likeCount);
     }
 }
