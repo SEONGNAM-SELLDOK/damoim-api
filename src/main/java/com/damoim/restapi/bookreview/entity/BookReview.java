@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -47,4 +48,17 @@ public class BookReview {
     @LastModifiedBy
     private String modifier;
 
+    public boolean isRegister(String register) {
+        if (Objects.isNull(register)) {
+            throw new RuntimeException();
+        }
+        return this.register.equals(register);
+    }
+
+    public void updateByOrigin(BookReview origin) {
+        this.createdDate = origin.createdDate;
+        this.register = origin.register;
+        this.modifiedDate = origin.modifiedDate;
+        this.modifier = origin.modifier;
+    }
 }

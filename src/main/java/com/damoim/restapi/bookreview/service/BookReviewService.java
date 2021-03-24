@@ -8,12 +8,14 @@ import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
 import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Objects;
@@ -35,12 +37,11 @@ public class BookReviewService {
     private final BookReviewSaveRequestMapper saveRequestMapper;
     private final BookReviewUpdateRequestMapper updateRequestMapper;
     private final BookReviewResponseMapper responseMapper;
-    private static String ROOT = "bookreview";
 
-    public BookReviewResponse save(@Valid BookReviewSaveRequest saveRequest, MultipartFile multipartFile) {
+    public BookReviewResponse save(@Valid BookReviewSaveRequest saveRequest, RequestFile file) {
         String imageUrl = null;
-        if (Objects.nonNull(multipartFile)) {
-            imageUrl = damoimFileUtil.upload(RequestFile.of(ROOT, multipartFile));
+        if (Objects.nonNull(file)) {
+            imageUrl = damoimFileUtil.upload(file);
         }
         saveRequest.setImage(imageUrl);
         BookReview bookReview = saveRequestMapper.toEntity(saveRequest);
@@ -52,24 +53,38 @@ public class BookReviewService {
         return bookReviewResponseSet(repository.findAll(pageable).toSet());
     }
 
-    public BookReviewResponse update(@Valid BookReviewUpdateRequest updateRequest, MultipartFile multipartFile) {
+    public BookReviewResponse update(@Valid BookReviewUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
+        BookReview origin = getBookReviewById(updateRequest.getId());
+        validateEditor(origin, authUser);
+        BookReview updateBookReview = updateRequestMapper.toEntity(updateRequest);
         String imageUrl = null;
-        if (Objects.nonNull(multipartFile)) {
-            imageUrl = damoimFileUtil.upload(RequestFile.of(ROOT, multipartFile));
+        if (Objects.nonNull(file)) {
+            imageUrl = damoimFileUtil.upload(file);
         }
-        updateRequest.setImage(imageUrl);
-        BookReview bookReview = updateRequestMapper.toEntity(updateRequest);
-        return responseMapper.toDto(repository.save(bookReview));
+        updateBookReview.setImage(imageUrl);
+        updateBookReview.updateByOrigin(origin);
+        return responseMapper.toDto(repository.save(updateBookReview));
     }
 
-    public void delete(long id) {
+    public void delete(long id, AuthUser authUser) {
         BookReview bookReview = repository.findById(id).orElseThrow(RuntimeException::new);
+        validateEditor(bookReview, authUser);
         repository.delete(bookReview);
+    }
+
+    private void validateEditor(BookReview bookReview, AuthUser authUser) {
+        if (Objects.isNull(bookReview) || Objects.isNull(authUser) || !bookReview.isRegister(authUser.getEmail())) {
+            throw new RuntimeException();
+        }
     }
 
     @Transactional(readOnly = true)
     public BookReviewResponse getById(long id) {
-        return responseMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
+        return responseMapper.toDto(getBookReviewById(id));
+    }
+
+    private BookReview getBookReviewById(long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
     }
 
     @Transactional(readOnly = true)
