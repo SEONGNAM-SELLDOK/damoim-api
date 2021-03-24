@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
+import com.damoim.restapi.like.model.ReadLikeResponse;
 import com.damoim.restapi.like.service.BoardLikeService;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.member.service.MemberService;
@@ -79,9 +80,11 @@ public class SeminarController {
 
     @GetMapping("{id}")
     @ResponseBody
-    public ResponseEntity<List<ReadBoardsResponse>> findById(@PathVariable("id") Long id) {
+    public ReadBoardsIncludeLikeResponse findById(@PathVariable("id") Long id) {
         List<ReadBoardsResponse> seminarInfo = boardService.findBoardInfo(id, BoardType.SEMINAR);
-        return ResponseEntity.ok(seminarInfo);
+        List<ReadLikeResponse> byLikeInfo = boardLikeService.findByLikeInfo(id, BoardType.SEMINAR);
+
+        return ReadBoardsIncludeLikeResponse.toMapper(seminarInfo, byLikeInfo);
     }
 
     @PutMapping("{id}")

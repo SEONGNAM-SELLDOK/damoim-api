@@ -12,6 +12,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -71,9 +73,9 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                     totalMemberEq(condition.getTotalMember()),
                     currentMemberEq(condition.getCurrentMember()),
                     subjectEq(condition.getSubject()),
-                    damoimTagEq(condition.getDamoimTag()),
-                    boardTypeEq(condition.getBoardType()),
-                    fromTo(condition.getFrom(), condition.getTo())
+                    damoimTagEq(condition.getDamoimTag())
+//                    boardTypeEq(condition.getBoardType())
+//                    fromTo(condition.getFrom(), condition.getTo())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -89,12 +91,20 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         return StringUtils.hasText(title) ? board.title.eq(title) : null;
     }
 
-    private BooleanExpression fromTo(LocalDate from, LocalDate to) {
-        if (from == null || to == null) {
-            return null;
-        }
-        return board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
-    }
+//    private BooleanExpression fromTo(LocalDate from, LocalDate to) {
+//        if (from == null && to == null) {
+//            return null;
+//        }
+//
+//        if(Objects.nonNull(to) && Objects.isNull(from)) {
+//            return board.endDate.after(to.atStartOfDay().plusDays(1L));
+//        }
+//
+//        if(Objects.isNull(to)) {
+//            return board.endDate.before(from.atStartOfDay());
+//        }
+//        return board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
+//    }
 
     private BooleanExpression boardsCountryEq(String boardsCountry) {
         return StringUtils.hasText(boardsCountry) ? board.address.country.eq(boardsCountry) : null;
@@ -125,6 +135,6 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     private BooleanExpression boardTypeEq(BoardType type) {
-        return type != null ? board.boardType.eq(type) : null;
+        return Objects.nonNull(type) ? board.boardType.eq(type) : null;
     }
 }
