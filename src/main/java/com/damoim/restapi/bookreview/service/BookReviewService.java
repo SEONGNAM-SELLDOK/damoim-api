@@ -62,7 +62,6 @@ public class BookReviewService {
             imageUrl = damoimFileUtil.upload(file);
         }
         updateBookReview.setImage(imageUrl);
-        updateBookReview.updateByOrigin(origin);
         return responseMapper.toDto(repository.save(updateBookReview));
     }
 
