@@ -5,6 +5,7 @@ import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.lecture.service.LectureService;
+import com.damoim.restapi.member.model.AuthUser;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,14 +48,14 @@ public class LectureController {
     }
 
     @PutMapping
-    public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file) {
-        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, file), HttpStatus.OK);
+    public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, file, authUser), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id, @AuthenticationPrincipal AuthUser authUser) {
         log.info("Delete Lectures Request - {}", id);
-        lectureService.delete(id);
+        lectureService.delete(id, authUser);
         return status(HttpStatus.NO_CONTENT).build();
     }
 

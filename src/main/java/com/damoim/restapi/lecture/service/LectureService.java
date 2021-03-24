@@ -8,8 +8,11 @@ import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
+import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -55,25 +58,38 @@ public class LectureService {
                 .orElseThrow(() -> new RuntimeException(String.format("Lecture not found (id = %s)", id))));
     }
 
-    public void delete(long id) {
+    public void delete(long id, AuthUser authUser) {
+        validateEditor(getLectureById(id), authUser);
         lectureRepository.deleteById(id);
     }
 
-    public LectureResponse update(@Valid LectureUpdateRequest request, MultipartFile file) {
+    public LectureResponse update(@Valid LectureUpdateRequest updateRequest, MultipartFile file, AuthUser authUser) {
+        Lecture origin = getLectureById(updateRequest.getId());
+        validateEditor(origin, authUser);
         String fileName = null;
         if (Objects.nonNull(file)) {
             fileName = fileUtil.upload(RequestFile.of(ROOT, file));
         }
-        Lecture lecture = updateRequestMapper.toEntity(request);
-        lecture.setImage(fileName);
-        return responseMapper.toDto(lectureRepository.save(lecture));
+        Lecture update = updateRequestMapper.toEntity(updateRequest);
+        update.setImage(fileName);
+        return responseMapper.toDto(lectureRepository.save(update));
+    }
+
+    private void validateEditor(Lecture lecture, AuthUser authUser) {
+        if (Objects.isNull(lecture) || Objects.isNull(authUser) || !lecture.isRegister(authUser.getEmail())) {
+            throw new RuntimeException();
+        }
+    }
+
+    private Lecture getLectureById(long id) {
+        return lectureRepository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
     }
 
     public Set<LectureResponse> getLectureByCondition(Pageable pageable, LectureGetRequest getRequest) {
         return lectureResponseSet(repositorySupport.search(getRequest, pageable));
     }
 
-    private Set<LectureResponse> lectureResponseSet(Set<Lecture> lectureSet){
+    private Set<LectureResponse> lectureResponseSet(Set<Lecture> lectureSet) {
         return lectureSet.stream().map(responseMapper::toDto).collect(Collectors.toSet());
     }
 }
