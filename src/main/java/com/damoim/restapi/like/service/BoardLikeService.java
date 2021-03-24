@@ -3,11 +3,13 @@ package com.damoim.restapi.like.service;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.boards.service.BoardService;
+import com.damoim.restapi.like.dao.BoardLikeSearchCondition;
 import com.damoim.restapi.like.dao.LikeStatusRepository;
 import com.damoim.restapi.like.entity.BoardLike;
 import com.damoim.restapi.like.entity.LikeStatus;
 import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.dao.BoardLikeRepository;
+import com.damoim.restapi.like.model.ListLikeResponse;
 import com.damoim.restapi.like.model.ReadLikeResponse;
 import com.damoim.restapi.like.model.SaveLikeRequest;
 import com.damoim.restapi.member.entity.Member;
@@ -15,6 +17,8 @@ import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -88,5 +92,9 @@ public class BoardLikeService {
         }
         int likeCount = boardLikeRepository.getLikeCount(boardId);
         return new ReadLikeResponse(boardLikeId, likeStatusId, boardId, status, likeCount);
+    }
+
+    public Page<ListLikeResponse> searchBoardLike(BoardLikeSearchCondition condition, Pageable pageable) {
+        return boardLikeRepository.searchBoardLike(condition, pageable);
     }
 }

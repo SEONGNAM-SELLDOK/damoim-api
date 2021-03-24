@@ -34,7 +34,6 @@ import java.util.List;
 public class BoardLikeController {
 
     private final BoardLikeService boardLikeService;
-    private final BoardLikeRepository boardLikeRepository;
     private final MemberService memberService;
 
 
@@ -63,7 +62,7 @@ public class BoardLikeController {
             BoardLikeSearchCondition condition,
             Pageable pageable) {
 
-        Page<ListLikeResponse> responses = boardLikeRepository.searchBoardLike(condition, pageable);
+        Page<ListLikeResponse> responses = boardLikeService.searchBoardLike(condition, pageable);
         return ResponseEntity.ok(responses);
     }
 }

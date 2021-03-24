@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
+import com.damoim.restapi.like.dao.BoardLikeSearchCondition;
 import com.damoim.restapi.like.model.ReadLikeResponse;
 import com.damoim.restapi.like.service.BoardLikeService;
 import com.damoim.restapi.member.model.AuthUser;
@@ -106,13 +107,13 @@ public class SeminarController {
 
 
     @GetMapping("pages")
-    public ResponseEntity<Page<ListBoardsResponse>> list(
+    public Page<ListBoardsResponse> list(
             @AuthenticationPrincipal AuthUser member,
             BoardSearchCondition condition,
+            BoardLikeSearchCondition likeSearchCondition,
         Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
-        Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
 
-        return ResponseEntity.ok(responses);
+        return boardRepository.searchBoard(condition, pageable);
     }
 }

@@ -105,8 +105,7 @@ public class StudyController {
     public ResponseEntity<Page<ListBoardsResponse>> list(BoardSearchCondition condition,
         Pageable pageable) {
         condition.setBoardType(BoardType.STUDY);
-        Page<ListBoardsResponse> listBoardsResponses = boardRepository
-            .searchBoard(condition, pageable);
+        Page<ListBoardsResponse> listBoardsResponses = boardRepository.searchBoard(condition, pageable);
         return ResponseEntity.ok(listBoardsResponses);
     }
 }
