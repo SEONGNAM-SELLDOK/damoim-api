@@ -1,12 +1,11 @@
 package com.damoim.restapi.community.service;
 
 
-import com.damoim.restapi.boards.model.ReadBoardsResponse;
 import com.damoim.restapi.community.dao.CommunityRepository;
 import com.damoim.restapi.community.entity.Community;
 import com.damoim.restapi.community.model.ModifyCommunityRequest;
 import com.damoim.restapi.community.model.ReadCommunityResponse;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,7 @@ public class CommunityService {
     @Transactional(readOnly = true)
     public Community findById(Long id) {
         Optional<Community> communityId = communityRepository.findById(id);
-        return communityId.orElseThrow(() -> new NotFoundPage(
+        return communityId.orElseThrow(() -> new NotFoundResource(
                 HttpStatus.NOT_FOUND.toString(),
                 String.valueOf(communityId)
         ));
