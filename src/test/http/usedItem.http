@@ -1,21 +1,17 @@
-
-###
 ### 중고거래 게시글 생성
 POST http://localhost:8080/useditems
 Content-Type: application/json
+Cookie: AUTH_TOKEN=
 
 {
-  "writer": "KJJ",
-  "address" : "서울특별시",
-  "category" : "default",
-  "description" : "Air",
-  "negotiation" : "true",
+  "address": "서울특별시",
+  "category": "default",
+  "description": "Air",
+  "negotiation": "true",
   "tradeType": "ALL",
-  "title" : "MackBook 판매합니다.",
+  "title": "MackBook 판매합니다.",
   "price": "10000"
 }
-
-
 
 > {%
 client.test("Request executed successfully", function() {
@@ -24,45 +20,121 @@ client.test("Request executed successfully", function() {
 });
 %}
 
+### 부모 댓글 추가.(isChildId == false  and  parentReplyId == null) query total = 2
+POST http://localhost:8080/useditems/item/1/reply
+Content-Type: application/json
+
+{
+  "writer": "구매자",
+  "isChildId": false,
+  "content": "너무비싸요.."
+}
+
+### 부모 댓글 수정.(isParentId == true) query total = 2
+PUT http://localhost:8080/reply/1
+Content-Type: application/json
+
+{
+  "writer": "구매자",
+  "isParentReply": true,
+  "content": "(수정) 엄청 비 싸 요 ! !"
+}
+
+
+### 부모에 자식 댓글 추가. (isChildId == false and parentReplyId == n (Min(1))) query total = 3
+POST http://localhost:8080/useditems/item/1/reply
+Content-Type: application/json
+
+{
+  "parentReplyId": 1,
+  "isChildId": false,
+  "writer": "작성자",
+  "content": "안 비싸요.."
+}
+
+
+### 자식 댓글 수정.(isChildId == false) query total = 2
+PUT http://localhost:8080/reply/1
+Content-Type: application/json
+
+{
+  "writer": "작성자",
+  "isParentReply": false,
+  "content": "(수정) 사지마세요 "
+}
+
+### 자식에 자식 댓글 추가. (isChildId == true and parentReplyId == n (Min(1)) ) query total = 3
+POST http://localhost:8080/useditems/item/1/reply
+Content-Type: application/json
+
+{
+  "parentReplyId": 1,
+  "isChildId": true,
+  "writer": "구매자",
+  "content": "비싸다구요 :("
+}
+
+### 부모댓글 삭제 !. (isChildId == false and ReplyId == n (Min(1)) ) query total = 2
+## 자식 노드가 존재하지 않을시 delete and select query
+## 자식 노드가 존재 update and select query
+DELETE http://localhost:8080/reply
+Content-Type: application/json
+
+{
+  "replyId": 1,
+  "isChildId": false
+}
+
+### 자식 댓글 삭제 !. ( isChildId == ture and ReplyId == n (Min(1)) )
+### query total = 2 , 4 ( 부모가 closed 상태에서 자식의 마지막 댓글 삭제시 )
+DELETE http://localhost:8080/useditems/item/1/reply
+Content-Type: application/json
+
+{
+  "replyId": 3,
+  "isChildId": true
+}
+
+### 특정 게시글 가져오기(댓글 목록 포함)
+### total query = 2
+GET http://localhost:8080/useditems/item/1/reply
+Accept: application/json
+
+
 ### 게시글 지우기
 DELETE http://localhost:8080/useditems/item/1
+Cookie: AUTH_TOKEN=
 
 
 ### 게시글 수정
 PUT http://localhost:8080/useditems/item/1
 Content-Type: application/json
+Cookie: AUTH_TOKEN=
+
 
 {
   "writer": "(수정자)JJ",
-  "titleImg" : "IMG URL",
-  "address" : "(수정)판교",
-  "category" : "default",
-  "description" : "(수정)content",
-  "negotiation" : "true",
+  "titleImg": "IMG URL",
+  "address": "(수정)판교",
+  "category": "default",
+  "description": "(수정)content",
+  "negotiation": "true",
   "tradeType": "ALL",
-  "title" : "(수정) MackBook 판매합니다.",
+  "title": "(수정) MackBook 판매합니다.",
   "price": "12000"
 }
 
 ### 게시글 닫기
 PATCH http://localhost:8080//useditems/item/1/closed
 Content-Type: application/x-www-form-urlencoded
-
-writer=KJJ
+Cookie: AUTH_TOKEN=
 
 ### 검색
 GET http://localhost:8080/useditems/pages/search
 Accept: application/json
+Cookie: AUTH_TOKEN=
 
 
 ### 카테고리 종류 가져오기
 GET http://localhost:8080/useditems/categories
 Accept: application/json
-
-### 특정 게시글 가져오기
-GET http://localhost:8080/useditems/item/1
-Accept: application/json
-
-
-
-

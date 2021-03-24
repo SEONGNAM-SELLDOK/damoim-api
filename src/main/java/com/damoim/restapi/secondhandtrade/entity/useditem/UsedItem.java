@@ -1,9 +1,10 @@
 package com.damoim.restapi.secondhandtrade.entity.useditem;
 
-import com.damoim.restapi.secondhandtrade.model.ResponseModifyUsedItemClosed;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseModifyUsedItemClosed;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
@@ -26,6 +30,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @EqualsAndHashCode(of = "no")
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class UsedItem {
 
   @Id
@@ -38,6 +43,7 @@ public class UsedItem {
   @Column(nullable = false)
   private int price; //가격
 
+  @CreatedBy
   @Column(nullable = false)
   private String writer; //등록자 ID
 
@@ -63,7 +69,9 @@ public class UsedItem {
   @UpdateTimestamp
   private LocalDateTime updateDate; //수정일시
 
+  @LastModifiedBy
   private String editWriter; //수정자 ID
+
   @Builder.Default
   private boolean close = false; //판매완료 여부 (default = false)
   @Builder.Default

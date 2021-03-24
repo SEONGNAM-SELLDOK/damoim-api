@@ -3,7 +3,7 @@ package com.damoim.restapi.boards.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundPage;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Board findById(Long id) {
         Optional<Board> boardId = boardRepository.findById(id);
-        return boardId.orElseThrow(() -> new NotFoundPage(
+        return boardId.orElseThrow(() -> new NotFoundResource(
             HttpStatus.NOT_FOUND.toString(),
             String.valueOf(boardId))
         );

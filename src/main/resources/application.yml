@@ -16,6 +16,8 @@ spring:
       path: /h2-db
       settings:
         web-allow-others: true
+  main:
+    allow-bean-definition-overriding: true
   jpa:
     generate-ddl: true
     show-sql: true
