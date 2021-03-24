@@ -94,22 +94,23 @@ class BookReviewServiceTest {
     @WithAccount("lokie")
     @Test
     void updateValidateTest() {
+        AuthUser authUser = AuthUser.builder().email("lokie").build();
         BookReviewUpdateRequest noId = BookReviewUpdateRequest.updateBookReviewBuilder().description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noId, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noId, null, authUser));
         BookReviewUpdateRequest noTitle = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noTitle, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noTitle, null, authUser));
         BookReviewUpdateRequest noIsbn = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noIsbn, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noIsbn, null, authUser));
         BookReviewUpdateRequest noPublisher = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noPublisher, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noPublisher, null, authUser));
         BookReviewUpdateRequest noWriter = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noWriter, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noWriter, null, authUser));
         BookReviewUpdateRequest noSubject = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noSubject, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noSubject, null, authUser));
         BookReviewUpdateRequest noDeadline = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(noDeadline, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(noDeadline, null, authUser));
         BookReviewUpdateRequest pastDeadline = BookReviewUpdateRequest.updateBookReviewBuilder().id(1).title("객체지향의 사실과 오해를 읽고...").description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2020, 3, 16)).build();
-        assertThrows(RuntimeException.class, () -> bookReviewService.update(pastDeadline, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.update(pastDeadline, null, authUser));
     }
 
     @DisplayName("도서 리뷰 삭제 테스트")
@@ -120,9 +121,10 @@ class BookReviewServiceTest {
         BookReviewResponse savedBookReview = bookReviewService.save(saveRequest, null);
         PageRequest pageRequest = PageRequest.of(0, 6);
         assertEquals(1, bookReviewService.getAll(pageRequest).size());
-        bookReviewService.delete(savedBookReview.getId(), AuthUser.builder().email("lokie").build());
+        AuthUser authUser = AuthUser.builder().email("lokie").build();
+        bookReviewService.delete(savedBookReview.getId(), authUser);
         assertEquals(0, bookReviewService.getAll(pageRequest).size());
-        assertThrows(RuntimeException.class, () -> bookReviewService.delete(50105012301240L, AuthUser.builder().email(savedBookReview.getRegister()).build()));
+        assertThrows(RuntimeException.class, () -> bookReviewService.delete(50105012301240L, authUser));
     }
 
     @DisplayName("도서 리뷰 조건 가져오기 테스트")

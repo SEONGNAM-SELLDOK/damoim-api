@@ -95,19 +95,20 @@ class RecruitServiceTest {
     @WithAccount("lokie")
     @Test
     void updateRecruitValidation() {
+        AuthUser authUser = AuthUser.builder().email("lokie").build();
         RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().company("회사").title("구인 타이틀").location("판교").reward(500).deadline(LocalDate.of(2022, 2, 1)).build();
         RecruitResponse saveRecruit = recruitService.save(recruitSaveRequest, null);
         String updateCompany = "업데이트회사";
         RecruitUpdateRequest noIdRecruit = RecruitUpdateRequest.updateRequestBuilder().company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit, null, authUser));
         RecruitUpdateRequest noCompanyRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noCompanyRecruit, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noCompanyRecruit, null, authUser));
         RecruitUpdateRequest noTitleRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noTitleRecruit, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noTitleRecruit, null, authUser));
         RecruitUpdateRequest noDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noDeadLineRecruit, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noDeadLineRecruit, null, authUser));
         RecruitUpdateRequest afterDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(LocalDate.of(2020, 1, 1)).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(afterDeadLineRecruit, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> recruitService.update(afterDeadLineRecruit, null, authUser));
     }
 
     @DisplayName("구인 삭제")

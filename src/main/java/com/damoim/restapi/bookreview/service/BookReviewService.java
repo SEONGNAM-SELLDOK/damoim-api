@@ -66,7 +66,7 @@ public class BookReviewService {
     }
 
     public void delete(long id, AuthUser authUser) {
-        BookReview bookReview = repository.findById(id).orElseThrow(RuntimeException::new);
+        BookReview bookReview = getBookReviewById(id);
         validateEditor(bookReview, authUser);
         repository.delete(bookReview);
     }

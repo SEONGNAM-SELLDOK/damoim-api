@@ -68,21 +68,22 @@ class LectureServiceTest {
     @WithAccount("lokie")
     @Test
     void updateRequestValidate() {
+        AuthUser authUser = AuthUser.builder().email("lokie").build();
         LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
         LectureResponse savedLecture = lectureService.save(lectureSaveRequest, null);
         String updateSpeaker = "홍길동";
         LectureUpdateRequest noId = LectureUpdateRequest.updateRequestBuilder().speaker(updateSpeaker).title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(noId, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(noId, null, authUser));
         LectureUpdateRequest noSpeaker = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(noSpeaker, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(noSpeaker, null, authUser));
         LectureUpdateRequest noTitle = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(noTitle, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(noTitle, null, authUser));
         LectureUpdateRequest noSubject = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).title("토비의 스프링 5").deadline(LocalDate.of(2022, 2, 2)).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(noSubject, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(noSubject, null, authUser));
         LectureUpdateRequest noDeadLine = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).title("토비의 스프링 5").subject(LectureSubject.JAVA).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(noDeadLine, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(noDeadLine, null, authUser));
         LectureUpdateRequest pastDeadLine = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2020, 2, 2)).build();
-        assertThrows(RuntimeException.class, () -> lectureService.update(pastDeadLine, null, AuthUser.builder().email("lokie").build()));
+        assertThrows(RuntimeException.class, () -> lectureService.update(pastDeadLine, null, authUser));
     }
 
     @DisplayName("강의 삭제")
