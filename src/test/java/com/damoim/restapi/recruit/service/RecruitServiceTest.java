@@ -1,22 +1,23 @@
 package com.damoim.restapi.recruit.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import com.damoim.restapi.recruit.entity.Recruit;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
-import java.time.LocalDate;
-import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author SeongRok.Oh
@@ -84,7 +85,7 @@ class RecruitServiceTest {
         String updateCompany = "Never";
         String updateTitle = "회사 이름 바뀜";
         RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
-        RecruitResponse updateRecruit = recruitService.update(recruitUpdateRequest, null);
+        RecruitResponse updateRecruit = recruitService.update(recruitUpdateRequest, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build());
         assertEquals(updateCompany, updateRecruit.getCompany());
         assertEquals(updateTitle, updateRecruit.getTitle());
     }
@@ -96,17 +97,17 @@ class RecruitServiceTest {
         RecruitResponse saveRecruit = recruitService.save(recruitSaveRequest, null);
         String updateCompany = "업데이트회사";
         RecruitUpdateRequest noIdRecruit = RecruitUpdateRequest.updateRequestBuilder().register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noIdRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
         RecruitUpdateRequest noRegisterRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noRegisterRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noRegisterRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
         RecruitUpdateRequest noCompanyRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).title(saveRecruit.getTitle()).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noCompanyRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noCompanyRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
         RecruitUpdateRequest noTitleRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).reward(0).deadline(saveRecruit.getDeadline()).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noTitleRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noTitleRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
         RecruitUpdateRequest noDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(noDeadLineRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(noDeadLineRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
         RecruitUpdateRequest afterDeadLineRecruit = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).register(saveRecruit.getRegister()).company(updateCompany).title(saveRecruit.getTitle()).reward(0).deadline(LocalDate.of(2020, 1, 1)).build();
-        assertThrows(RuntimeException.class, () -> recruitService.update(afterDeadLineRecruit, null));
+        assertThrows(RuntimeException.class, () -> recruitService.update(afterDeadLineRecruit, null, AuthUser.builder().email(recruitSaveRequest.getRegister()).build()));
     }
 
     @DisplayName("구인 삭제")
@@ -117,7 +118,7 @@ class RecruitServiceTest {
         RecruitResponse getRecruit = recruitService.getById(saveRecruit.getId());
         assertEquals(saveRecruit.getId(), getRecruit.getId());
 
-        recruitService.delete(saveRecruit.getId());
+        recruitService.delete(saveRecruit.getId(), AuthUser.builder().email(recruitSaveRequest.getRegister()).build());
         final Long id = saveRecruit.getId();
         assertThrows(RuntimeException.class, () -> recruitService.getById(id));
     }

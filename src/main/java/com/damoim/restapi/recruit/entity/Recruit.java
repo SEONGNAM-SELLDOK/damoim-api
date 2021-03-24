@@ -54,4 +54,7 @@ public class Recruit {
     @LastModifiedBy
     private String modifier;
 
+    public boolean isRegister(String register) {
+        return this.register.equals(register);
+    }
 }

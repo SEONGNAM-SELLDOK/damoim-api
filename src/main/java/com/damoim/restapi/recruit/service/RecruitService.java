@@ -1,14 +1,18 @@
 package com.damoim.restapi.recruit.service;
 
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.recruit.dao.*;
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +39,7 @@ public class RecruitService {
     private final RecruitRepositorySupport repositorySupport;
     private final RecruitResponseMapper responseMapper;
 
-    public RecruitResponse save(@Valid RecruitSaveRequest recruitSaveRequest, MultipartFile file) {
+    public RecruitResponse save(@Valid RecruitSaveRequest recruitSaveRequest, RequestFile file) {
         String fileName = file == null ? null : fileUtil.upload(file);
         recruitSaveRequest.setImage(fileName);
         return responseMapper.toDto(repository.save(saveRequestMapper.toEntity(recruitSaveRequest)));
@@ -46,15 +50,24 @@ public class RecruitService {
         return responseMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
     }
 
-    public RecruitResponse update(@Valid RecruitUpdateRequest recruitUpdateRequest, MultipartFile file) {
+    public RecruitResponse update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
+        Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
+        validateEditor(updateRecruit, authUser);
         String fileName = file == null ? null : fileUtil.upload(file);
-        recruitUpdateRequest.setImage(fileName);
-        return responseMapper.toDto(repository.save(updateRequestMapper.toEntity(recruitUpdateRequest)));
+        updateRecruit.setImage(fileName);
+        return responseMapper.toDto(repository.save(updateRecruit));
     }
 
-    public void delete(@Valid Long id) {
-        Recruit recruit = repository.findById(id).orElseThrow(RuntimeException::new);
+    public void delete(@Valid Long id, AuthUser authUser) {
+        Recruit recruit = repository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
+        validateEditor(recruit, authUser);
         repository.delete(recruit);
+    }
+
+    private void validateEditor(Recruit recruit, AuthUser editor) {
+        if (!recruit.isRegister(editor.getEmail())) {
+            throw new RuntimeException();
+        }
     }
 
     @Transactional(readOnly = true)
@@ -62,7 +75,7 @@ public class RecruitService {
         return recruitResponseSet(repositorySupport.search(recruitGetRequest, pageable));
     }
 
-    private Set<RecruitResponse> recruitResponseSet(Set<Recruit> recruitSet){
+    private Set<RecruitResponse> recruitResponseSet(Set<Recruit> recruitSet) {
         return recruitSet.stream().map(responseMapper::toDto).collect(Collectors.toSet());
     }
 }

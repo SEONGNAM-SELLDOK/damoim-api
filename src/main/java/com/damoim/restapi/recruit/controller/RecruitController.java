@@ -1,5 +1,7 @@
 package com.damoim.restapi.recruit.controller;
 
+import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,10 +31,11 @@ import java.util.Set;
 @RestController
 public class RecruitController {
     private final RecruitService recruitService;
+    private static final String ROOT = "recruit";
 
     @PostMapping
     public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
-        return new ResponseEntity<>(recruitService.save(saveRequest, file), HttpStatus.CREATED);
+        return new ResponseEntity<>(recruitService.save(saveRequest, RequestFile.of(ROOT, file)), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -40,13 +44,13 @@ public class RecruitController {
     }
 
     @PutMapping
-    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file) {
-        return new ResponseEntity<>(recruitService.update(updateRequest, file), HttpStatus.OK);
+    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteRecruit(@Valid @PathVariable Long id) {
-        recruitService.delete(id);
+    public ResponseEntity<Void> deleteRecruit(@Valid @PathVariable Long id, @AuthenticationPrincipal AuthUser authUser) {
+        recruitService.delete(id, authUser);
         return ResponseEntity.noContent().build();
     }
 
