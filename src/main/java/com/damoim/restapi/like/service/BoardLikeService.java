@@ -46,7 +46,6 @@ public class BoardLikeService {
 
     public SaveLikeRequest saveLike(BoardType boardType, Long boardId, AuthUser member) {
         Member byName = memberService.findByName(member.getEmail());
-        System.out.println("byName = " + byName);
         // BoardLike 저장
         BoardLike boardLike = BoardLike.builder()
                 .boardId(boardId)
