@@ -30,6 +30,7 @@ public class Recruit {
     @Id
     private Long id;
 
+    @Column(updatable = false)
     @CreatedBy
     private String register;
     private String company;
@@ -45,6 +46,7 @@ public class Recruit {
 
     private LocalDate deadline;
 
+    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
 
@@ -56,12 +58,5 @@ public class Recruit {
 
     public boolean isRegister(String register) {
         return this.register.equals(register);
-    }
-
-    public void updateByOrigin(Recruit origin) {
-        this.createdDate = origin.createdDate;
-        this.register = origin.register;
-        this.modifiedDate = origin.modifiedDate;
-        this.modifier = origin.modifier;
     }
 }

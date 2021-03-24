@@ -55,7 +55,6 @@ public class RecruitService {
         validateEditor(origin, authUser);
         String fileName = file == null ? null : fileUtil.upload(file);
         updateRecruit.setImage(fileName);
-        updateRecruit.updateByOrigin(origin);
         return responseMapper.toDto(repository.save(updateRecruit));
     }
 
