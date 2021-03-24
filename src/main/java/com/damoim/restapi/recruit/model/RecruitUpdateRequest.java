@@ -23,8 +23,8 @@ public class RecruitUpdateRequest extends RecruitSaveRequest {
     private Long id;
 
     @Builder(builderMethodName = "updateRequestBuilder")
-    private RecruitUpdateRequest(Long id, String register, String company, String title, String location, Integer reward, RecruitTag tag, String description, LocalDate deadline, String image) {
-        super(register, company, title, location, reward, tag, description, deadline, image);
+    private RecruitUpdateRequest(Long id, String company, String title, String location, Integer reward, RecruitTag tag, String description, LocalDate deadline, String image) {
+        super(company, title, location, reward, tag, description, deadline, image);
         this.id = id;
     }
 }

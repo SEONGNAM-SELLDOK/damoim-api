@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.Set;
@@ -46,20 +45,22 @@ public class RecruitService {
     }
 
     @Transactional(readOnly = true)
-    public RecruitResponse getById(@Valid Long id) {
-        return responseMapper.toDto(repository.findById(id).orElseThrow(RuntimeException::new));
+    public RecruitResponse getById(long id) {
+        return responseMapper.toDto(getRecruitById(id));
     }
 
     public RecruitResponse update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
+        Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
-        validateEditor(updateRecruit, authUser);
+        validateEditor(origin, authUser);
         String fileName = file == null ? null : fileUtil.upload(file);
         updateRecruit.setImage(fileName);
+        updateRecruit.updateByOrigin(origin);
         return responseMapper.toDto(repository.save(updateRecruit));
     }
 
-    public void delete(@Valid Long id, AuthUser authUser) {
-        Recruit recruit = repository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
+    public void delete(long id, AuthUser authUser) {
+        Recruit recruit = getRecruitById(id);
         validateEditor(recruit, authUser);
         repository.delete(recruit);
     }
@@ -68,6 +69,10 @@ public class RecruitService {
         if (!recruit.isRegister(editor.getEmail())) {
             throw new RuntimeException();
         }
+    }
+
+    private Recruit getRecruitById(long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
     }
 
     @Transactional(readOnly = true)

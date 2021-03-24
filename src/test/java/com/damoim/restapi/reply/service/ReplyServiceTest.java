@@ -154,7 +154,6 @@ class ReplyServiceTest {
 
     private RecruitSaveRequest getRecruitSaveRequest() {
         return RecruitSaveRequest.builder()
-            .register("오성록")
             .company("Naver")
             .title("서비스를 함께할 팀원을 모집합니다.")
             .location("판교")
