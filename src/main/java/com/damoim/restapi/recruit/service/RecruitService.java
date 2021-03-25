@@ -6,14 +6,10 @@ import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.recruit.dao.*;
 import com.damoim.restapi.recruit.entity.Recruit;
-import com.damoim.restapi.recruit.model.RecruitGetRequest;
-import com.damoim.restapi.recruit.model.RecruitResponse;
-import com.damoim.restapi.recruit.model.RecruitSaveRequest;
-import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
-import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import com.damoim.restapi.recruit.model.*;
 import com.damoim.restapi.reply.entity.Reply;
 import com.damoim.restapi.reply.service.ReplyService;
+import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,7 +42,7 @@ public class RecruitService {
     private final ReplyService replyService;
 
     public RecruitResponse save(@Valid RecruitSaveRequest recruitSaveRequest, RequestFile file) {
-        String fileName = file.getFile() == null ? null : fileUtil.upload(file);
+        String fileName = Objects.isNull(file) || file.getFile() == null ? null : fileUtil.upload(file);
         recruitSaveRequest.setImage(fileName);
         return responseMapper.toDto(repository.save(saveRequestMapper.toEntity(recruitSaveRequest)));
     }
@@ -59,7 +56,7 @@ public class RecruitService {
         Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
         validateEditor(origin, authUser);
-        String fileName = file.getFile() == null ? null : fileUtil.upload(file);
+        String fileName = Objects.isNull(file) || file.getFile() == null ? null : fileUtil.upload(file);
         updateRecruit.setImage(fileName);
         return responseMapper.toDto(repository.save(updateRecruit));
     }
