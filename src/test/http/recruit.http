@@ -1,9 +1,9 @@
 ### 구직 작성
 POST http://localhost:8080/recruits
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 {
-  "register": "오성록",
   "company": "Naver",
   "title": "서비스를 함께 할 팀원을 모집합니다.",
   "location": "판교역 그린팩토리",
@@ -22,7 +22,8 @@ client.test("Request executed successfully", function() {
 
 ### 구직 가져오기
 GET http://localhost:8080/recruits/1
-Content-Type: application/json
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 > {%
 client.test("Request executed successfully", function() {
@@ -34,6 +35,7 @@ client.test("Request executed successfully", function() {
 ### 구직 업데이트
 PUT http://localhost:8080/recruits
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 {
   "id": 1,
@@ -57,6 +59,7 @@ client.test("Request executed successfully", function() {
 ### 구직 삭제
 DELETE http://localhost:8080/recruits/1
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 > {%
 client.test("Request executed successfully", function() {
@@ -68,9 +71,9 @@ client.test("Request executed successfully", function() {
 ### 다른 조건 넣기
 POST http://localhost:8080/recruits
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 {
-  "register": "오성록",
   "company": "우아한형제들",
   "title": "백엔드 개발자 모집",
   "location": "잠실역",
@@ -84,10 +87,34 @@ Content-Type: application/json
 ### 조건 구직 가져오기
 GET http://localhost:8080/recruits?company=우아
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
 
 > {%
 client.test("Request executed successfully", function() {
     client.log("response.body" + response.body)
-    client.assert(response.status === 200, "Response status is not 20, it is " + response.status);
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 구직 댓글 넣기
+POST http://localhost:8080/recruits/2/reply
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
+
+{
+  "isChildId": false,
+  "writer": "우아한형제들",
+  "content": "좋은 구인 정보군요"
+}
+
+### 구직 댓글 가져오기
+GET http://localhost:8080/recruits/2/reply
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjgyMTYxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTAxNjEsImp0aSI6IjgwNjUzNTA5LWQ0ZjUtNDg2Yy04N2ZhLTJmYjE4OGFlMTRlNyJ9.EuPFvVg2Hy9UqBs2yukp03emrAHza_FV_an761CaEew
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
 });
 %}
