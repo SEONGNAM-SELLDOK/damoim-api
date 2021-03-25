@@ -1,6 +1,7 @@
 ### 도서 리뷰 작성
 POST http://localhost:8080/bookreviews
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 {
   "title": "객체지향의 사실과 오해를 읽고...",
@@ -27,6 +28,7 @@ client.test("Request executed successfully", function() {
 ### 도서 리뷰 가져오기
 GET http://localhost:8080/bookreviews/1
 Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 > {%
 client.test("Request executed successfully", function() {
@@ -38,6 +40,7 @@ client.test("Request executed successfully", function() {
 ### 도서 리뷰 업데이트
 PUT http://localhost:8080/bookreviews
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 {
   "id": 1,
@@ -66,6 +69,7 @@ client.test("Request executed successfully", function() {
 ### 도서 리뷰 삭제
 DELETE http://localhost:8080/bookreviews/1
 Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 > {%
 client.test("Request executed successfully", function() {
@@ -77,6 +81,7 @@ client.test("Request executed successfully", function() {
 ### 다른 조건 넣기
 POST http://localhost:8080/bookreviews
 Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 {
   "title": "토비의 스프링을 읽고...",
@@ -97,10 +102,34 @@ Content-Type: application/json
 ### 조건 도서 리뷰 가져오기
 GET http://localhost:8080/bookreviews?description=토비
 Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
 
 > {%
 client.test("Request executed successfully", function() {
     client.log("response.body" + response.body)
-    client.assert(response.status === 200, "Response status is not 20, it is " + response.status);
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 도서 리뷰 댓글 작성
+POST http://localhost:8080/bookreviews/2/reply
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
+
+{
+  "isChildId": false,
+  "writer": "토비",
+  "content": "저도 읽어 보겠습니다."
+}
+
+### 도서 리뷰 댓글 가져오기
+GET http://localhost:8080/bookreviews/2/reply
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Mjg2NjcxLCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2OTQ2NzEsImp0aSI6IjFmOWExMTNkLTYxOTAtNGI4Zi1iNDZhLTcwMTVmZDdmYWRlYiJ9.sEA2adp7D4TahFIJxoBBIwBSA7ry7XiGOM5KKVFC1wA
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
 });
 %}

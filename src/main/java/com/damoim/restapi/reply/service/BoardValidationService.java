@@ -4,6 +4,7 @@ package com.damoim.restapi.reply.service;
 import com.damoim.restapi.boards.dao.BoardRepository;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.dao.BookReviewRepository;
 import com.damoim.restapi.recruit.dao.RecruitRepository;
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
@@ -28,6 +29,7 @@ public class BoardValidationService {
     private final UsedItemRepository usedItemRepository;
     private final RecruitRepository recruitRepository;
     private final BoardRepository boardRepository;
+    private final BookReviewRepository bookReviewRepository;
     private final ModelMapper modelMapper;
 
     public Long existBoard(Long boarId, BoardType boardType) {
@@ -42,6 +44,10 @@ public class BoardValidationService {
 
         if (BoardType.SEMINAR.equals(boardType) || BoardType.STUDY.equals(boardType)) {
             result = boardExist(boarId);
+        }
+
+        if(BoardType.BOOKREVIEW.equals(boardType)){
+            result = bookReviewExist(boarId);
         }
 
         if (!result) {
@@ -90,6 +96,9 @@ public class BoardValidationService {
         return boardRepository.existsById(id);
     }
 
+    private boolean bookReviewExist(Long id) {
+        return bookReviewRepository.existsById(id);
+    }
 
     private Supplier<NotFoundResource> getFoundPageSupplier(Long id) {
         return () -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));
