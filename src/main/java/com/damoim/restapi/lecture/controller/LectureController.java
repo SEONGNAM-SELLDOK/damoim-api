@@ -1,11 +1,17 @@
 package com.damoim.restapi.lecture.controller;
 
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.lecture.dao.LectureResponseWithReply;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.lecture.service.LectureService;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +37,12 @@ import static org.springframework.http.ResponseEntity.status;
 public class LectureController {
 
     private final LectureService lectureService;
+    private final ReplyService replyService;
+    private static final String ROOT = "lecture";
 
     @PostMapping
     public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
-        return new ResponseEntity<>(lectureService.save(lectureSaveRequest, file), HttpStatus.CREATED);
+        return new ResponseEntity<>(lectureService.save(lectureSaveRequest, RequestFile.of(ROOT, file)), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -49,7 +57,7 @@ public class LectureController {
 
     @PutMapping
     public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, file, authUser), HttpStatus.OK);
+        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +65,18 @@ public class LectureController {
         log.info("Delete Lectures Request - {}", id);
         lectureService.delete(id, authUser);
         return status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{no}/reply")
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+                                                   @Valid @RequestBody RequestSaveReply requestSaveReply) {
+        RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
+        return ResponseEntity.ok(replyService.replySave(no, reply));
+    }
+
+    @GetMapping("/{no}/reply")
+    public ResponseEntity<LectureResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(lectureService.getLectureIncludeReply(no, BoardType.LECTURE));
     }
 
 }

@@ -2,9 +2,7 @@ package com.damoim.restapi.lecture.model;
 
 import com.damoim.restapi.lecture.entity.LectureSubject;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -18,6 +16,8 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class LectureGetRequest {
     @ApiModelProperty(value = "강의 제목", example = "토비의 스프링 강의")
     private String title;

@@ -1,5 +1,6 @@
 package com.damoim.restapi.lecture.service;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.lecture.dao.*;
@@ -9,6 +10,8 @@ import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.entity.Reply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,16 +42,12 @@ public class LectureService {
     private final DamoimFileUtil fileUtil;
     private final LectureRepositorySupport repositorySupport;
     private final LectureResponseMapper responseMapper;
+    private final ReplyService replyService;
 
-    private static final String ROOT = "lecture";
-
-    public LectureResponse save(@Valid LectureSaveRequest request, MultipartFile file) {
-        String fileName = null;
-        if (Objects.nonNull(file)) {
-            fileName = fileUtil.upload(RequestFile.of(ROOT, file));
-        }
+    public LectureResponse save(@Valid LectureSaveRequest request, RequestFile file) {
+        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : fileUtil.upload(file);
         Lecture lecture = saveRequestMapper.toEntity(request);
-        lecture.setImage(fileName);
+        lecture.setImage(imageUrl);
         return responseMapper.toDto(lectureRepository.save(lecture));
     }
 
@@ -63,15 +62,12 @@ public class LectureService {
         lectureRepository.deleteById(id);
     }
 
-    public LectureResponse update(@Valid LectureUpdateRequest updateRequest, MultipartFile file, AuthUser authUser) {
+    public LectureResponse update(@Valid LectureUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
         Lecture origin = getLectureById(updateRequest.getId());
         validateEditor(origin, authUser);
-        String fileName = null;
-        if (Objects.nonNull(file)) {
-            fileName = fileUtil.upload(RequestFile.of(ROOT, file));
-        }
+        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : fileUtil.upload(file);
         Lecture update = updateRequestMapper.toEntity(updateRequest);
-        update.setImage(fileName);
+        update.setImage(imageUrl);
         return responseMapper.toDto(lectureRepository.save(update));
     }
 
@@ -91,5 +87,11 @@ public class LectureService {
 
     private Set<LectureResponse> lectureResponseSet(Set<Lecture> lectureSet) {
         return lectureSet.stream().map(responseMapper::toDto).collect(Collectors.toSet());
+    }
+
+    public LectureResponseWithReply getLectureIncludeReply(long id, BoardType boardType) {
+        LectureResponse lectureResponse = findById(id);
+        List<Reply> replyList = replyService.getReplyList(boardType, id);
+        return new LectureResponseWithReply(lectureResponse, replyList);
     }
 }
