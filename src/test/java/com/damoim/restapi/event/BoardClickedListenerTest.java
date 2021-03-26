@@ -10,6 +10,7 @@ import com.damoim.restapi.event.boardcount.entity.BoardCount;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
+import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import java.time.LocalDate;
@@ -50,12 +51,13 @@ class BoardClickedListenerTest {
     @DisplayName("게시글 카운트")
     @WithAccount("kjj@email.com")
     void boardCount() throws Exception {
-        mockMvc.perform(get("/useditems/item/1/reply")
+        UsedItem usedItem = usedItemService.save(getItemRequest());
+        mockMvc.perform(get("/useditems/item/" + usedItem.getNo() + "/reply")
             .cookie(new Cookie("AUTH_TOKEN", "testUser")))
             .andExpect(status().isOk());
 
         BoardCount boardCount = boardCountRepository
-            .findByBoardIdAndBoardType(1L, BoardType.USEDITEMS);
+            .findByBoardIdAndBoardType(usedItem.getNo(), BoardType.USEDITEMS);
 
         assertThat(boardCount.getClickCount()).isEqualTo(1L);
         assertThat(boardCount.getWeekClickCount()).isEqualTo(1L);
@@ -67,14 +69,14 @@ class BoardClickedListenerTest {
     @DisplayName("쓰레드 세이프 테스트")
     @WithAccount("kjj@email.com")
     void thread() throws Exception {
-        usedItemService.save(getItemRequest());
+        UsedItem usedItem = usedItemService.save(getItemRequest());
         for (int i = 0; i < 10; i++) {
-            mockMvc.perform(get("/useditems/item/1/reply")
+            mockMvc.perform(get("/useditems/item/" + usedItem.getNo() + "/reply")
                 .cookie(new Cookie("AUTH_TOKEN", "testUser")))
                 .andExpect(status().isOk());
         }
         BoardCount boardCount = boardCountRepository
-            .findByBoardIdAndBoardType(1L, BoardType.USEDITEMS);
+            .findByBoardIdAndBoardType(usedItem.getNo(), BoardType.USEDITEMS);
         assertThat(boardCount.getClickCount()).isEqualTo(10L);
     }
 
