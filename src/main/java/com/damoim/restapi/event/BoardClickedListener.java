@@ -3,7 +3,6 @@ package com.damoim.restapi.event;
 import com.damoim.restapi.event.boardcount.dao.BoardCountRepository;
 import com.damoim.restapi.event.boardcount.entity.BoardCount;
 import java.util.Objects;
-import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -17,21 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardClickedListener {
 
     private final BoardCountRepository boardCountRepository;
-    private final EntityManager entityManager;
+
 
     @EventListener
     @Transactional
-    public void handleBoardClickedEvent(BoardClickedEvent clickedEvent) {
-
-        entityManager.clear();
+    public synchronized void handleBoardClickedEvent(BoardClickedEvent clickedEvent) {
         BoardCount boardCount = boardCountRepository
             .findByBoardIdAndBoardType(clickedEvent.getBoardId(), clickedEvent.getBoardType());
 
-        System.out.println("findBy = " + boardCount);
-
         if (Objects.isNull(boardCount)) {
-            BoardCount boardCount1 = boardCountRepository.save(clickedEvent.toEntity());
-            System.out.println("SAVE = " + boardCount1);
+            boardCountRepository.save(clickedEvent.toEntity());
         }
 
         if (Objects.nonNull(boardCount)) {
@@ -39,8 +33,7 @@ public class BoardClickedListener {
                 boardCount.updateRecordDateAndResetWeekClickCount();
             }
             boardCount.plusCount();
-            BoardCount boardCount1 = boardCountRepository.save(boardCount);
-            System.out.println("Update = " + boardCount1);
+            boardCountRepository.save(boardCount);
         }
     }
 }
