@@ -55,7 +55,7 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
             .from(boardLike)
             .leftJoin(boardLike.likeStatus, likeStatus)
             .where(statusEq(condition.getStatus()))
-            .orderBy(popularity(condition.getPopular()))
+            .orderBy(popularity(condition.getPopularity()))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetchResults();
@@ -70,8 +70,8 @@ public class BoardLikeRepositoryImpl implements BoardLikeRepositoryCustom {
         return Objects.nonNull(status) ? likeStatus.status.eq(status) : null;
     }
 
-    private OrderSpecifier popularity(String popular) {
-        if(Objects.isNull(popular) || Objects.isNull(popular.equals(popular))) {
+    private OrderSpecifier popularity(String popularity) {
+        if(Objects.isNull(popularity)) {
             return boardLike.boardId.desc();
         }
         return boardLike.likeCount.desc();
