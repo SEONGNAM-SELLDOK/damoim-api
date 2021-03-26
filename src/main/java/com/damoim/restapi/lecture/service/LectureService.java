@@ -45,7 +45,10 @@ public class LectureService {
     private final ReplyService replyService;
 
     public LectureResponse save(@Valid LectureSaveRequest request, RequestFile file) {
-        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : fileUtil.upload(file);
+        String imageUrl = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            imageUrl = fileUtil.upload(file);
+        }
         Lecture lecture = saveRequestMapper.toEntity(request);
         lecture.setImage(imageUrl);
         return responseMapper.toDto(lectureRepository.save(lecture));
@@ -65,7 +68,10 @@ public class LectureService {
     public LectureResponse update(@Valid LectureUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
         Lecture origin = getLectureById(updateRequest.getId());
         validateEditor(origin, authUser);
-        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : fileUtil.upload(file);
+        String imageUrl = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            imageUrl = fileUtil.upload(file);
+        }
         Lecture update = updateRequestMapper.toEntity(updateRequest);
         update.setImage(imageUrl);
         return responseMapper.toDto(lectureRepository.save(update));

@@ -41,7 +41,10 @@ public class BookReviewService {
     private final ReplyService replyService;
 
     public BookReviewResponse save(@Valid BookReviewSaveRequest saveRequest, RequestFile file) {
-        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : damoimFileUtil.upload(file);
+        String imageUrl = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            imageUrl = damoimFileUtil.upload(file);
+        }
         saveRequest.setImage(imageUrl);
         BookReview bookReview = saveRequestMapper.toEntity(saveRequest);
         return responseMapper.toDto(repository.save(bookReview));
@@ -56,7 +59,10 @@ public class BookReviewService {
         BookReview origin = getBookReviewById(updateRequest.getId());
         validateEditor(origin, authUser);
         BookReview updateBookReview = updateRequestMapper.toEntity(updateRequest);
-        String imageUrl = Objects.isNull(file) || Objects.isNull(file.getFile()) ? null : damoimFileUtil.upload(file);
+        String imageUrl = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            imageUrl = damoimFileUtil.upload(file);
+        }
         updateBookReview.setImage(imageUrl);
         return responseMapper.toDto(repository.save(updateBookReview));
     }
