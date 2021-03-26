@@ -24,8 +24,8 @@ public class LectureUpdateRequest extends LectureSaveRequest {
     private long id;
 
     @Builder(builderMethodName = "updateRequestBuilder")
-    public LectureUpdateRequest(long id, String title, String description, String speaker, LectureSubject subject, String route, LocalDate deadline, String register) {
-        super(title, description, speaker, subject, route, deadline, register);
+    public LectureUpdateRequest(long id, String title, String description, String speaker, LectureSubject subject, String route, LocalDate deadline) {
+        super(title, description, speaker, subject, route, deadline);
         this.id = id;
     }
 }

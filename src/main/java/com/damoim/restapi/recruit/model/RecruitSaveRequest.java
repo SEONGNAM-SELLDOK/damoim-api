@@ -21,10 +21,6 @@ import java.time.LocalDate;
 @Setter
 public class RecruitSaveRequest {
 
-    @ApiModelProperty(value = "등록자", required = true, example = "오성록")
-    @NotBlank
-    private String register;
-
     @ApiModelProperty(value = "회사", required = true, example = "네이버")
     @NotBlank
     private String company;

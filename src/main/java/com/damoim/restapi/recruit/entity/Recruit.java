@@ -30,6 +30,7 @@ public class Recruit {
     @Id
     private Long id;
 
+    @Column(updatable = false)
     @CreatedBy
     private String register;
     private String company;
@@ -45,6 +46,7 @@ public class Recruit {
 
     private LocalDate deadline;
 
+    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
 
@@ -54,4 +56,7 @@ public class Recruit {
     @LastModifiedBy
     private String modifier;
 
+    public boolean isRegister(String register) {
+        return this.register.equals(register);
+    }
 }

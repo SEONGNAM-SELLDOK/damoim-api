@@ -40,12 +40,8 @@ public class LectureSaveRequest {
     @ApiModelProperty(value = "수업 경로", example = "Zoom")
     private String route;
 
-    @ApiModelProperty(value = "마감 기한",required = true,example = "2021-03-10")
+    @ApiModelProperty(value = "마감 기한", required = true, example = "2021-03-10")
     @Future
     @NotNull
     private LocalDate deadline;
-
-    @ApiModelProperty(value = "등록자", required = true, example = "이경희")
-    @NotBlank
-    private String register;
 }
