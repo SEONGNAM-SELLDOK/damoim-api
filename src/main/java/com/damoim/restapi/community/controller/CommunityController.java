@@ -44,7 +44,7 @@ public class CommunityController {
                 .build();
         ReadCommunityResponse response = communityService.save(community);
 
-        return new ResponseEntity(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("{id}")

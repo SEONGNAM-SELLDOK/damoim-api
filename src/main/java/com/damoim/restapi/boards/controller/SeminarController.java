@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.damoim.restapi.boards.model.*;
-import com.damoim.restapi.like.dao.BoardLikeSearchCondition;
 import com.damoim.restapi.like.model.ReadLikeResponse;
 import com.damoim.restapi.like.service.BoardLikeService;
 import com.damoim.restapi.member.model.AuthUser;

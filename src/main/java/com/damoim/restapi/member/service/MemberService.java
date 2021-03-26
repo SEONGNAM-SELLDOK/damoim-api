@@ -8,7 +8,6 @@ import com.damoim.restapi.member.entity.Member;
 import com.damoim.restapi.member.model.SaveMemberRequest;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 import java.util.Optional;
 
 /**  * MemberService

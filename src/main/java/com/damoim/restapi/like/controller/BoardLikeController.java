@@ -1,7 +1,6 @@
 package com.damoim.restapi.like.controller;
 
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.like.dao.BoardLikeRepository;
 import com.damoim.restapi.like.dao.BoardLikeSearchCondition;
 import com.damoim.restapi.like.model.ChangeLikeRequest;
 import com.damoim.restapi.like.model.ListLikeResponse;
@@ -42,7 +41,7 @@ public class BoardLikeController {
     public ResponseEntity<ReadLikeResponse> changeLike(
             @AuthenticationPrincipal AuthUser member,
             final @Valid @RequestBody ChangeLikeRequest request) {
-        Member nMember = memberService.findByName(member.getEmail());
+        memberService.findByName(member.getEmail());
 
         ReadLikeResponse response = boardLikeService.changeLike(request);
         return ResponseEntity.ok(response);

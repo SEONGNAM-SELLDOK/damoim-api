@@ -1,11 +1,8 @@
 package com.damoim.restapi.boards.model;
 
-import com.damoim.restapi.boards.entity.Address;
 import com.damoim.restapi.like.model.ReadLikeResponse;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

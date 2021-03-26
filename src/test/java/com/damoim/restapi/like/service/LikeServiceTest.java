@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
-public class LikeServiceTest {
+class LikeServiceTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -57,20 +57,4 @@ public class LikeServiceTest {
                 .build();
 
     }
-
-    @Test
-    @DisplayName("Save Like Test")
-    @WithAccount("ggs0707@naver.com")
-    void saveLikeTest() throws Exception{
-//        SaveLikeRequest request = SaveLikeRequest.builder()
-//                                        .likeCount(0)
-//                                        .boardId(1L)
-//                                        .build();
-
-//        String json = objectMapper.writeValueAsString(request);
-//        Member byEmail = memberRepository.findByEmail("ggs0707@naver.com");
-
-    }
-
-
 }

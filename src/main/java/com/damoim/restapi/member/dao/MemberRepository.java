@@ -5,9 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import com.damoim.restapi.member.entity.Member;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * MemberRepository
  *

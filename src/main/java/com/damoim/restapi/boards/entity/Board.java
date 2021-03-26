@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-import com.damoim.restapi.like.entity.BoardLike;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

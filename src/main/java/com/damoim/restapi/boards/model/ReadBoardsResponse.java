@@ -4,7 +4,6 @@ import com.damoim.restapi.boards.entity.Address;
 import com.querydsl.core.annotations.QueryProjection;
 import java.time.LocalDateTime;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
