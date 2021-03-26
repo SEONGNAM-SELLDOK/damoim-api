@@ -42,7 +42,10 @@ public class RecruitService {
     private final ReplyService replyService;
 
     public RecruitResponse save(@Valid RecruitSaveRequest recruitSaveRequest, RequestFile file) {
-        String fileName = Objects.isNull(file) || file.getFile() == null ? null : fileUtil.upload(file);
+        String fileName = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            fileName = fileUtil.upload(file);
+        }
         recruitSaveRequest.setImage(fileName);
         return responseMapper.toDto(repository.save(saveRequestMapper.toEntity(recruitSaveRequest)));
     }
@@ -56,7 +59,10 @@ public class RecruitService {
         Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
         validateEditor(origin, authUser);
-        String fileName = Objects.isNull(file) || file.getFile() == null ? null : fileUtil.upload(file);
+        String fileName = null;
+        if (Objects.nonNull(file) && file.nonNull()) {
+            fileName = fileUtil.upload(file);
+        }
         updateRecruit.setImage(fileName);
         return responseMapper.toDto(repository.save(updateRecruit));
     }
