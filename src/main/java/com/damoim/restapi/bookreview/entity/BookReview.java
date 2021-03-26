@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -38,8 +39,10 @@ public class BookReview {
     private Set<String> tag;
     private LocalDate deadline;
 
+    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
+    @Column(updatable = false)
     @CreatedBy
     private String register;
     @LastModifiedDate
@@ -47,4 +50,10 @@ public class BookReview {
     @LastModifiedBy
     private String modifier;
 
+    public boolean isRegister(String register) {
+        if (Objects.isNull(register)) {
+            throw new RuntimeException();
+        }
+        return this.register.equals(register);
+    }
 }

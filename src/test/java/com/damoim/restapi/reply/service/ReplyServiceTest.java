@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.recruit.entity.Recruit;
+import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.service.RecruitService;
 import com.damoim.restapi.reply.dao.ReplyRepository;
@@ -57,7 +58,7 @@ class ReplyServiceTest {
     @WithAccount("kjj@naver.com")
     void saveReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
-        Recruit recruit = recruitService.save(getRecruitSaveRequest(), null);
+        RecruitResponse recruit = recruitService.save(getRecruitSaveRequest(), null);
 
         long usedItemNo = usedItem.getNo();
         RequestSaveReply requestSaveReply = getSaveReply();
@@ -153,7 +154,6 @@ class ReplyServiceTest {
 
     private RecruitSaveRequest getRecruitSaveRequest() {
         return RecruitSaveRequest.builder()
-            .register("오성록")
             .company("Naver")
             .title("서비스를 함께할 팀원을 모집합니다.")
             .location("판교")
