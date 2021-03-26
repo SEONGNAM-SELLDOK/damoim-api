@@ -20,13 +20,13 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "Id")
+@EqualsAndHashCode(of = "id")
 @ToString
 public class BoardCount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private Long boardId;
 
