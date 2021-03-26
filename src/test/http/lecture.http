@@ -86,3 +86,27 @@ client.test("Request executed successfully", function() {
     client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
 });
 %}
+
+### 강의 대댓글 작성
+POST http://localhost:8080/lectures/2/reply
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MzkzMjI4LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY4MDEyMjgsImp0aSI6IjhiNjQ2OTM5LTE0MmUtNDMyYy05ZTk5LWQyODA5ZGU2MGJmYSJ9.AvV-UUvle_hTjotsrKqbjEpegSxZ6gwaODXeOUJ-O0I
+
+{
+  "parentReplyId": 1,
+  "isChildId": false,
+  "writer": "백기선",
+  "content": "강의 잘만들었군요."
+}
+
+### 강의 대대댓글 작성
+POST http://localhost:8080/lectures/2/reply
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MzkzMjI4LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY4MDEyMjgsImp0aSI6IjhiNjQ2OTM5LTE0MmUtNDMyYy05ZTk5LWQyODA5ZGU2MGJmYSJ9.AvV-UUvle_hTjotsrKqbjEpegSxZ6gwaODXeOUJ-O0I
+
+{
+  "parentReplyId": 1,
+  "isChildId": true,
+  "writer": "김영한",
+  "content": "2222"
+}
