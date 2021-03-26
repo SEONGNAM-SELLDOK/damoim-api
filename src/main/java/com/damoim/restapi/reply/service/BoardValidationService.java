@@ -6,20 +6,18 @@ import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.bookreview.dao.BookReviewRepository;
 import com.damoim.restapi.lecture.dao.LectureRepository;
-import com.damoim.restapi.lecture.entity.Lecture;
 import com.damoim.restapi.recruit.dao.RecruitRepository;
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
-
-import java.util.function.Supplier;
-
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Supplier;
 
 /**
  * @author dkansk924@naver.com

@@ -7,7 +7,6 @@ import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
-import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
 import com.damoim.restapi.reply.service.ReplyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
