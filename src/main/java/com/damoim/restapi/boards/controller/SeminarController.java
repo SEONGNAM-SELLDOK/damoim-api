@@ -107,13 +107,12 @@ public class SeminarController {
 
 
     @GetMapping("pages")
-    public Page<ListBoardsResponse> list(
+    public ResponseEntity<Page<ListBoardsResponse>> list(
             @AuthenticationPrincipal AuthUser member,
             BoardSearchCondition condition,
-            BoardLikeSearchCondition likeSearchCondition,
-        Pageable pageable) {
+            Pageable pageable) {
         condition.setBoardType(BoardType.SEMINAR);
-
-        return boardRepository.searchBoard(condition, pageable);
+        Page<ListBoardsResponse> responses = boardRepository.searchBoard(condition, pageable);
+        return ResponseEntity.ok(responses);
     }
 }
