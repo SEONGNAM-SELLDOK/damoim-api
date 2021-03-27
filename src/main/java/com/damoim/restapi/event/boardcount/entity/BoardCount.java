@@ -1,7 +1,6 @@
 package com.damoim.restapi.event.boardcount.entity;
 
 import com.damoim.restapi.boards.entity.BoardType;
-import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,26 +33,6 @@ public class BoardCount {
     private BoardType boardType;
 
     @Builder.Default
-    private Long clickCount = 1L;
+    private final Long clickCount = 1L;
 
-    private LocalDate recordDate;
-
-    @Builder.Default
-    private Long weekClickCount = 1L;
-
-
-    public void plusCount() {
-        clickCount += 1;
-        weekClickCount += 1;
-    }
-
-    public boolean isOneWeekAgo() {
-        LocalDate plusWeeks = recordDate.plusWeeks(1);
-        return LocalDate.now().isAfter(plusWeeks);
-    }
-
-    public void updateRecordDateAndResetWeekClickCount() {
-        recordDate = LocalDate.now();
-        weekClickCount = 0L;
-    }
 }

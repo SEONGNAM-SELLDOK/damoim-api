@@ -2,7 +2,6 @@ package com.damoim.restapi.event;
 
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.event.boardcount.entity.BoardCount;
-import java.time.LocalDate;
 import lombok.Getter;
 
 
@@ -19,7 +18,6 @@ public class BoardClickedEvent {
 
     public BoardCount toEntity() {
         return BoardCount.builder()
-            .recordDate(LocalDate.now())
             .boardType(boardType)
             .boardId(boardId)
             .build();

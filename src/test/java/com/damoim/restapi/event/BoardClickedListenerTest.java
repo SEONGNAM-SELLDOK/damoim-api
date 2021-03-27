@@ -13,7 +13,6 @@ import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
-import java.time.LocalDate;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,37 +46,22 @@ class BoardClickedListenerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
-    @Test
-    @DisplayName("게시글 카운트")
-    @WithAccount("kjj@email.com")
-    void boardCount() throws Exception {
-        UsedItem usedItem = usedItemService.save(getItemRequest());
-        mockMvc.perform(get("/useditems/item/" + usedItem.getNo() + "/reply")
-            .cookie(new Cookie("AUTH_TOKEN", "testUser")))
-            .andExpect(status().isOk());
-
-        BoardCount boardCount = boardCountRepository
-            .findByBoardIdAndBoardType(usedItem.getNo(), BoardType.USEDITEMS);
-
-        assertThat(boardCount.getClickCount()).isEqualTo(1L);
-        assertThat(boardCount.getWeekClickCount()).isEqualTo(1L);
-        assertThat(boardCount.getRecordDate()).isEqualTo(LocalDate.now());
-        assertThat(boardCount.getBoardType()).isEqualTo(BoardType.USEDITEMS);
-    }
 
     @Test
-    @DisplayName("쓰레드 세이프 테스트")
+    @DisplayName("쓰레드 세이프 테스트 ")
     @WithAccount("kjj@email.com")
     void thread() throws Exception {
         UsedItem usedItem = usedItemService.save(getItemRequest());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1000; i++) {
             mockMvc.perform(get("/useditems/item/" + usedItem.getNo() + "/reply")
                 .cookie(new Cookie("AUTH_TOKEN", "testUser")))
                 .andExpect(status().isOk());
         }
         BoardCount boardCount = boardCountRepository
             .findByBoardIdAndBoardType(usedItem.getNo(), BoardType.USEDITEMS);
-        assertThat(boardCount.getClickCount()).isEqualTo(10L);
+        long count = boardCountRepository.count();
+        assertThat(count).isEqualTo(1);
+        assertThat(boardCount.getClickCount()).isEqualTo(1000L);
     }
 
     private UsedItemRequest getItemRequest() {

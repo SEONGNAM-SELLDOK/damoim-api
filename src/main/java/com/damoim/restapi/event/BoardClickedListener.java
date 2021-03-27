@@ -23,17 +23,13 @@ public class BoardClickedListener {
     public synchronized void handleBoardClickedEvent(BoardClickedEvent clickedEvent) {
         BoardCount boardCount = boardCountRepository
             .findByBoardIdAndBoardType(clickedEvent.getBoardId(), clickedEvent.getBoardType());
-
         if (Objects.isNull(boardCount)) {
             boardCountRepository.save(clickedEvent.toEntity());
         }
 
         if (Objects.nonNull(boardCount)) {
-            if (boardCount.isOneWeekAgo()) {
-                boardCount.updateRecordDateAndResetWeekClickCount();
-            }
-            boardCount.plusCount();
-            boardCountRepository.save(boardCount);
+            boardCountRepository
+                .updateCount(clickedEvent.getBoardId(), clickedEvent.getBoardType());
         }
     }
 }
