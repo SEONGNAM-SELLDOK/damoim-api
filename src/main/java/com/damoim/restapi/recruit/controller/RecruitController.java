@@ -1,12 +1,13 @@
 package com.damoim.restapi.recruit.controller;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
-import com.damoim.restapi.recruit.model.RecruitGetRequest;
-import com.damoim.restapi.recruit.model.RecruitResponse;
-import com.damoim.restapi.recruit.model.RecruitSaveRequest;
-import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
+import com.damoim.restapi.recruit.model.*;
 import com.damoim.restapi.recruit.service.RecruitService;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ import java.util.Set;
 @RestController
 public class RecruitController {
     private final RecruitService recruitService;
+    private final ReplyService replyService;
     private static final String ROOT = "recruit";
 
     @PostMapping
@@ -57,5 +59,17 @@ public class RecruitController {
     @GetMapping
     public ResponseEntity<Set<RecruitResponse>> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
         return new ResponseEntity<>(recruitService.getRecruitByCondition(pageable, getRequest), HttpStatus.OK);
+    }
+
+    @PostMapping("/{no}/reply")
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+                                                   @Valid @RequestBody RequestSaveReply requestSaveReply) {
+        RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
+        return ResponseEntity.ok(replyService.replySave(no, reply));
+    }
+
+    @GetMapping("/{no}/reply")
+    public ResponseEntity<RecruitResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT));
     }
 }
