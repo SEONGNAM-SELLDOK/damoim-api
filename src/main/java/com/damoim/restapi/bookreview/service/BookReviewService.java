@@ -1,14 +1,14 @@
 package com.damoim.restapi.bookreview.service;
 
+import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.bookreview.dao.*;
 import com.damoim.restapi.bookreview.entity.BookReview;
-import com.damoim.restapi.bookreview.model.BookReviewGetRequest;
-import com.damoim.restapi.bookreview.model.BookReviewResponse;
-import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
-import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
+import com.damoim.restapi.bookreview.model.*;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.entity.Reply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,10 +38,11 @@ public class BookReviewService {
     private final BookReviewSaveRequestMapper saveRequestMapper;
     private final BookReviewUpdateRequestMapper updateRequestMapper;
     private final BookReviewResponseMapper responseMapper;
+    private final ReplyService replyService;
 
     public BookReviewResponse save(@Valid BookReviewSaveRequest saveRequest, RequestFile file) {
         String imageUrl = null;
-        if (Objects.nonNull(file)) {
+        if (Objects.nonNull(file) && file.nonNull()) {
             imageUrl = damoimFileUtil.upload(file);
         }
         saveRequest.setImage(imageUrl);
@@ -58,7 +60,7 @@ public class BookReviewService {
         validateEditor(origin, authUser);
         BookReview updateBookReview = updateRequestMapper.toEntity(updateRequest);
         String imageUrl = null;
-        if (Objects.nonNull(file)) {
+        if (Objects.nonNull(file) && file.nonNull()) {
             imageUrl = damoimFileUtil.upload(file);
         }
         updateBookReview.setImage(imageUrl);
@@ -93,5 +95,11 @@ public class BookReviewService {
 
     private Set<BookReviewResponse> bookReviewResponseSet(Set<BookReview> bookReviewSet) {
         return bookReviewSet.stream().map(responseMapper::toDto).collect(Collectors.toSet());
+    }
+
+    public BookReviewResponseWithReply getBookReviewIncludeReply(Long id, BoardType boardType) {
+        BookReviewResponse bookReviewResponse = getById(id);
+        List<Reply> replyList = replyService.getReplyList(boardType, id);
+        return new BookReviewResponseWithReply(bookReviewResponse, replyList);
     }
 }
