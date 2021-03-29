@@ -5,7 +5,6 @@ import com.damoim.restapi.bookreview.model.*;
 import com.damoim.restapi.bookreview.service.BookReviewService;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
-import com.damoim.restapi.common.model.CommonResponse;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.service.ReplyService;
@@ -36,18 +35,18 @@ public class BookReviewController {
     private static final String ROOT = "bookreview";
 
     @PostMapping
-    public ResponseEntity<CommonResponse<BookReviewResponse>> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
-        return new ResponseEntity<>(new CommonResponse<>(bookReviewService.save(reviewSaveRequest, RequestFile.of(ROOT, multipartFile))), HttpStatus.CREATED);
+    public ResponseEntity<BookReviewsResponse> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
+        return new ResponseEntity<>(new BookReviewsResponse(bookReviewService.save(reviewSaveRequest, RequestFile.of(ROOT, multipartFile))), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<CommonResponse<BookReviewResponse>> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(new CommonResponse<>(bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser)), HttpStatus.OK);
+    public ResponseEntity<BookReviewsResponse> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new BookReviewsResponse(bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser)), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CommonResponse<BookReviewResponse>> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(new CommonResponse<>(bookReviewService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<BookReviewsResponse> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(new BookReviewsResponse(bookReviewService.getById(id)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -57,19 +56,19 @@ public class BookReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponse<BookReviewResponse>> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
-        return new ResponseEntity<>(new CommonResponse<>(bookReviewService.getByCondition(getRequest, pageable)), HttpStatus.OK);
+    public ResponseEntity<BookReviewsResponse> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
+        return new ResponseEntity<>(new BookReviewsResponse(bookReviewService.getByCondition(getRequest, pageable)), HttpStatus.OK);
     }
 
     @PostMapping("/{no}/reply")
-    public ResponseEntity<CommonResponse<ResponseReply>> saveReply(@PathVariable Long no,
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
                                                    @Valid @RequestBody RequestSaveReply requestSaveReply) {
         RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
-        return ResponseEntity.ok(new CommonResponse<>(replyService.replySave(no, reply)));
+        return ResponseEntity.ok(replyService.replySave(no, reply));
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<CommonResponse<BookReviewResponseWithReply>> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(new CommonResponse<>(bookReviewService.getBookReviewIncludeReply(no, BoardType.BOOKREVIEW)));
+    public ResponseEntity<BookReviewsWithReplyResponse> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(new BookReviewsWithReplyResponse(bookReviewService.getBookReviewIncludeReply(no, BoardType.BOOKREVIEW)));
     }
 }
