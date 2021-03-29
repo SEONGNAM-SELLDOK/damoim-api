@@ -39,14 +39,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin().disable()
 			.logout().disable();
 
-		http.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.authorizeRequests()
-			.antMatchers(PUBLIC_URIS).permitAll()
-			.anyRequest().authenticated();
+        http.authorizeRequests()
+            .antMatchers(PUBLIC_URIS).permitAll()
+            .anyRequest().authenticated();
 
-		http.addFilterBefore(new JwtAuthenticationFiler(authenticationManagerBean()),
-			UsernamePasswordAuthenticationFilter.class);
-	}
+        http.addFilterBefore(new JwtAuthenticationFiler(authenticationManagerBean()),
+            UsernamePasswordAuthenticationFilter.class);
+
+        http.headers().frameOptions().disable();
+    }
 }

@@ -4,17 +4,20 @@ package com.damoim.restapi.reply.service;
 import com.damoim.restapi.boards.dao.BoardRepository;
 import com.damoim.restapi.boards.entity.Board;
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.dao.BookReviewRepository;
+import com.damoim.restapi.lecture.dao.LectureRepository;
 import com.damoim.restapi.recruit.dao.RecruitRepository;
 import com.damoim.restapi.recruit.entity.Recruit;
 import com.damoim.restapi.secondhandtrade.dao.UsedItemRepository;
 import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
-import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.function.Supplier;
 
 /**
  * @author dkansk924@naver.com
@@ -28,6 +31,8 @@ public class BoardValidationService {
     private final UsedItemRepository usedItemRepository;
     private final RecruitRepository recruitRepository;
     private final BoardRepository boardRepository;
+    private final BookReviewRepository bookReviewRepository;
+    private final LectureRepository lectureRepository;
     private final ModelMapper modelMapper;
 
     public Long existBoard(Long boarId, BoardType boardType) {
@@ -44,9 +49,17 @@ public class BoardValidationService {
             result = boardExist(boarId);
         }
 
+        if (BoardType.BOOKREVIEW.equals(boardType)) {
+            result = bookReviewExist(boarId);
+        }
+
+        if (BoardType.LECTURE.equals(boardType)) {
+            result = lectureExist(boarId);
+        }
+
         if (!result) {
             throw new NotFoundResource(HttpStatus.NOT_FOUND.toString(),
-                String.valueOf(boarId));
+                    String.valueOf(boarId));
         }
         return boarId;
     }
@@ -90,6 +103,13 @@ public class BoardValidationService {
         return boardRepository.existsById(id);
     }
 
+    private boolean bookReviewExist(Long id) {
+        return bookReviewRepository.existsById(id);
+    }
+
+    private boolean lectureExist(Long id) {
+        return lectureRepository.existsById(id);
+    }
 
     private Supplier<NotFoundResource> getFoundPageSupplier(Long id) {
         return () -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id));

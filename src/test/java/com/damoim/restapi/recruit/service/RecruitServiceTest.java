@@ -5,6 +5,11 @@ import com.damoim.restapi.recruit.model.RecruitGetRequest;
 import com.damoim.restapi.recruit.model.RecruitResponse;
 import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.model.RecruitUpdateRequest;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.recruit.model.*;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +35,9 @@ class RecruitServiceTest {
 
     @Autowired
     RecruitService recruitService;
+
+    @Autowired
+    ReplyService replyService;
 
     @DisplayName("구인 저장")
     @Test
@@ -155,4 +163,54 @@ class RecruitServiceTest {
         Set<RecruitResponse> emptyConditionRecruitSet = recruitService.getRecruitByCondition(pageRequest, RecruitGetRequest.builder().title("").register("").build());
         assertEquals(6, emptyConditionRecruitSet.size());
     }
+
+    @DisplayName("구인 댓글 입력하기")
+    @Test
+    void createRecruitWithReply() {
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().company("Firm").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitResponse recruitResponse = recruitService.save(recruitSaveRequest, null);
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setWriter("쓰는자");
+        requestSaveReply.setContent("내요오오오옹");
+        requestSaveReply.setIsChildId(false);
+        RequestSaveReply replySave = requestSaveReply.checkUrl("recruit");
+        ResponseReply responseReply = replyService.replySave(recruitResponse.getId(), replySave);
+        assertEquals("쓰는자", responseReply.getReply().getWriter());
+    }
+
+    @DisplayName("구인 댓글 가져오기")
+    @Test
+    void getRecruitWithReply() {
+        RecruitSaveRequest recruitSaveRequest = RecruitSaveRequest.builder().company("Firm").title("서비스를 함께할 팀원을 모집합니다.").location("판교").reward(0).deadline(LocalDate.of(2022, 2, 1)).build();
+        RecruitResponse recruitResponse = recruitService.save(recruitSaveRequest, null);
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setWriter("쓰는자");
+        requestSaveReply.setContent("내요오오오옹");
+        requestSaveReply.setIsChildId(false);
+        RequestSaveReply replySave = requestSaveReply.checkUrl("recruit");
+        replyService.replySave(recruitResponse.getId(), replySave);
+        RequestSaveReply requestSaveReply2 = new RequestSaveReply();
+        requestSaveReply2.setWriter("쓰는자2");
+        requestSaveReply2.setContent("내요오오오옹2");
+        requestSaveReply2.setIsChildId(false);
+        RequestSaveReply replySave2 = requestSaveReply2.checkUrl("recruit");
+        replyService.replySave(recruitResponse.getId(), replySave2);
+
+//        RequestSaveReply requestSaveReply3 = new RequestSaveReply();
+//        requestSaveReply3.setWriter("대댓글쓰는자");
+//        requestSaveReply3.setContent("잘나오나");
+//        requestSaveReply3.setIsChildId(true);
+//        requestSaveReply3.setParentReplyId(1L);
+//        RequestSaveReply replySave3 = requestSaveReply3.checkUrl("recruit");
+//        replyService.replySave(recruitResponse.getId(), replySave3);
+
+        RecruitResponseWithReply recruitResponseWithReply = recruitService.getRecruitIncludeReply(recruitResponse.getId(), BoardType.RECRUIT);
+        assertEquals(2, recruitResponseWithReply.getReplyList().size());
+        assertEquals("쓰는자", recruitResponseWithReply.getReplyList().get(0).getWriter());
+
+//        assertEquals(1, recruitResponseWithReply.getReplyList().get(1).getChildReply().size());
+//        assertEquals("잘나오나", recruitResponseWithReply.getReplyList().get(1).getChildReply().get(0).getContent());
+
+    }
+
 }
