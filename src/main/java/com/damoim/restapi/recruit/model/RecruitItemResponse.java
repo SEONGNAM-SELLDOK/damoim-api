@@ -1,6 +1,6 @@
-package com.damoim.restapi.bookreview.model;
+package com.damoim.restapi.recruit.model;
 
-import com.damoim.restapi.recruit.model.RecruitResponse;
+import com.damoim.restapi.lecture.model.LectureResponse;
 import lombok.Getter;
 
 import java.util.Collection;
@@ -11,16 +11,16 @@ import java.util.Collections;
  * @since 2021/03/29
  */
 @Getter
-public class BookReviewsResponse {
-    private Collection<BookReviewResponse> items;
+public class RecruitItemResponse {
+    private Collection<RecruitResponse> items;
     private int totalCount;
 
-    public BookReviewsResponse(Collection<BookReviewResponse> items) {
+    public RecruitItemResponse(Collection<RecruitResponse> items) {
         this.items = items;
         this.totalCount = items.size();
     }
 
-    public BookReviewsResponse(BookReviewResponse item) {
+    public RecruitItemResponse(RecruitResponse item) {
         this.items = Collections.singleton(item);
         this.totalCount = 1;
     }

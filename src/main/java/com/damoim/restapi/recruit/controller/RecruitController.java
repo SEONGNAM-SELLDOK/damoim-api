@@ -35,18 +35,18 @@ public class RecruitController {
     private static final String ROOT = "recruit";
 
     @PostMapping
-    public ResponseEntity<RecruitsResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
-        return new ResponseEntity<>(new RecruitsResponse(recruitService.save(saveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
+    public ResponseEntity<RecruitItemResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.save(saveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecruitsResponse> getRecruit(@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(new RecruitsResponse(recruitService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> getRecruit(@Valid @PathVariable Long id) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<RecruitsResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(new RecruitsResponse(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -56,8 +56,8 @@ public class RecruitController {
     }
 
     @GetMapping
-    public ResponseEntity<RecruitsResponse> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
-        return new ResponseEntity<>(new RecruitsResponse(recruitService.getRecruitByCondition(pageable, getRequest)), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.getRecruitByCondition(pageable, getRequest)), HttpStatus.OK);
     }
 
     @PostMapping("/{no}/reply")
@@ -68,7 +68,7 @@ public class RecruitController {
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<RecruitsWithReplyResponse> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(new RecruitsWithReplyResponse(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT)));
+    public ResponseEntity<RecruitItemWithReplyResponse> getReplyAndRecruit(@PathVariable Long no) {
+        return ResponseEntity.ok(new RecruitItemWithReplyResponse(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT)));
     }
 }

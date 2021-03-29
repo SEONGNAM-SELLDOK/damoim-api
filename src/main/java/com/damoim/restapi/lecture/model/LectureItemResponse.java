@@ -10,16 +10,16 @@ import java.util.Collections;
  * @since 2021/03/29
  */
 @Getter
-public class LecturesResponse {
+public class LectureItemResponse {
     private Collection<LectureResponse> items;
     private int totalCount;
 
-    public LecturesResponse(Collection<LectureResponse> items) {
+    public LectureItemResponse(Collection<LectureResponse> items) {
         this.items = items;
         this.totalCount = items.size();
     }
 
-    public LecturesResponse(LectureResponse item) {
+    public LectureItemResponse(LectureResponse item) {
         this.items = Collections.singleton(item);
         this.totalCount = 1;
     }
