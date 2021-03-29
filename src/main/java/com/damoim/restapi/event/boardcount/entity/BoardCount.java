@@ -33,6 +33,6 @@ public class BoardCount {
     private BoardType boardType;
 
     @Builder.Default
-    private final Long clickCount = 1L;
+    private final Long clickCount = 0L;
 
 }
