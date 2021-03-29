@@ -1,8 +1,6 @@
 package com.damoim.restapi.event;
 
 import com.damoim.restapi.event.boardcount.dao.BoardCountRepository;
-import com.damoim.restapi.event.boardcount.entity.BoardCount;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -17,19 +15,15 @@ public class BoardClickedListener {
 
     private final BoardCountRepository boardCountRepository;
 
+    @EventListener
+    @Transactional
+    public void handleBoardCreateEvent(BoardCreatedEvent event) {
+        boardCountRepository.save(event.toEntity());
+    }
 
     @EventListener
     @Transactional
     public synchronized void handleBoardClickedEvent(BoardClickedEvent clickedEvent) {
-        BoardCount boardCount = boardCountRepository
-            .findByBoardIdAndBoardType(clickedEvent.getBoardId(), clickedEvent.getBoardType());
-        if (Objects.isNull(boardCount)) {
-            boardCountRepository.save(clickedEvent.toEntity());
-        }
-
-        if (Objects.nonNull(boardCount)) {
-            boardCountRepository
-                .updateCount(clickedEvent.getBoardId(), clickedEvent.getBoardType());
-        }
+        boardCountRepository.updateCount(clickedEvent.getBoardId(), clickedEvent.getBoardType());
     }
 }

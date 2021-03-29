@@ -5,9 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.damoim.restapi.boards.entity.BoardType;
-import com.damoim.restapi.recruit.entity.Recruit;
-import com.damoim.restapi.recruit.model.RecruitResponse;
-import com.damoim.restapi.recruit.model.RecruitSaveRequest;
 import com.damoim.restapi.recruit.service.RecruitService;
 import com.damoim.restapi.reply.dao.ReplyRepository;
 import com.damoim.restapi.reply.entity.Reply;
@@ -23,22 +20,16 @@ import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
 
 
 @SpringBootTest
-@AutoConfigureMockMvc
 class ReplyServiceTest {
 
-    @Autowired
-    MockMvc mockMvc;
     @Autowired
     UsedItemService usedItemService;
     @Autowired
@@ -58,23 +49,23 @@ class ReplyServiceTest {
     @WithAccount("kjj@naver.com")
     void saveReply() {
         UsedItem usedItem = usedItemService.save(getItemRequest());
-        RecruitResponse recruit = recruitService.save(getRecruitSaveRequest(), null);
 
         long usedItemNo = usedItem.getNo();
         RequestSaveReply requestSaveReply = getSaveReply();
         RequestSaveReply reply = requestSaveReply.checkUrl("usedItems"); // board type setting
+        ResponseReply parentReply = replyService.replySave(usedItemNo, reply);// 부모 댓글 저장
 
-        replyService.replySave(usedItemNo, reply);// 부모 댓글 저장
+        RequestSaveReply childReply = getSaveReply();
+        childReply.setParentReplyId(parentReply.getReply().getNo());
+        childReply.setBoardType(BoardType.USEDITEMS);
+        ResponseReply saveChildReply = replyService
+            .replySave(usedItemNo, childReply);// 부모의 자식 댓글 저장
 
-        requestSaveReply.setParentReplyId(1L);
-        replyService.replySave(usedItemNo, reply); // 부모의 자식 댓글 저장
-
-        requestSaveReply.setIsChildId(true);
-        replyService.replySave(usedItemNo, reply); // 자식의 자식 댓글 저장
-
-        RequestSaveReply saveReply = getSaveReply();
-        saveReply.setBoardType(BoardType.RECRUIT);
-        replyService.replySave(recruit.getId(), saveReply); // 다른 보드타입 댓글 저장.
+        RequestSaveReply childChildReply = getSaveReply();
+        childChildReply.setParentReplyId(saveChildReply.getChildReply().getNo());
+        childChildReply.setBoardType(BoardType.USEDITEMS);
+        childChildReply.setIsChildId(true);
+        replyService.replySave(usedItemNo, childChildReply); // 자식의 자식 댓글 저장
 
         ResponseUsedItemIncludeReply usedItemIncludeReply = usedItemService
             .getUsedItemIncludeReply(usedItemNo, BoardType.USEDITEMS);
@@ -120,16 +111,19 @@ class ReplyServiceTest {
 
         RequestSaveReply reply = getSaveReply();
         reply.setBoardType(BoardType.USEDITEMS);
-        replyService.replySave(usedItemNo, reply);// 부모 댓글 저장
+        ResponseReply parentReply = replyService.replySave(usedItemNo, reply);// 부모 댓글 저장
 
-        reply.setParentReplyId(1L);
-        replyService.replySave(usedItemNo, reply); // 부모의 자식 댓글 저장
+        RequestSaveReply childReply = getSaveReply();
+        childReply.setParentReplyId(parentReply.getReply().getNo());
+        childReply.setBoardType(BoardType.USEDITEMS);
+        replyService.replySave(usedItemNo, childReply); // 부모의 자식 댓글 저장
 
-        reply.setBoardType(BoardType.USEDITEMS);
-        reply.setIsChildId(true);
-        reply.setParentReplyId(999L); //존재하지 않는 댓글 번호 설정.
+        RequestSaveReply childChildReply = getSaveReply();
+        childChildReply.setBoardType(BoardType.USEDITEMS);
+        childChildReply.setIsChildId(true);
+        childChildReply.setParentReplyId(999L); //존재하지 않는 댓글 번호 설정.
 
-        assertThatThrownBy(() -> replyService.replySave(usedItemNo, reply))
+        assertThatThrownBy(() -> replyService.replySave(usedItemNo, childChildReply))
             .isInstanceOf(NotFoundResource.class);
     }
 
@@ -149,17 +143,6 @@ class ReplyServiceTest {
         boolean result = replyRepository.existsById(rq.getReplyId());
 
         assertThat(result).isFalse();
-    }
-
-
-    private RecruitSaveRequest getRecruitSaveRequest() {
-        return RecruitSaveRequest.builder()
-            .company("Naver")
-            .title("서비스를 함께할 팀원을 모집합니다.")
-            .location("판교")
-            .reward(500)
-            .deadline(LocalDate.of(2022, 2, 1))
-            .build();
     }
 
     private RequestSaveReply getSaveReply() {
