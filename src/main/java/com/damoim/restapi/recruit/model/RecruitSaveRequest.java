@@ -49,7 +49,7 @@ public class RecruitSaveRequest {
     @NotNull
     private LocalDate deadline;
 
-    @ApiModelProperty(value = "이미지주소", required = true)
+    @ApiModelProperty(value = "이미지주소", example = "/recruit/image000.jpg")
     private String image;
 
 }
