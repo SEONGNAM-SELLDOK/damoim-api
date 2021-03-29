@@ -37,4 +37,14 @@ public class MemberService {
 	public Optional<Member> get(Long memberId) {
 		return memberRepository.findById(memberId);
 	}
+
+	@Transactional(readOnly = true)
+	public Member findByName(String email) {
+		return memberRepository.findByEmail(email);
+	}
+
+	@Transactional(readOnly = true)
+	public Member findByNo(long no) {
+		return memberRepository.findByNo(no);
+	}
 }
