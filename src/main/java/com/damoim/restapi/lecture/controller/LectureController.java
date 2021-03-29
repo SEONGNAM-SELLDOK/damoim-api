@@ -9,6 +9,7 @@ import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.lecture.service.LectureService;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.common.model.CommonResponse;
 import com.damoim.restapi.reply.model.request.RequestSaveReply;
 import com.damoim.restapi.reply.model.response.ResponseReply;
 import com.damoim.restapi.reply.service.ReplyService;
@@ -25,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -41,23 +41,23 @@ public class LectureController {
     private static final String ROOT = "lecture";
 
     @PostMapping
-    public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
-        return new ResponseEntity<>(lectureService.save(lectureSaveRequest, RequestFile.of(ROOT, file)), HttpStatus.CREATED);
+    public ResponseEntity<CommonResponse<LectureResponse>> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
+        return new ResponseEntity<>(new CommonResponse<>(lectureService.save(lectureSaveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Set<LectureResponse>> retrieve(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, LectureGetRequest getRequest) {
-        return new ResponseEntity<>(lectureService.getLectureByCondition(pageable, getRequest), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<LectureResponse>> retrieve(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, LectureGetRequest getRequest) {
+        return new ResponseEntity<>(new CommonResponse<>(lectureService.getLectureByCondition(pageable, getRequest)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LectureResponse> selectItem(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(lectureService.findById(id), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<LectureResponse>> selectItem(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(new CommonResponse<>(lectureService.findById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<LectureResponse>> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new CommonResponse<>(lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -68,15 +68,15 @@ public class LectureController {
     }
 
     @PostMapping("/{no}/reply")
-    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+    public ResponseEntity<CommonResponse<ResponseReply>> saveReply(@PathVariable Long no,
                                                    @Valid @RequestBody RequestSaveReply requestSaveReply) {
         RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
-        return ResponseEntity.ok(replyService.replySave(no, reply));
+        return ResponseEntity.ok(new CommonResponse<>(replyService.replySave(no, reply)));
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<LectureResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(lectureService.getLectureIncludeReply(no, BoardType.LECTURE));
+    public ResponseEntity<CommonResponse<LectureResponseWithReply>> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(new CommonResponse<>(lectureService.getLectureIncludeReply(no, BoardType.LECTURE)));
     }
 
 }

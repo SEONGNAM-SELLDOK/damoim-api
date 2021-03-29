@@ -1,6 +1,7 @@
 package com.damoim.restapi.recruit.controller;
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.common.model.CommonResponse;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.recruit.model.*;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 /**
  * @author SeongRok.Oh
@@ -36,18 +36,18 @@ public class RecruitController {
     private static final String ROOT = "recruit";
 
     @PostMapping
-    public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
-        return new ResponseEntity<>(recruitService.save(saveRequest, RequestFile.of(ROOT, file)), HttpStatus.CREATED);
+    public ResponseEntity<CommonResponse<RecruitResponse>> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
+        return new ResponseEntity<>(new CommonResponse<>(recruitService.save(saveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecruitResponse> getRecruit(@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(recruitService.getById(id), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<RecruitResponse>> getRecruit(@Valid @PathVariable Long id) {
+        return new ResponseEntity<>(new CommonResponse<>(recruitService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<RecruitResponse>> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new CommonResponse<>(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -57,19 +57,19 @@ public class RecruitController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<RecruitResponse>> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
-        return new ResponseEntity<>(recruitService.getRecruitByCondition(pageable, getRequest), HttpStatus.OK);
+    public ResponseEntity<CommonResponse<RecruitResponse>> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
+        return new ResponseEntity<>(new CommonResponse<>(recruitService.getRecruitByCondition(pageable, getRequest)), HttpStatus.OK);
     }
 
     @PostMapping("/{no}/reply")
-    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
-                                                   @Valid @RequestBody RequestSaveReply requestSaveReply) {
+    public ResponseEntity<CommonResponse<ResponseReply>> saveReply(@PathVariable Long no,
+                                                                   @Valid @RequestBody RequestSaveReply requestSaveReply) {
         RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
-        return ResponseEntity.ok(replyService.replySave(no, reply));
+        return ResponseEntity.ok(new CommonResponse(replyService.replySave(no, reply)));
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<RecruitResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT));
+    public ResponseEntity<CommonResponse<RecruitResponseWithReply>> getReplyAndUsedItem(@PathVariable Long no) {
+        return ResponseEntity.ok(new CommonResponse(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT)));
     }
 }
