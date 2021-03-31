@@ -47,4 +47,11 @@ public class Introduce {
         }
         return this.register.equals(register);
     }
+
+    public void update(Introduce updateIntroduce) {
+        if (Objects.isNull(id) || Objects.isNull(updateIntroduce) || Objects.isNull(updateIntroduce.getId()) || !id.equals(updateIntroduce.getId())) {
+            throw new RuntimeException();
+        }
+        this.content = updateIntroduce.content;
+    }
 }

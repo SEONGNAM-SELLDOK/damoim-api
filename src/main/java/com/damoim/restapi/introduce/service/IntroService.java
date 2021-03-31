@@ -48,10 +48,10 @@ public class IntroService {
         return repository.findById(id).orElseThrow(() -> new NotFoundResource(HttpStatus.NOT_FOUND.toString(), String.valueOf(id)));
     }
 
-    public IntroResponse update(@Valid IntroUpdateRequest updateRequest, AuthUser authUser) {
+    public void update(@Valid IntroUpdateRequest updateRequest, AuthUser authUser) {
         Introduce origin = getIntroduceById(updateRequest.getId());
         validateEditor(origin, authUser);
-        return responseMapper.toDto(repository.save(updateRequestMapper.toEntity(updateRequest)));
+        origin.update(updateRequestMapper.toEntity(updateRequest));
     }
 
     public void delete(long id, AuthUser authUser) {
