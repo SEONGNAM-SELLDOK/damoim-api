@@ -1,6 +1,5 @@
 package com.damoim.restapi.recruit.model;
 
-import com.damoim.restapi.lecture.model.LectureResponse;
 import lombok.Getter;
 
 import java.util.Collection;
