@@ -94,7 +94,8 @@ class RecruitServiceTest {
         String updateCompany = "Never";
         String updateTitle = "회사 이름 바뀜";
         RecruitUpdateRequest recruitUpdateRequest = RecruitUpdateRequest.updateRequestBuilder().id(saveRecruit.getId()).company(updateCompany).title(updateTitle).location(saveRecruit.getLocation()).reward(saveRecruit.getReward()).deadline(saveRecruit.getDeadline()).build();
-        RecruitResponse updateRecruit = recruitService.update(recruitUpdateRequest, null, AuthUser.builder().email("lokie").build());
+        recruitService.update(recruitUpdateRequest, null, AuthUser.builder().email("lokie").build());
+        RecruitResponse updateRecruit = recruitService.getById(saveRecruit.getId());
         assertEquals(updateCompany, updateRecruit.getCompany());
         assertEquals(updateTitle, updateRecruit.getTitle());
     }

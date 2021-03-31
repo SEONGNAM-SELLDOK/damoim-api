@@ -46,7 +46,8 @@ public class RecruitController {
 
     @PutMapping
     public ResponseEntity<RecruitItemResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(new RecruitItemResponse(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
+        recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser);
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.getById(updateRequest.getId())), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")

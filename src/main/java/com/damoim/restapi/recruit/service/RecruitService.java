@@ -55,7 +55,7 @@ public class RecruitService {
         return responseMapper.toDto(getRecruitById(id));
     }
 
-    public RecruitResponse update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
+    public void update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
         Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
         validateEditor(origin, authUser);
@@ -64,7 +64,7 @@ public class RecruitService {
             fileName = fileUtil.upload(file);
         }
         updateRecruit.setImage(fileName);
-        return responseMapper.toDto(repository.save(updateRecruit));
+        origin.update(updateRecruit);
     }
 
     public void delete(long id, AuthUser authUser) {
