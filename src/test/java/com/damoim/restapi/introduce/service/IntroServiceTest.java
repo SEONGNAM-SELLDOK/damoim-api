@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author SeongRok.Oh
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("커뮤니티 소개글 테스트")
 @Transactional
 @SpringBootTest
-public class IntroServiceTest {
+class IntroServiceTest {
 
     @Autowired
     IntroService introService;
@@ -64,7 +65,8 @@ public class IntroServiceTest {
         IntroSaveRequest saveRequest = IntroSaveRequest.builder().content("만나서 반갑습니다.").build();
         IntroResponse introResponse = introService.create(saveRequest);
         introService.delete(introResponse.getId(), AuthUser.builder().email("lokie").build());
-        assertThrows(NotFoundResource.class, () -> introService.getById(introResponse.getId()));
+        Long id = introResponse.getId();
+        assertThrows(NotFoundResource.class, () -> introService.getById(id));
     }
 
 }
