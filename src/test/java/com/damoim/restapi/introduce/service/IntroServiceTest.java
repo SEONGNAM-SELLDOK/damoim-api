@@ -3,6 +3,8 @@ package com.damoim.restapi.introduce.service;
 import com.damoim.restapi.introduce.model.IntroResponse;
 import com.damoim.restapi.introduce.model.IntroSaveRequest;
 import com.damoim.restapi.introduce.model.IntroUpdateRequest;
+import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.damoim.restapi.secondhandtrade.errormsg.NotFoundResource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,24 +44,26 @@ public class IntroServiceTest {
     }
 
     @DisplayName("커뮤니티 소개글 업데이트 테스트")
+    @WithAccount("lokie")
     @Test
     void updateTest() {
         IntroSaveRequest saveRequest = IntroSaveRequest.builder().content("만나서 반갑습니다.").build();
         IntroResponse introResponse = introService.create(saveRequest);
         final String updateContent = "(수정) 만나서 좋아요.";
         IntroUpdateRequest updateRequest = IntroUpdateRequest.updateBuilder().id(introResponse.getId()).content(updateContent).build();
-        introService.update(updateRequest);
+        introService.update(updateRequest, AuthUser.builder().email("lokie").build());
 
         IntroResponse getIntro = introService.getById(introResponse.getId());
         assertEquals(updateContent, getIntro.getContent());
     }
 
     @DisplayName("커뮤니티 소개글 삭제 테스트")
+    @WithAccount("lokie")
     @Test
     void deleteTest() {
         IntroSaveRequest saveRequest = IntroSaveRequest.builder().content("만나서 반갑습니다.").build();
         IntroResponse introResponse = introService.create(saveRequest);
-        introService.delete(introResponse.getId());
+        introService.delete(introResponse.getId(), AuthUser.builder().email("lokie").build());
         assertThrows(NotFoundResource.class, () -> introService.getById(introResponse.getId()));
     }
 
