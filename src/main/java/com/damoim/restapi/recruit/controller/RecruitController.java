@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 /**
  * @author SeongRok.Oh
@@ -36,18 +35,18 @@ public class RecruitController {
     private static final String ROOT = "recruit";
 
     @PostMapping
-    public ResponseEntity<RecruitResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
-        return new ResponseEntity<>(recruitService.save(saveRequest, RequestFile.of(ROOT, file)), HttpStatus.CREATED);
+    public ResponseEntity<RecruitItemResponse> saveRecruit(@Valid @RequestBody RecruitSaveRequest saveRequest, @RequestParam(required = false) MultipartFile file) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.save(saveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecruitResponse> getRecruit(@Valid @PathVariable Long id) {
-        return new ResponseEntity<>(recruitService.getById(id), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> getRecruit(@Valid @PathVariable Long id) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.getById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<RecruitResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> updateRecruit(@Valid @RequestBody RecruitUpdateRequest updateRequest, @RequestParam(required = false) MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.update(updateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -57,8 +56,8 @@ public class RecruitController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<RecruitResponse>> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
-        return new ResponseEntity<>(recruitService.getRecruitByCondition(pageable, getRequest), HttpStatus.OK);
+    public ResponseEntity<RecruitItemResponse> getRecruits(@PageableDefault(size = 6, sort = "createdDate", direction = Sort.Direction.DESC) Pageable pageable, RecruitGetRequest getRequest) {
+        return new ResponseEntity<>(new RecruitItemResponse(recruitService.getRecruitByCondition(pageable, getRequest)), HttpStatus.OK);
     }
 
     @PostMapping("/{no}/reply")
@@ -69,7 +68,7 @@ public class RecruitController {
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<RecruitResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT));
+    public ResponseEntity<RecruitItemWithReplyResponse> getReplyAndRecruit(@PathVariable Long no) {
+        return ResponseEntity.ok(new RecruitItemWithReplyResponse(recruitService.getRecruitIncludeReply(no, BoardType.RECRUIT)));
     }
 }

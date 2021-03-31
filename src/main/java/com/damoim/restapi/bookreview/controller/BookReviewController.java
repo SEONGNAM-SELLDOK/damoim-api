@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 /**
  * @author SeongRok.Oh
@@ -36,18 +35,18 @@ public class BookReviewController {
     private static final String ROOT = "bookreview";
 
     @PostMapping
-    public ResponseEntity<BookReviewResponse> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
-        return new ResponseEntity<>(bookReviewService.save(reviewSaveRequest, RequestFile.of(ROOT, multipartFile)), HttpStatus.CREATED);
+    public ResponseEntity<BookReviewItemResponse> create(@Valid @RequestBody BookReviewSaveRequest reviewSaveRequest, MultipartFile multipartFile) {
+        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.save(reviewSaveRequest, RequestFile.of(ROOT, multipartFile))), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<BookReviewResponse> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser), HttpStatus.OK);
+    public ResponseEntity<BookReviewItemResponse> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser)), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<BookReviewResponse> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(bookReviewService.getById(id), HttpStatus.OK);
+    public ResponseEntity<BookReviewItemResponse> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.getById(id)), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -57,8 +56,8 @@ public class BookReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<BookReviewResponse>> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
-        return new ResponseEntity<>(bookReviewService.getByCondition(getRequest, pageable), HttpStatus.OK);
+    public ResponseEntity<BookReviewItemResponse> getByCondition(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, BookReviewGetRequest getRequest) {
+        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.getByCondition(getRequest, pageable)), HttpStatus.OK);
     }
 
     @PostMapping("/{no}/reply")
@@ -69,7 +68,7 @@ public class BookReviewController {
     }
 
     @GetMapping("/{no}/reply")
-    public ResponseEntity<BookReviewResponseWithReply> getReplyAndUsedItem(@PathVariable Long no) {
-        return ResponseEntity.ok(bookReviewService.getBookReviewIncludeReply(no, BoardType.BOOKREVIEW));
+    public ResponseEntity<BookReviewItemWithReplyResponse> getReplyAndBookReview(@PathVariable Long no) {
+        return ResponseEntity.ok(new BookReviewItemWithReplyResponse(bookReviewService.getBookReviewIncludeReply(no, BoardType.BOOKREVIEW)));
     }
 }
