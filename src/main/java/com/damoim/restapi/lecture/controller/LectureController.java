@@ -52,7 +52,8 @@ public class LectureController {
 
     @PutMapping
     public ResponseEntity<LectureItemResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(new LectureItemResponse(lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
+        lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser);
+        return new ResponseEntity<>(new LectureItemResponse(lectureService.findById(lectureUpdateRequest.getId())), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

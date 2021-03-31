@@ -67,7 +67,8 @@ class LectureServiceTest {
         LectureResponse savedLecture = lectureService.save(lectureSaveRequest, null);
         String updateSpeaker = "홍길동";
         LectureUpdateRequest updateRequest = LectureUpdateRequest.updateRequestBuilder().id(savedLecture.getId()).speaker(updateSpeaker).title("토비의 스프링 5").subject(LectureSubject.JAVA).deadline(LocalDate.of(2022, 2, 2)).build();
-        LectureResponse updatedLecture = lectureService.update(updateRequest, null, AuthUser.builder().email("lokie").build());
+        lectureService.update(updateRequest, null, AuthUser.builder().email("lokie").build());
+        LectureResponse updatedLecture = lectureService.findById(savedLecture.getId());
         assertEquals(savedLecture.getId(), updatedLecture.getId());
         assertEquals(updateSpeaker, updatedLecture.getSpeaker());
     }

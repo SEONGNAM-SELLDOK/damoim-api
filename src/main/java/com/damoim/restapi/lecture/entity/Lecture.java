@@ -41,10 +41,8 @@ public class Lecture {
     private String route;             // 수업 경로
     private LocalDate deadline;   // 마감 기한
 
-    @Column(updatable = false)
     @CreatedBy
     private String register;
-    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime registeredDate;
     @LastModifiedDate
@@ -59,4 +57,16 @@ public class Lecture {
         return this.register.equals(register);
     }
 
+    public void update(Lecture updateLecture) {
+        if (Objects.isNull(updateLecture) || Objects.isNull(id) || Objects.isNull(updateLecture.getId()) || !id.equals(updateLecture.getId())) {
+            throw new RuntimeException();
+        }
+        this.title = updateLecture.title;
+        this.description = updateLecture.description;
+        this.image = updateLecture.image;
+        this.speaker = updateLecture.speaker;
+        this.subject = updateLecture.subject;
+        this.route = updateLecture.route;
+        this.deadline = updateLecture.deadline;
+    }
 }
