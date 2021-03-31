@@ -5,6 +5,7 @@ import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.event.BoardClickedEvent;
+import com.damoim.restapi.event.BoardCreatedEvent;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.reply.entity.Reply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
@@ -51,7 +52,8 @@ public class UsedItemService {
             String upload = damoimFileUtil.upload(file);
             item.setTitleImg(upload);
         }
-        usedItemRepository.save(item);
+        item = usedItemRepository.save(item);
+        eventPublisher.publishEvent(new BoardCreatedEvent(item.getNo(), BoardType.USEDITEMS));
         return modelMapper.map(item, ResponseUsedItem.class);
     }
 

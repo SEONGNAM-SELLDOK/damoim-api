@@ -5,13 +5,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.event.boardcount.dao.BoardCountRepository;
 import com.damoim.restapi.event.boardcount.entity.BoardCount;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import com.damoim.restapi.secondhandtrade.entity.useditem.Category;
 import com.damoim.restapi.secondhandtrade.entity.useditem.TradeType;
-import com.damoim.restapi.secondhandtrade.entity.useditem.UsedItem;
 import com.damoim.restapi.secondhandtrade.model.request.UsedItemRequest;
+import com.damoim.restapi.secondhandtrade.model.response.ResponseUsedItem;
 import com.damoim.restapi.secondhandtrade.service.UsedItemService;
 import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,14 +52,15 @@ class BoardClickedListenerTest {
     @DisplayName("쓰레드 세이프 테스트 ")
     @WithAccount("kjj@email.com")
     void thread() throws Exception {
-        UsedItem usedItem = usedItemService.save(getItemRequest());
+        ResponseUsedItem item =
+            usedItemService.save(getItemRequest(), RequestFile.of("test", null));
         for (int i = 0; i < 1000; i++) {
-            mockMvc.perform(get("/useditems/item/" + usedItem.getNo() + "/reply")
+            mockMvc.perform(get("/useditems/item/" + item.getNo() + "/reply")
                 .cookie(new Cookie("AUTH_TOKEN", "testUser")))
                 .andExpect(status().isOk());
         }
         BoardCount boardCount = boardCountRepository
-            .findByBoardIdAndBoardType(usedItem.getNo(), BoardType.USEDITEMS);
+            .findByBoardIdAndBoardType(item.getNo(), BoardType.USEDITEMS);
         long count = boardCountRepository.count();
         assertThat(count).isEqualTo(1);
         assertThat(boardCount.getClickCount()).isEqualTo(1000L);
