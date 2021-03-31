@@ -55,7 +55,7 @@ public class BookReviewService {
         return bookReviewResponseSet(repository.findAll(pageable).toSet());
     }
 
-    public BookReviewResponse update(@Valid BookReviewUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
+    public void update(@Valid BookReviewUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
         BookReview origin = getBookReviewById(updateRequest.getId());
         validateEditor(origin, authUser);
         BookReview updateBookReview = updateRequestMapper.toEntity(updateRequest);
@@ -64,7 +64,7 @@ public class BookReviewService {
             imageUrl = damoimFileUtil.upload(file);
         }
         updateBookReview.setImage(imageUrl);
-        return responseMapper.toDto(repository.save(updateBookReview));
+        origin.update(updateBookReview);
     }
 
     public void delete(long id, AuthUser authUser) {

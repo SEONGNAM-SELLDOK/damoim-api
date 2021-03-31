@@ -41,7 +41,8 @@ public class BookReviewController {
 
     @PutMapping
     public ResponseEntity<BookReviewItemResponse> update(@Valid @RequestBody BookReviewUpdateRequest reviewUpdateRequest, MultipartFile multipartFile, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser)), HttpStatus.OK);
+        bookReviewService.update(reviewUpdateRequest, RequestFile.of(ROOT, multipartFile), authUser);
+        return new ResponseEntity<>(new BookReviewItemResponse(bookReviewService.getById(reviewUpdateRequest.getId())), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

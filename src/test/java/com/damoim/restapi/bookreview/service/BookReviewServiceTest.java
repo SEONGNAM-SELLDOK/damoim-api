@@ -90,7 +90,8 @@ class BookReviewServiceTest {
         BookReviewResponse savedBookReview = bookReviewService.save(saveRequest, null);
         String updateTitle = "(수정)객체지향의 사실과 오해를 읽고...";
         BookReviewUpdateRequest updateRequest = BookReviewUpdateRequest.updateBookReviewBuilder().id(savedBookReview.getId()).title(updateTitle).description("아주 좋은 내용이다").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP"))).deadline(LocalDate.of(2022, 3, 16)).build();
-        BookReviewResponse updatedBookReview = bookReviewService.update(updateRequest, null, AuthUser.builder().email("lokie").build());
+        bookReviewService.update(updateRequest, null, AuthUser.builder().email("lokie").build());
+        BookReviewResponse updatedBookReview = bookReviewService.getById(savedBookReview.getId());
         assertEquals(updateTitle, updatedBookReview.getTitle());
     }
 

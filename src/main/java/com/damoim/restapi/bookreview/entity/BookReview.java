@@ -56,4 +56,16 @@ public class BookReview {
         }
         return this.register.equals(register);
     }
+
+    public void update(BookReview updateBookReview) {
+        this.title = updateBookReview.title;
+        this.description = updateBookReview.description;
+        this.image = updateBookReview.image;
+        this.isbn = updateBookReview.isbn;
+        this.publisher = updateBookReview.publisher;
+        this.writer = updateBookReview.writer;
+        this.subject = updateBookReview.subject;
+        this.tag = updateBookReview.tag;
+        this.deadline = updateBookReview.deadline;
+    }
 }
