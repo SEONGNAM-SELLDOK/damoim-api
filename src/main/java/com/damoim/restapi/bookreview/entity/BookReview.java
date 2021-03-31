@@ -58,6 +58,10 @@ public class BookReview {
     }
 
     public void update(BookReview updateBookReview) {
+        if (Objects.isNull(updateBookReview) || Objects.isNull(updateBookReview.getId()) || Objects.isNull(id) || !id.equals(updateBookReview.getId())) {
+            throw new RuntimeException();
+        }
+
         this.title = updateBookReview.title;
         this.description = updateBookReview.description;
         this.image = updateBookReview.image;
