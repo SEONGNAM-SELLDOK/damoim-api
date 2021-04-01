@@ -1,5 +1,6 @@
 package com.damoim.restapi.member.entity;
 
+import com.damoim.restapi.like.entity.LikeStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -7,6 +8,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Member
@@ -25,7 +28,10 @@ import java.time.LocalDateTime;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_no")
     private long no;
+
+    @Column(name = "member_id")
     private String id;
     private String name;
     private String pwd;
@@ -38,4 +44,15 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime modifiedDate;
     private String modifier;
+
+    // 하나의 맴버는 여러개의 like를 가질 수 있다.
+    @OneToMany(mappedBy = "memberLike", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<LikeStatus> LikeStatusLists = new ArrayList<>();
+
+    // 양방향 연관관계
+    public void  addBoardLike(LikeStatus likeStatus) {
+        LikeStatusLists.add(likeStatus);
+        likeStatus.setMemberLike(this);
+    }
 }

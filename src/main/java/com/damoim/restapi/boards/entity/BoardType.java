@@ -6,5 +6,5 @@ package com.damoim.restapi.boards.entity;
  */
 
 public enum BoardType {
-    SEMINAR, STUDY, USEDITEMS, RECRUIT
+    SEMINAR, STUDY, USEDITEMS, RECRUIT, BOOKREVIEW, LECTURE
 }

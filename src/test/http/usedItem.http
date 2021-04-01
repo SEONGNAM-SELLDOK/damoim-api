@@ -1,7 +1,7 @@
 ### 중고거래 게시글 생성
 POST http://localhost:8080/useditems
 Content-Type: application/json
-Cookie: AUTH_TOKEN=
+Cookie:  AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjU3NjA3LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2NjU2MDcsImp0aSI6IjU3NTM3YWJhLWM4ZjktNDc3Mi05MzIwLWM2ODdiYzNjMWY5MCJ9.enfbPJaCbHe4itEPkRkfqxeAGMKzp0BrwrulvX7I6Bw
 
 {
   "address": "서울특별시",
@@ -98,6 +98,7 @@ Content-Type: application/json
 ### 특정 게시글 가져오기(댓글 목록 포함)
 ### total query = 2
 GET http://localhost:8080/useditems/item/1/reply
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5MjU3NjA3LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTY2NjU2MDcsImp0aSI6IjU3NTM3YWJhLWM4ZjktNDc3Mi05MzIwLWM2ODdiYzNjMWY5MCJ9.enfbPJaCbHe4itEPkRkfqxeAGMKzp0BrwrulvX7I6Bw
 Accept: application/json
 
 

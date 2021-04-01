@@ -1,11 +1,13 @@
 package com.damoim.restapi.lecture.controller;
 
-import com.damoim.restapi.lecture.model.LectureGetRequest;
-import com.damoim.restapi.lecture.model.LectureResponse;
-import com.damoim.restapi.lecture.model.LectureSaveRequest;
-import com.damoim.restapi.lecture.model.LectureUpdateRequest;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.lecture.model.*;
 import com.damoim.restapi.lecture.service.LectureService;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.status;
 
@@ -31,25 +32,27 @@ import static org.springframework.http.ResponseEntity.status;
 public class LectureController {
 
     private final LectureService lectureService;
+    private final ReplyService replyService;
+    private static final String ROOT = "lecture";
 
     @PostMapping
-    public ResponseEntity<LectureResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
-        return new ResponseEntity<>(lectureService.save(lectureSaveRequest, file), HttpStatus.CREATED);
+    public ResponseEntity<LectureItemResponse> save(@Valid @RequestBody LectureSaveRequest lectureSaveRequest, MultipartFile file) {
+        return new ResponseEntity<>(new LectureItemResponse(lectureService.save(lectureSaveRequest, RequestFile.of(ROOT, file))), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Set<LectureResponse>> retrieve(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, LectureGetRequest getRequest) {
-        return new ResponseEntity<>(lectureService.getLectureByCondition(pageable, getRequest), HttpStatus.OK);
+    public ResponseEntity<LectureItemResponse> retrieve(@PageableDefault(size = 6, sort = "createDate", direction = Sort.Direction.DESC) Pageable pageable, LectureGetRequest getRequest) {
+        return new ResponseEntity<>(new LectureItemResponse(lectureService.getLectureByCondition(pageable, getRequest)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LectureResponse> selectItem(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(lectureService.findById(id), HttpStatus.OK);
+    public ResponseEntity<LectureItemResponse> selectItem(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(new LectureItemResponse(lectureService.findById(id)), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<LectureResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
-        return new ResponseEntity<>(lectureService.update(lectureUpdateRequest, file, authUser), HttpStatus.OK);
+    public ResponseEntity<LectureItemResponse> update(@Valid @RequestBody LectureUpdateRequest lectureUpdateRequest, MultipartFile file, @AuthenticationPrincipal AuthUser authUser) {
+        return new ResponseEntity<>(new LectureItemResponse(lectureService.update(lectureUpdateRequest, RequestFile.of(ROOT, file), authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +60,18 @@ public class LectureController {
         log.info("Delete Lectures Request - {}", id);
         lectureService.delete(id, authUser);
         return status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{no}/reply")
+    public ResponseEntity<ResponseReply> saveReply(@PathVariable Long no,
+                                                   @Valid @RequestBody RequestSaveReply requestSaveReply) {
+        RequestSaveReply reply = requestSaveReply.checkUrl(ROOT);
+        return ResponseEntity.ok(replyService.replySave(no, reply));
+    }
+
+    @GetMapping("/{no}/reply")
+    public ResponseEntity<LectureItemWithReplyResponse> getReplyAndLecture(@PathVariable Long no) {
+        return ResponseEntity.ok(new LectureItemWithReplyResponse(lectureService.getLectureIncludeReply(no, BoardType.LECTURE)));
     }
 
 }

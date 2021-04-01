@@ -6,6 +6,8 @@ import com.damoim.restapi.boards.entity.DamoimTag;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,22 +26,31 @@ import lombok.ToString;
 @Builder
 public class ModifyBoardsRequest {
     @NotBlank
-    private String title; // 세미나 제목
+    @ApiModelProperty(value = "모임 제목", example = "Seminar, Study 제목 입니다.")
+    private String title;
     @NotBlank
-    private String content; // 상세 내용
+    @ApiModelProperty(value = "모임 내용", example = "Spring 모임 입니다.")
+    private String content;
     @NotBlank
-    private String image; // 대표 이미지
+    @ApiModelProperty(value = "모임 썸네일", example = "img/0000.jpg")
+    private String image;
     @NotNull
+    @ApiModelProperty(value = "국가", example = "KR")
     private String country;
     @NotNull
+    @ApiModelProperty(value = "도시", example = "SEOUL")
     private String city;
     @NotNull
+    @ApiModelProperty(value = "상세 주소", example = "강남구 영동대로 513")
     private String street;
     @NotNull
-    private String subject; // 주제
+    @ApiModelProperty(value = "모임 주제", example = "SPRING")
+    private String subject;
     @NotNull
-    private DamoimTag damoimTag; // 태그
+    @ApiModelProperty(value = "모임 태그", example = "JAVA")
+    private DamoimTag damoimTag;
     @NotNull
+    @ApiModelProperty(value = "모임 썸네일", example = "img/0000.jpg")
     private LocalDateTime endDate; // 마감일
 
     public Board updateTo(Board board) {

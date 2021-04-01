@@ -1,10 +1,11 @@
 package com.damoim.restapi.bookreview.service;
 
-import com.damoim.restapi.bookreview.model.BookReviewGetRequest;
-import com.damoim.restapi.bookreview.model.BookReviewResponse;
-import com.damoim.restapi.bookreview.model.BookReviewSaveRequest;
-import com.damoim.restapi.bookreview.model.BookReviewUpdateRequest;
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.model.*;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class BookReviewServiceTest {
 
     @Autowired
     BookReviewService bookReviewService;
+
+    @Autowired
+    ReplyService replyService;
 
     @DisplayName("도서 리뷰 저장 테스트")
     @WithAccount("lokie")
@@ -192,5 +196,43 @@ class BookReviewServiceTest {
 //        Set<BookReview> registerBookReviewSet = bookReviewService.getByCondition(registerRequest, pageRequest);
 //        assertEquals(3, registerBookReviewSet.size());
 
+    }
+
+    @DisplayName("도서리뷰 댓글 입력하기")
+    @Test
+    void createBookReviewReplyTest() {
+        BookReviewSaveRequest bookReviewSaveRequest = BookReviewSaveRequest.builder().title("객체지향의 사실과 오해를 읽고...").description("어려운 내용").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP", "솔리드"))).deadline(LocalDate.of(2023, 3, 16)).build();
+        BookReviewResponse bookReviewResponse = bookReviewService.save(bookReviewSaveRequest, null);
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setIsChildId(false);
+        requestSaveReply.setWriter("오성록");
+        requestSaveReply.setContent("댓글댓글");
+        RequestSaveReply saveReply = requestSaveReply.checkUrl("bookreview");
+        ResponseReply responseReply = replyService.replySave(bookReviewResponse.getId(), saveReply);
+        assertEquals("오성록", responseReply.getReply().getWriter());
+    }
+
+    @DisplayName("도서리뷰 댓글 가져오기")
+    @Test
+    void getBookReviewReplyTest() {
+        BookReviewSaveRequest bookReviewSaveRequest = BookReviewSaveRequest.builder().title("객체지향의 사실과 오해를 읽고...").description("어려운 내용").isbn("978-89-98139-76-6").publisher("위키북스").writer("조영호").subject("객체지향").tag(new HashSet<>(Arrays.asList("객체", "OOP", "솔리드"))).deadline(LocalDate.of(2023, 3, 16)).build();
+        BookReviewResponse bookReviewResponse = bookReviewService.save(bookReviewSaveRequest, null);
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setIsChildId(false);
+        requestSaveReply.setWriter("오성록");
+        requestSaveReply.setContent("댓글댓글");
+        RequestSaveReply saveReply = requestSaveReply.checkUrl("bookreview");
+        replyService.replySave(bookReviewResponse.getId(), saveReply);
+
+        RequestSaveReply requestSaveReply2 = new RequestSaveReply();
+        requestSaveReply2.setIsChildId(false);
+        requestSaveReply2.setWriter("홍길동");
+        requestSaveReply2.setContent("222");
+        RequestSaveReply saveReply2 = requestSaveReply2.checkUrl("bookreview");
+        replyService.replySave(bookReviewResponse.getId(), saveReply2);
+
+        BookReviewResponseWithReply reviewResponseWithReply = bookReviewService.getBookReviewIncludeReply(bookReviewResponse.getId(), BoardType.BOOKREVIEW);
+        assertEquals(2, reviewResponseWithReply.getReplyList().size());
+        assertEquals("222", reviewResponseWithReply.getReplyList().get(1).getContent());
     }
 }

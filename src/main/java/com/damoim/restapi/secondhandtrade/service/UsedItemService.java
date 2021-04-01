@@ -4,6 +4,8 @@ package com.damoim.restapi.secondhandtrade.service;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
+import com.damoim.restapi.event.BoardClickedEvent;
+import com.damoim.restapi.event.BoardCreatedEvent;
 import com.damoim.restapi.member.model.AuthUser;
 import com.damoim.restapi.reply.entity.Reply;
 import com.damoim.restapi.reply.model.response.ResponseUsedItemIncludeReply;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -41,6 +44,7 @@ public class UsedItemService {
     private final ReplyService replyService;
     private final DamoimFileUtil damoimFileUtil;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ResponseUsedItem save(UsedItemRequest request, RequestFile file) {
         UsedItem item = request.toEntity();
@@ -48,7 +52,8 @@ public class UsedItemService {
             String upload = damoimFileUtil.upload(file);
             item.setTitleImg(upload);
         }
-        usedItemRepository.save(item);
+        item = usedItemRepository.save(item);
+        eventPublisher.publishEvent(new BoardCreatedEvent(item.getNo(), BoardType.USEDITEMS));
         return modelMapper.map(item, ResponseUsedItem.class);
     }
 
@@ -96,6 +101,7 @@ public class UsedItemService {
     public ResponseUsedItemIncludeReply getUsedItemIncludeReply(Long boardId, BoardType boardType) {
         UsedItem item = getItemFromId(boardId);
         List<Reply> replyList = replyService.getReplyList(boardType, boardId);
+        eventPublisher.publishEvent(new BoardClickedEvent(boardId, boardType));
         return ResponseUsedItemIncludeReply.toMapper(item, replyList);
     }
 

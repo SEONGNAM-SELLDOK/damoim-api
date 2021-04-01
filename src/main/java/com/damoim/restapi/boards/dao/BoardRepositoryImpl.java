@@ -12,10 +12,12 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
+
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 
 /**
  * @author gisung go
@@ -86,45 +88,53 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
     }
 
     private BooleanExpression titleEq(String title) {
-        return StringUtils.hasText(title) ? board.title.eq(title) : null;
+        return Strings.isBlank(title) ? null : board.title.eq(title);
     }
 
     private BooleanExpression fromTo(LocalDate from, LocalDate to) {
-        if (from == null || to == null) {
+        if (from == null && to == null) {
             return null;
+        }
+
+        if(Objects.nonNull(to) && Objects.isNull(from)) {
+            return board.endDate.after(to.atStartOfDay().plusDays(1L));
+        }
+
+        if(Objects.isNull(to)) {
+            return board.endDate.before(from.atStartOfDay());
         }
         return board.endDate.between(from.atStartOfDay(), to.atStartOfDay().plusDays(1L));
     }
 
     private BooleanExpression boardsCountryEq(String boardsCountry) {
-        return StringUtils.hasText(boardsCountry) ? board.address.country.eq(boardsCountry) : null;
+        return Strings.isBlank(boardsCountry) ? null : board.address.country.eq(boardsCountry);
     }
 
     private BooleanExpression boardsCityEq(String boardsCity) {
-        return StringUtils.hasText(boardsCity) ? board.address.city.eq(boardsCity) : null;
+        return Strings.isBlank(boardsCity) ? null : board.address.city.eq(boardsCity);
     }
 
     private BooleanExpression boardStreetEq(String boardStreet) {
-        return StringUtils.hasText(boardStreet) ? board.address.street.eq(boardStreet) : null;
+        return Strings.isBlank(boardStreet) ? null : board.address.street.eq(boardStreet);
     }
 
-    private BooleanExpression totalMemberEq(String totalMember) {
-        return StringUtils.hasText(totalMember) ? board.totalMember.eq(totalMember) : null;
+    private BooleanExpression totalMemberEq(Integer totalMember) {
+        return totalMember == null ? null : board.totalMember.eq(totalMember);
     }
 
-    private BooleanExpression currentMemberEq(String currentMember) {
-        return StringUtils.hasText(currentMember) ? board.currentMember.eq(currentMember) : null;
+    private BooleanExpression currentMemberEq(Integer currentMember) {
+        return currentMember == null ? null : board.currentMember.eq(currentMember);
     }
 
     private BooleanExpression subjectEq(String subject) {
-        return StringUtils.hasText(subject) ? board.subject.eq(subject) : null;
+        return Strings.isBlank(subject) ? null : board.subject.eq(subject);
     }
 
     private BooleanExpression damoimTagEq(String damoimTag) {
-        return StringUtils.hasText(damoimTag) ? board.damoimTag.tag.eq(damoimTag) : null;
+        return Strings.isBlank(damoimTag) ? null : board.damoimTag.tag.eq(damoimTag);
     }
 
     private BooleanExpression boardTypeEq(BoardType type) {
-        return type != null ? board.boardType.eq(type) : null;
+        return Objects.nonNull(type) ? board.boardType.eq(type) : null;
     }
 }

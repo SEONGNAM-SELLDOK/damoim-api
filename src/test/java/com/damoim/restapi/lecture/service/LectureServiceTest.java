@@ -1,11 +1,16 @@
 package com.damoim.restapi.lecture.service;
 
+import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.lecture.dao.LectureResponseWithReply;
 import com.damoim.restapi.lecture.entity.LectureSubject;
 import com.damoim.restapi.lecture.model.LectureGetRequest;
 import com.damoim.restapi.lecture.model.LectureResponse;
 import com.damoim.restapi.lecture.model.LectureSaveRequest;
 import com.damoim.restapi.lecture.model.LectureUpdateRequest;
 import com.damoim.restapi.member.model.AuthUser;
+import com.damoim.restapi.reply.model.request.RequestSaveReply;
+import com.damoim.restapi.reply.model.response.ResponseReply;
+import com.damoim.restapi.reply.service.ReplyService;
 import com.damoim.restapi.secondhandtrade.controller.WithAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +32,9 @@ class LectureServiceTest {
 
     @Autowired
     LectureService lectureService;
+
+    @Autowired
+    ReplyService replyService;
 
     @DisplayName("강의 추천 저장 테스트")
     @Test
@@ -151,4 +159,42 @@ class LectureServiceTest {
         assertEquals(2, deadlineFromToLecture.size());
     }
 
+    @DisplayName("강의 댓글 저장 테스트")
+    @Test
+    void createLectureReplyTest() {
+        LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").title("애플을 왜 좋은가?").subject(LectureSubject.FRONT).deadline(LocalDate.of(2022, 2, 2)).build();
+        LectureResponse response = lectureService.save(lectureSaveRequest, null);
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setIsChildId(false);
+        requestSaveReply.setContent("하이루");
+        requestSaveReply.setWriter("스티브잡스");
+        RequestSaveReply saveReply = requestSaveReply.checkUrl("lecture");
+        ResponseReply responseReply = replyService.replySave(response.getId(), saveReply);
+        assertEquals("스티브잡스", responseReply.getReply().getWriter());
+    }
+
+    @DisplayName("강의 댓글 가져오기 테스트")
+    @Test
+    void getLectureReplyTest() {
+        LectureSaveRequest lectureSaveRequest = LectureSaveRequest.builder().speaker("오성록").title("애플을 왜 좋은가?").subject(LectureSubject.FRONT).deadline(LocalDate.of(2022, 2, 2)).build();
+        LectureResponse response = lectureService.save(lectureSaveRequest, null);
+
+        RequestSaveReply requestSaveReply = new RequestSaveReply();
+        requestSaveReply.setIsChildId(false);
+        requestSaveReply.setContent("하이루");
+        requestSaveReply.setWriter("스티브잡스");
+        RequestSaveReply saveReply = requestSaveReply.checkUrl("lecture");
+        replyService.replySave(response.getId(), saveReply);
+
+        RequestSaveReply requestSaveReply2 = new RequestSaveReply();
+        requestSaveReply2.setIsChildId(false);
+        requestSaveReply2.setContent("하이염");
+        requestSaveReply2.setWriter("팀쿡");
+        RequestSaveReply saveReply2 = requestSaveReply2.checkUrl("lecture");
+        replyService.replySave(response.getId(), saveReply2);
+
+        LectureResponseWithReply lectureResponseWithReply = lectureService.getLectureIncludeReply(response.getId(), BoardType.LECTURE);
+        assertEquals(2, lectureResponseWithReply.getReplyList().size());
+        assertEquals("스티브잡스", lectureResponseWithReply.getReplyList().get(0).getWriter());
+    }
 }

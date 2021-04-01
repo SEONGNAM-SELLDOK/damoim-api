@@ -12,7 +12,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 public class BoardSearchCondition {
-
     private String title;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate from;
@@ -21,8 +20,8 @@ public class BoardSearchCondition {
     private String boardsCountry;
     private String boardsCity;
     private String boardStreet;
-    private String totalMember;
-    private String currentMember;
+    private Integer totalMember;
+    private Integer currentMember;
     private String subject;
     private String damoimTag;
     private BoardType boardType;
