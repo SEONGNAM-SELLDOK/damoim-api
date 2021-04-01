@@ -39,10 +39,8 @@ public class BookReview {
     private Set<String> tag;
     private LocalDate deadline;
 
-    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
-    @Column(updatable = false)
     @CreatedBy
     private String register;
     @LastModifiedDate
@@ -57,19 +55,21 @@ public class BookReview {
         return this.register.equals(register);
     }
 
-    public void update(BookReview updateBookReview) {
-        if (Objects.isNull(updateBookReview) || Objects.isNull(updateBookReview.getId()) || Objects.isNull(id) || !id.equals(updateBookReview.getId())) {
+    public void update(BookReview origin) {
+        if (Objects.isNull(origin) || Objects.isNull(origin.getId()) || Objects.isNull(id) || !id.equals(origin.getId())) {
             throw new RuntimeException();
         }
 
-        this.title = updateBookReview.title;
-        this.description = updateBookReview.description;
-        this.image = updateBookReview.image;
-        this.isbn = updateBookReview.isbn;
-        this.publisher = updateBookReview.publisher;
-        this.writer = updateBookReview.writer;
-        this.subject = updateBookReview.subject;
-        this.tag = updateBookReview.tag;
-        this.deadline = updateBookReview.deadline;
+//        this.title = updateBookReview.title;
+//        this.description = updateBookReview.description;
+//        this.image = updateBookReview.image;
+//        this.isbn = updateBookReview.isbn;
+//        this.publisher = updateBookReview.publisher;
+//        this.writer = updateBookReview.writer;
+//        this.subject = updateBookReview.subject;
+//        this.tag = updateBookReview.tag;
+//        this.deadline = updateBookReview.deadline;
+        this.register = origin.register;
+        this.createdDate = origin.createdDate;
     }
 }
