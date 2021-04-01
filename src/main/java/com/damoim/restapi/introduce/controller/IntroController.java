@@ -41,8 +41,7 @@ public class IntroController {
 
     @PutMapping
     public ResponseEntity<IntroItemResponse> update(@Valid @RequestBody IntroUpdateRequest updateRequest, @AuthenticationPrincipal AuthUser authUser) {
-        introService.update(updateRequest, authUser);
-        return new ResponseEntity<>(new IntroItemResponse(introService.getById(updateRequest.getId())), HttpStatus.OK);
+        return new ResponseEntity<>(new IntroItemResponse(introService.update(updateRequest, authUser)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

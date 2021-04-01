@@ -65,16 +65,17 @@ public class LectureService {
         lectureRepository.deleteById(id);
     }
 
-    public void update(@Valid LectureUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
+    public LectureResponse update(@Valid LectureUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
         Lecture origin = getLectureById(updateRequest.getId());
         validateEditor(origin, authUser);
+        Lecture updateLecture = updateRequestMapper.toEntity(updateRequest);
+        origin.update(updateLecture);
         String imageUrl = null;
         if (Objects.nonNull(file) && file.nonNull()) {
             imageUrl = fileUtil.upload(file);
         }
-        Lecture updateLecture = updateRequestMapper.toEntity(updateRequest);
-        updateLecture.setImage(imageUrl);
-        origin.update(updateLecture);
+        origin.setImage(imageUrl);
+        return responseMapper.toDto(lectureRepository.saveAndFlush(origin));
     }
 
     private void validateEditor(Lecture lecture, AuthUser authUser) {

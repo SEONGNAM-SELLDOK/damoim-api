@@ -55,16 +55,17 @@ public class RecruitService {
         return responseMapper.toDto(getRecruitById(id));
     }
 
-    public void update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
+    public RecruitResponse update(@Valid RecruitUpdateRequest recruitUpdateRequest, RequestFile file, AuthUser authUser) {
         Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
         validateEditor(origin, authUser);
+        origin.update(updateRecruit);
         String fileName = null;
         if (Objects.nonNull(file) && file.nonNull()) {
             fileName = fileUtil.upload(file);
         }
-        updateRecruit.setImage(fileName);
-        origin.update(updateRecruit);
+        origin.setImage(fileName);
+        return responseMapper.toDto(repository.saveAndFlush(origin));
     }
 
     public void delete(long id, AuthUser authUser) {
