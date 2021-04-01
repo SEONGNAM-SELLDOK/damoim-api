@@ -43,14 +43,14 @@ public class Introduce {
 
     public boolean isRegister(String register) {
         if (Objects.isNull(register)) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         return this.register.equals(register);
     }
 
     public void update(Introduce updateIntroduce) {
         if (Objects.isNull(id) || Objects.isNull(updateIntroduce) || Objects.isNull(updateIntroduce.getId()) || !id.equals(updateIntroduce.getId())) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         this.content = updateIntroduce.content;
     }

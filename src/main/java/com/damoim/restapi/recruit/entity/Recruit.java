@@ -56,6 +56,9 @@ public class Recruit {
     private String modifier;
 
     public boolean isRegister(String register) {
+        if(Objects.isNull(register)){
+            throw new IllegalArgumentException();
+        }
         return this.register.equals(register);
     }
 

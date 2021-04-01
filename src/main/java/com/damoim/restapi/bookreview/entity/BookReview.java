@@ -50,14 +50,14 @@ public class BookReview {
 
     public boolean isRegister(String register) {
         if (Objects.isNull(register)) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         return this.register.equals(register);
     }
 
     public void update(BookReview updateBookReview) {
         if (Objects.isNull(updateBookReview) || Objects.isNull(updateBookReview.getId()) || Objects.isNull(id) || !id.equals(updateBookReview.getId())) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
 
         this.title = updateBookReview.title;

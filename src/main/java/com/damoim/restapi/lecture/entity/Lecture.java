@@ -52,14 +52,14 @@ public class Lecture {
 
     public boolean isRegister(String register) {
         if (Objects.isNull(register)) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         return this.register.equals(register);
     }
 
     public void update(Lecture updateLecture) {
         if (Objects.isNull(updateLecture) || Objects.isNull(id) || Objects.isNull(updateLecture.getId()) || !id.equals(updateLecture.getId())) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         this.title = updateLecture.title;
         this.description = updateLecture.description;

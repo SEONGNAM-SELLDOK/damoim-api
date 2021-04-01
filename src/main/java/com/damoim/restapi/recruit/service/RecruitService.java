@@ -1,6 +1,7 @@
 package com.damoim.restapi.recruit.service;
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.exception.UnauthorizedException;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
@@ -75,8 +76,11 @@ public class RecruitService {
     }
 
     private void validateEditor(Recruit recruit, AuthUser editor) {
+        if (Objects.isNull(recruit) || Objects.isNull(editor)) {
+            throw new IllegalArgumentException();
+        }
         if (!recruit.isRegister(editor.getEmail())) {
-            throw new RuntimeException();
+            throw new UnauthorizedException("작성자가 아닙니다.");
         }
     }
 

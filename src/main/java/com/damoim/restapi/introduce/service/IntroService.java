@@ -1,5 +1,6 @@
 package com.damoim.restapi.introduce.service;
 
+import com.damoim.restapi.bookreview.exception.UnauthorizedException;
 import com.damoim.restapi.introduce.dao.IntroRepository;
 import com.damoim.restapi.introduce.dao.IntroResponseMapper;
 import com.damoim.restapi.introduce.dao.IntroSaveRequestMapper;
@@ -62,8 +63,11 @@ public class IntroService {
     }
 
     private void validateEditor(Introduce introduce, AuthUser authUser) {
-        if (Objects.isNull(introduce) || Objects.isNull(authUser) || !introduce.isRegister(authUser.getEmail())) {
-            throw new RuntimeException();
+        if (Objects.isNull(introduce) || Objects.isNull(authUser)) {
+            throw new IllegalArgumentException();
+        }
+        if (!introduce.isRegister(authUser.getEmail())) {
+            throw new UnauthorizedException("작성자가 아닙니다.");
         }
     }
 
