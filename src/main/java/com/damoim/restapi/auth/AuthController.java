@@ -36,7 +36,7 @@ public class AuthController {
         String authToken = authService.naverCallback(code);
         setAuthToken(httpServletResponse, authToken);
 
-        return "redirect:/me";
+        return "redirect:http://localhost:3000";
     }
 
     private void setAuthToken(HttpServletResponse httpServletResponse, String authToken) {
