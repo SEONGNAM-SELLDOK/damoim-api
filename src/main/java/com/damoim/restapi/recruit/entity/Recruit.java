@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * @author SeongRok.Oh
@@ -30,7 +31,6 @@ public class Recruit {
     @Id
     private Long id;
 
-    @Column(updatable = false)
     @CreatedBy
     private String register;
     private String company;
@@ -46,7 +46,6 @@ public class Recruit {
 
     private LocalDate deadline;
 
-    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime createdDate;
 
@@ -57,6 +56,23 @@ public class Recruit {
     private String modifier;
 
     public boolean isRegister(String register) {
+        if(Objects.isNull(register)){
+            throw new IllegalArgumentException();
+        }
         return this.register.equals(register);
+    }
+
+    public void update(Recruit updateRecruit) {
+        if (Objects.isNull(updateRecruit) || Objects.isNull(updateRecruit.getId()) || Objects.isNull(id) || !id.equals(updateRecruit.getId())) {
+            throw new RuntimeException();
+        }
+        this.company = updateRecruit.company;
+        this.title = updateRecruit.title;
+        this.description = updateRecruit.description;
+        this.location = updateRecruit.location;
+        this.tag = updateRecruit.tag;
+        this.reward = updateRecruit.reward;
+        this.image = updateRecruit.image;
+        this.deadline = updateRecruit.deadline;
     }
 }

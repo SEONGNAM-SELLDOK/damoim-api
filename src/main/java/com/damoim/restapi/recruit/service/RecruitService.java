@@ -1,6 +1,7 @@
 package com.damoim.restapi.recruit.service;
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.exception.UnauthorizedException;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.member.model.AuthUser;
@@ -59,12 +60,13 @@ public class RecruitService {
         Recruit origin = getRecruitById(recruitUpdateRequest.getId());
         Recruit updateRecruit = updateRequestMapper.toEntity(recruitUpdateRequest);
         validateEditor(origin, authUser);
+        origin.update(updateRecruit);
         String fileName = null;
         if (Objects.nonNull(file) && file.nonNull()) {
             fileName = fileUtil.upload(file);
         }
-        updateRecruit.setImage(fileName);
-        return responseMapper.toDto(repository.save(updateRecruit));
+        origin.setImage(fileName);
+        return responseMapper.toDto(repository.saveAndFlush(origin));
     }
 
     public void delete(long id, AuthUser authUser) {
@@ -74,8 +76,11 @@ public class RecruitService {
     }
 
     private void validateEditor(Recruit recruit, AuthUser editor) {
+        if (Objects.isNull(recruit) || Objects.isNull(editor)) {
+            throw new IllegalArgumentException();
+        }
         if (!recruit.isRegister(editor.getEmail())) {
-            throw new RuntimeException();
+            throw new UnauthorizedException("작성자가 아닙니다.");
         }
     }
 

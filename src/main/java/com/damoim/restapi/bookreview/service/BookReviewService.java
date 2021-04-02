@@ -3,6 +3,7 @@ package com.damoim.restapi.bookreview.service;
 import com.damoim.restapi.boards.entity.BoardType;
 import com.damoim.restapi.bookreview.dao.*;
 import com.damoim.restapi.bookreview.entity.BookReview;
+import com.damoim.restapi.bookreview.exception.UnauthorizedException;
 import com.damoim.restapi.bookreview.model.*;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
@@ -59,12 +60,13 @@ public class BookReviewService {
         BookReview origin = getBookReviewById(updateRequest.getId());
         validateEditor(origin, authUser);
         BookReview updateBookReview = updateRequestMapper.toEntity(updateRequest);
+        origin.update(updateBookReview);
         String imageUrl = null;
         if (Objects.nonNull(file) && file.nonNull()) {
             imageUrl = damoimFileUtil.upload(file);
         }
-        updateBookReview.setImage(imageUrl);
-        return responseMapper.toDto(repository.save(updateBookReview));
+        origin.setImage(imageUrl);
+        return responseMapper.toDto(repository.saveAndFlush(origin));
     }
 
     public void delete(long id, AuthUser authUser) {
@@ -74,8 +76,11 @@ public class BookReviewService {
     }
 
     private void validateEditor(BookReview bookReview, AuthUser authUser) {
-        if (Objects.isNull(bookReview) || Objects.isNull(authUser) || !bookReview.isRegister(authUser.getEmail())) {
-            throw new RuntimeException();
+        if (Objects.isNull(bookReview) || Objects.isNull(authUser)) {
+            throw new IllegalArgumentException();
+        }
+        if (!bookReview.isRegister(authUser.getEmail())) {
+            throw new UnauthorizedException("작성자가 아닙니다.");
         }
     }
 

@@ -1,6 +1,7 @@
 package com.damoim.restapi.lecture.service;
 
 import com.damoim.restapi.boards.entity.BoardType;
+import com.damoim.restapi.bookreview.exception.UnauthorizedException;
 import com.damoim.restapi.config.fileutil.DamoimFileUtil;
 import com.damoim.restapi.config.fileutil.model.RequestFile;
 import com.damoim.restapi.lecture.dao.*;
@@ -68,18 +69,22 @@ public class LectureService {
     public LectureResponse update(@Valid LectureUpdateRequest updateRequest, RequestFile file, AuthUser authUser) {
         Lecture origin = getLectureById(updateRequest.getId());
         validateEditor(origin, authUser);
+        Lecture updateLecture = updateRequestMapper.toEntity(updateRequest);
+        origin.update(updateLecture);
         String imageUrl = null;
         if (Objects.nonNull(file) && file.nonNull()) {
             imageUrl = fileUtil.upload(file);
         }
-        Lecture update = updateRequestMapper.toEntity(updateRequest);
-        update.setImage(imageUrl);
-        return responseMapper.toDto(lectureRepository.save(update));
+        origin.setImage(imageUrl);
+        return responseMapper.toDto(lectureRepository.saveAndFlush(origin));
     }
 
     private void validateEditor(Lecture lecture, AuthUser authUser) {
-        if (Objects.isNull(lecture) || Objects.isNull(authUser) || !lecture.isRegister(authUser.getEmail())) {
-            throw new RuntimeException();
+        if (Objects.isNull(lecture) || Objects.isNull(authUser)) {
+            throw new IllegalArgumentException();
+        }
+        if (!lecture.isRegister(authUser.getEmail())) {
+            throw new UnauthorizedException("작성자가 아닙니다.");
         }
     }
 
