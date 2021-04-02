@@ -1,6 +1,7 @@
 package com.damoim.restapi.config.web;
 
 import java.time.format.DateTimeFormatter;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
@@ -18,7 +19,10 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+		registry.addMapping("/**")
+			.allowedMethods("*")
+			.allowedOriginPatterns("http://localhost:3000")
+			.allowCredentials(true);
 	}
 
 	@Override
