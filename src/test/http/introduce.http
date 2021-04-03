@@ -1,0 +1,68 @@
+### 커뮤니티 소개 작성
+POST http://localhost:8080/intro
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Nzk5MzQ0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTcyMDczNDQsImp0aSI6ImQ4NmJlMjdhLWZmNzgtNGVhNy04MzEwLWE0YmQ3ZmQzNWMwOCJ9.lHffdlp3gQBwhDAS0Anf-wnarwNqdjKJU91C3IODBh8
+
+{
+  "content": "안녕하세요 개발자 커뮤니티 입니다."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 201, "Response status is not 201, it is " + response.status);
+});
+%}
+
+### 커뮤니티 소개 전체 가져오기
+GET http://localhost:8080/intro
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Nzk5MzQ0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTcyMDczNDQsImp0aSI6ImQ4NmJlMjdhLWZmNzgtNGVhNy04MzEwLWE0YmQ3ZmQzNWMwOCJ9.lHffdlp3gQBwhDAS0Anf-wnarwNqdjKJU91C3IODBh8
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 커뮤니티 소개 가져오기
+GET http://localhost:8080/intro/1
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Nzk5MzQ0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTcyMDczNDQsImp0aSI6ImQ4NmJlMjdhLWZmNzgtNGVhNy04MzEwLWE0YmQ3ZmQzNWMwOCJ9.lHffdlp3gQBwhDAS0Anf-wnarwNqdjKJU91C3IODBh8
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 커뮤니티 소개 업데이트
+PUT http://localhost:8080/intro
+Content-Type: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Nzk5MzQ0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTcyMDczNDQsImp0aSI6ImQ4NmJlMjdhLWZmNzgtNGVhNy04MzEwLWE0YmQ3ZmQzNWMwOCJ9.lHffdlp3gQBwhDAS0Anf-wnarwNqdjKJU91C3IODBh8
+
+{
+  "id": 1,
+  "content": "(수정)객체지향의 사실과 오해를 읽고..."
+}
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.body)
+    client.assert(response.status === 200, "Response status is not 200, it is " + response.status);
+});
+%}
+
+### 커뮤니티 소개 삭제
+DELETE http://localhost:8080/intro/2
+Accept: application/json
+Cookie: AUTH_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNjE5Nzk5MzQ0LCJpZCI6MSwiaXNzdWVkQXQiOjE2MTcyMDczNDQsImp0aSI6ImQ4NmJlMjdhLWZmNzgtNGVhNy04MzEwLWE0YmQ3ZmQzNWMwOCJ9.lHffdlp3gQBwhDAS0Anf-wnarwNqdjKJU91C3IODBh8
+
+> {%
+client.test("Request executed successfully", function() {
+    client.log("response.body" + response.status)
+    client.assert(response.status === 204, "Response status is not 204, it is " + response.status);
+});
+%}
