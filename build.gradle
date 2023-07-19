@@ -9,7 +9,7 @@ plugins {
 
 group = 'com.damoim'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '12'
 
 configurations {
     compileOnly {
